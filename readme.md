@@ -1,6 +1,6 @@
 Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch of good stuff.
 
-#My features so far:
+# My features so far:
 
 ## Base XR gameplay mechanics
   - tba
