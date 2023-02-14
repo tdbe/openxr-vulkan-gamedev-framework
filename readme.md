@@ -20,6 +20,8 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch of
 ## Some Utils for XR, input, and gamedev.
   - Utils class
 
+-------------------------------
+
 ## Below is Janhsimon's original readme:
 
 -------------------------------
