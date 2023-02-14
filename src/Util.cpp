@@ -1,6 +1,6 @@
 #include "Util.h"
 
-#include <glm/gtx/quaternion.hpp>
+
 
 #include <boxer/boxer.h>
 
@@ -174,12 +174,25 @@ bool util::createAction(XrActionSet actionSet,
   actionCreateInfo.countSubactionPaths = static_cast<uint32_t>(paths.size());
   actionCreateInfo.subactionPaths = paths.data();
 
+  //strcpy_s(actionCreateInfo.actionName, actionName.c_str());
+  //strcpy_s(actionCreateInfo.localizedActionName, localizedActionName.c_str());
   memcpy(actionCreateInfo.actionName, actionName.data(), actionName.length() + 1u);
   memcpy(actionCreateInfo.localizedActionName, localizedActionName.data(), localizedActionName.length() + 1u);
 
   XrResult result = xrCreateAction(actionSet, &actionCreateInfo, &action);
   if (XR_FAILED(result))
   {
+    std::string cPlusPlusRemainsDumb = "XrResult: ";
+    cPlusPlusRemainsDumb.append(std::to_string((int)result));
+    cPlusPlusRemainsDumb.append("\n");
+    cPlusPlusRemainsDumb.append(actionCreateInfo.actionName);
+    cPlusPlusRemainsDumb.append("\n");
+    cPlusPlusRemainsDumb.append(actionCreateInfo.localizedActionName);
+    cPlusPlusRemainsDumb.append("\n");
+    cPlusPlusRemainsDumb.append(std::to_string(paths.size()));
+    cPlusPlusRemainsDumb.append("\n");
+
+    boxer::show(cPlusPlusRemainsDumb.c_str(), "CreateAction Error", boxer::Style::Error);
     return false;
   }
 
@@ -205,6 +218,25 @@ glm::mat4 util::poseToMatrix(const XrPosef& pose)
   return translation * rotation;
 }
 
+glm::mat4 util::poseToMatrix(const util::posef& pose)
+{
+  const glm::mat4 translation =
+    glm::translate(glm::mat4(1.0f), glm::vec3(pose.position.x, pose.position.y, pose.position.z));
+
+  const glm::mat4 rotation =
+    glm::toMat4(glm::quat(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z));
+
+  return translation * rotation;
+}
+
+util::posef util::xrPosefToGlmPosef(const XrPosef& xrPosef){
+  util::posef pose = {
+    .orientation = util::xrQuaternionfToGlmQuat(xrPosef.orientation), 
+    .position = util::xrVector3fToGlmVec3(xrPosef.position)
+  };
+  return pose;
+}
+
 glm::mat4 util::createProjectionMatrix(XrFovf fov, float nearClip, float farClip)
 {
   const float l = glm::tan(fov.angleLeft);
@@ -223,32 +255,120 @@ glm::mat4 util::createProjectionMatrix(XrFovf fov, float nearClip, float farClip
   return projectionMatrix;
 }
 
-bool util::updateActionStatePose(XrSession session, XrAction action, XrPath path, XrActionStatePose& state)
-{
-  XrActionStateGetInfo actionStateGetInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
-  actionStateGetInfo.action = action;
-  actionStateGetInfo.subactionPath = path;
-
-  const XrResult result = xrGetActionStatePose(session, &actionStateGetInfo, &state);
-  if (XR_FAILED(result))
-  {
-    return false;
-  }
-
-  return true;
+glm::quat util::xrQuaternionfToGlmQuat(const XrQuaternionf& src){
+  return glm::quat(src.x, src.y, src.z, src.w);
 }
 
-bool util::updateActionStateFloat(XrSession session, XrAction action, XrPath path, XrActionStateFloat& state)
+XrQuaternionf util::glmQuatToXrQuaternionf(const glm::quat& src){
+  return XrQuaternionf(src.x, src.y, src.z, src.w);
+}
+
+glm::vec3 util::xrVector3fToGlmVec3(const XrVector3f& src){
+  return glm::vec3(src.x, src.y, src.z);
+}
+
+XrVector3f util::glmVec3ToXrVector3f(const glm::vec3& src){
+  return XrVector3f(src.x, src.y, src.z);
+}
+
+glm::quat util::lerpMix(const glm::quat& from, const glm::quat& to, float t) {
+	glm::quat src = from * (1.0f - t);
+	glm::quat dst = to * t;
+
+	glm::quat q = src + dst;
+	return q;
+}
+
+float util::dot(const glm::quat& a, const glm::quat& b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+glm::vec3 util::lerpMix(const glm::vec3& a, const glm::vec3& b, float w){
+  glm::vec3 res = {};
+  res.x = a.x + w*(b.x-a.x);
+  res.y = a.y + w*(b.y-a.y);
+  res.z = a.z + w*(b.z-a.z);
+  return res;
+}
+
+float util::lerpMix(float a, float b, float w) {
+  return a + w*(b-a);
+}
+
+float util::dot(const glm::vec3& a, const glm::vec3& b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+glm::vec3 util::crossProductVector3(const glm::vec3& vector_a, const glm::vec3& vector_b) {
+  glm::vec3 temp;
+  temp.x = vector_a.y * vector_b.z - vector_a.z * vector_b.y;
+  temp.y = -(vector_a.x * vector_b.z - vector_a.z * vector_b.x);
+  temp.z = vector_a.x * vector_b.y - vector_a.y * vector_b.x;
+  return temp;
+}
+
+float util::clampf(float num, float left, float right){
+  if(num < left)
+    num = left;
+  else if (num > right)
+    num = right;
+  return num;
+}
+
+float util::lengthVector3(const glm::vec3& vec){
+  return glm::sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z);
+}
+
+
+glm::vec3 util::normalizeVector3(const glm::vec3& vec){
+  float len  = util::lengthVector3(vec);
+  return vec / len;
+}
+
+glm::quat util::slerp(const glm::quat& start, const glm::quat& end, float percent)
 {
-  XrActionStateGetInfo actionStateGetInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
-  actionStateGetInfo.action = action;
-  actionStateGetInfo.subactionPath = path;
+  float cosTheta = util::dot(start, end);
+	glm::quat temp(end);
 
-  const XrResult result = xrGetActionStateFloat(session, &actionStateGetInfo, &state);
-  if (XR_FAILED(result))
-  {
-    return false;
-  }
 
-  return true;
+	if (cosTheta < 0.0f) {
+		cosTheta *= -1.0f;
+		temp = temp * -1.0f;
+	}
+
+	float theta = glm::acos(cosTheta);
+	float sinThetaDenom = 1.0f / glm::sin(theta);
+
+  glm::quat res = (
+		((glm::quat)(start * glm::sin(theta * (1.0f - percent)))) + 
+		((glm::quat)(temp * glm::sin(percent * theta)))
+		) / sinThetaDenom;
+    
+	return res;
+}
+
+glm::vec3 util::slerp(const glm::vec3& start, const glm::vec3& end, float percent)
+{
+    // Dot product - the cosine of the angle between 2 vectors.
+    float dot = util::dot(start, end);
+
+    // Clamp it to be in the range of Acos()
+    // This may be unnecessary, but floating point
+    // precision can be a fickle mistress.
+    util::clampf(dot, -1.0f, 1.0f);
+
+    // Acos(dot) returns the angle between start and end,
+    // And multiplying that by percent returns the angle between
+    // start and the final result.
+    float theta = glm::acos(dot) * percent;
+    glm::vec3 startDotted = start * dot;
+    
+    glm::vec3 relativeVec = {};
+    relativeVec = end - startDotted;
+
+    util::normalizeVector3(relativeVec);
+
+    // Orthonormal basis
+    // The final result.
+    return ((start*glm::cos(theta)) + (relativeVec * glm::sin(theta)));
 }

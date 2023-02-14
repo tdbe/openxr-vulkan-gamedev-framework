@@ -1,13 +1,21 @@
 #pragma once
 
-#include <glm/fwd.hpp>
-
 #include <vulkan/vulkan.h>
 
 #include <openxr/openxr.h>
 
 #include <string>
 #include <vector>
+
+//#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
+//#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp> // tdbe gtx = "experimental"
+//#include <glm/trigonometric.hpp>  // tdbe radians
+//#include <glm/fwd.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/mat4x4.hpp>
+
 
 // All the things that can go wrong
 enum class Error
@@ -26,9 +34,18 @@ enum class Error
 
 /*
  * The util namespaces offers a wide variety of useful utility functions.
+ * [tdbe] Data structure utils for XR, input, and gamedev. 
+ *        Plus some common gamedev math functions you can easily see & use.
+ *        (on top of glm)
  */
 namespace util
 {
+
+typedef struct posef {
+    glm::quat orientation;
+    glm::vec3 position;
+} posef;
+
 // Reports an error with optional details through a system-native message box
 void error(Error error, const std::string& details = "");
 
@@ -69,12 +86,41 @@ XrPosef makeIdentity();
 // Converts an OpenXR pose to a transformation matrix
 glm::mat4 poseToMatrix(const XrPosef& pose);
 
+glm::mat4 poseToMatrix(const util::posef& pose);
+
+util::posef xrPosefToGlmPosef(const XrPosef& xrPosef);
+
 // Creates an OpenXR projection matrix
 glm::mat4 createProjectionMatrix(XrFovf fov, float nearClip, float farClip);
 
-// Updates an action state for a given action and path in pose format, returns false on error
-bool updateActionStatePose(XrSession session, XrAction action, XrPath path, XrActionStatePose& state);
+glm::quat xrQuaternionfToGlmQuat(const XrQuaternionf& src);
 
-// Updates an action state for a given action and path in float format, returns false on error
-bool updateActionStateFloat(XrSession session, XrAction action, XrPath path, XrActionStateFloat& state);
+XrQuaternionf glmQuatToXrQuaternionf(const glm::quat& src);
+
+glm::vec3 xrVector3fToGlmVec3(const XrVector3f& src);
+
+XrVector3f glmVec3ToXrVector3f(const glm::vec3& src);
+
+float dot(const glm::quat& a, const glm::quat& b);
+
+glm::quat lerpMix(const glm::quat& from, const glm::quat& to, float t);
+
+glm::vec3 lerpMix(const glm::vec3& a, const glm::vec3& b, float w);
+
+float lerpMix(float a, float b, float w);
+
+float dot(const glm::vec3& a, const glm::vec3& b);
+
+glm::vec3 crossProductVector3(const glm::vec3& vector_a, const glm::vec3& vector_b);
+
+float clampf(float num, float left, float right);
+
+float lengthVector3(const glm::vec3& vec);
+
+glm::vec3 normalizeVector3(const glm::vec3& vec);
+
+glm::quat slerp(const glm::quat& start, const glm::quat& end, float percent);
+
+glm::vec3 slerp(const glm::vec3& start, const glm::vec3& end, float percent);
+
 } // namespace util
