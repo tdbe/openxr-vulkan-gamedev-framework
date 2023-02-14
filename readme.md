@@ -1,3 +1,29 @@
+Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch of good stuff.
+
+#My features so far:
+
+## Base XR gameplay mechanics
+  - tba
+
+## Rendering
+  - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
+  - tba
+
+## Input.h class.
+  - "proper" xr input, supporting "all" controllers/headsetss, with customizable binding paths and action sets.
+  - poses for controllers and for head.
+  - actions (buttons, sticks, triggers, pressure, proximity etc).
+  - user presence / headset activity state.
+  - haptic feedback.
+  - exposes matrixes, and xr action state data (e.g. astChangeTime, isActive, changedSinceLastSync)
+
+## Some Utils.h for XR, input, and gamedev.
+
+
+##Below is Janhsimon's original readme:
+
+-------------------------------
+
 ![Teaser](teaser.gif)
 
 # Overview
