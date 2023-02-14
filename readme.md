@@ -15,7 +15,7 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch of
   - actions (buttons, sticks, triggers, pressure, proximity etc).
   - user presence / headset activity state.
   - haptic feedback.
-  - exposes matrixes, and xr action state data (e.g. astChangeTime, isActive, changedSinceLastSync)
+  - exposes matrixes, and xr action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
 
 ## Some Utils for XR, input, and gamedev.
   - Utils class
