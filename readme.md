@@ -1,23 +1,30 @@
-Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch of good stuff.
+Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch more foundational stuff.
 
-# My features so far:
+# My feature stack so far:
+
+## XR Locomotion
+  - Mode: Panning and Rotating the scene with both hands, from a "tunnelvision" "external scene".
+  - Uses state machines for movment and for visuals.
 
 ## Base XR gameplay mechanics
-  - tba
+  - Mechanics system based on a list of `GameBehaviour`'s.
+  - Each behaviour is processed by Main.
+  - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
 
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
   - tba
 
-## Input class.
+## `Input` class and `InputData`'s in `Inputspace`.
+  - nicely accessible through `InputData` and `InputHaptics`.
   - "proper" xr input, supporting "all" controllers/headsetss, with customizable binding paths and action sets.
   - poses for controllers and for head.
   - actions (buttons, sticks, triggers, pressure, proximity etc).
   - user presence / headset activity state.
-  - haptic feedback.
+  - haptic feedback output.
   - exposes matrixes, and xr action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
 
-## Some Utils for XR, input, and gamedev.
+## Some Utils for XR, input, and extra gamedev math/utils.
   - Utils class
 
 -------------------------------
