@@ -7,6 +7,8 @@ const std::string actionSetName = "actionset";
 const std::string localizedActionSetName = "Actions";
 } // namespace
 
+namespace Inputspace
+{
 // [tdbe] Sets up: Action Set, Action Paths, Actions, Action Spaces, Binding Paths, Interaction Profiles, Action Poses.
 Input::Input(XrInstance instance, XrSession session)
 {
@@ -134,31 +136,7 @@ Input::Input(XrInstance instance, XrSession session)
             valid = false;
             return;
         }
-        /*
-        XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
-        actionInfo.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
-        actionInfo.countSubactionPaths = uint32_t(actionSetData.controllerPaths.size());
-        actionInfo.subactionPaths = actionSetData.controllerPaths.data();
-        strcpy_s(actionInfo.actionName, "vibrateAction");
-        strcpy_s(actionInfo.localizedActionName, "Vibration Action");
-
-        result = xrCreateAction(actionSetData.actionSet, &actionInfo, &actionSetData.thumbstickAction);
-        if (XR_FAILED(result))
-        {
-            std::string cPlusPlusRemainsDumb = "XrResult: ";
-            cPlusPlusRemainsDumb.append(std::to_string((int)result));
-            cPlusPlusRemainsDumb.append("\n");
-            cPlusPlusRemainsDumb.append(actionInfo.actionName);
-            cPlusPlusRemainsDumb.append("\n");
-            cPlusPlusRemainsDumb.append(actionInfo.localizedActionName);
-            cPlusPlusRemainsDumb.append("\n");
-            cPlusPlusRemainsDumb.append(std::to_string(actionSetData.controllerPaths.size()));
-            cPlusPlusRemainsDumb.append("\n");
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumb.c_str());
-
-        }
-        */
-
+       
         // [tdbe] Note:
         // [tdbe] it's possible to bind an action to any controller, if you do it without a controller path.
         // [tdbe] and also when you get the action state info, you can pass XR_NULL_PATH to get any paths.
@@ -166,18 +144,29 @@ Input::Input(XrInstance instance, XrSession session)
  
 
     // [tdbe] Action Spaces for each controller. They will contain the controller poses.
-    actionSetData.controllerReferenceSpaces.resize((int)ControllerEnum::COUNT);
+    actionSetData.controllerReferenceSpaces_aim.resize((int)ControllerEnum::COUNT);
+    actionSetData.controllerReferenceSpaces_grip.resize((int)ControllerEnum::COUNT);
     for (size_t ci = 0u; ci < (int)ControllerEnum::COUNT; ci++)
     {
         XrActionSpaceCreateInfo actionSpaceInfo{XR_TYPE_ACTION_SPACE_CREATE_INFO};
-        actionSpaceInfo.action = actionSetData.gripPoseAction; 
+        actionSpaceInfo.action = actionSetData.aimPoseAction; 
         actionSpaceInfo.subactionPath = actionSetData.controllerPaths[ci];
         actionSpaceInfo.poseInActionSpace.orientation = {.x = 0, .y = 0, .z = 0, .w = 1.0};
         actionSpaceInfo.poseInActionSpace.position = {.x = 0, .y = 0, .z = 0};
 
-        result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces[ci]);
+        result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_aim[ci]);
         if (XR_FAILED(result)){
             std::string cPlusPlusRemainsDumb = "800; XrResult: ";
+            cPlusPlusRemainsDumb.append(std::to_string((int)result));
+            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumb);
+            valid = false;
+            return;
+        }
+
+        actionSpaceInfo.action = actionSetData.gripPoseAction; 
+        result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_grip[ci]);
+        if (XR_FAILED(result)){
+            std::string cPlusPlusRemainsDumb = "810; XrResult: ";
             cPlusPlusRemainsDumb.append(std::to_string((int)result));
             util::error(Error::GenericOpenXR, cPlusPlusRemainsDumb);
             valid = false;
@@ -194,6 +183,7 @@ Input::Input(XrInstance instance, XrSession session)
 
     std::array<XrPath, (int)ControllerEnum::COUNT> triggerValuePath; 
     std::array<XrPath, (int)ControllerEnum::COUNT> triggerClickPath; 
+    std::array<XrPath, (int)ControllerEnum::COUNT> triggerTouchPath; 
 
     std::array<XrPath, (int)ControllerEnum::COUNT> squeezeValuePath;
     std::array<XrPath, (int)ControllerEnum::COUNT> squeezeForcePath;
@@ -212,16 +202,18 @@ Input::Input(XrInstance instance, XrSession session)
     std::array<XrPath, (int)ControllerEnum::COUNT> hapticPath;
     
     {
-        xrStringToPath(instance, "/user/hand/left/input/grip/pose", &gripPosePath[(int)ControllerEnum::LEFT]);
-        xrStringToPath(instance, "/user/hand/right/input/grip/pose", &gripPosePath[(int)ControllerEnum::RIGHT]);
-
         xrStringToPath(instance, "/user/hand/left/input/aim/pose", &aimPosePath[(int)ControllerEnum::LEFT]);
         xrStringToPath(instance, "/user/hand/right/input/aim/pose", &aimPosePath[(int)ControllerEnum::RIGHT]);
+
+        xrStringToPath(instance, "/user/hand/left/input/grip/pose", &gripPosePath[(int)ControllerEnum::LEFT]);
+        xrStringToPath(instance, "/user/hand/right/input/grip/pose", &gripPosePath[(int)ControllerEnum::RIGHT]);
 
         xrStringToPath(instance, "/user/hand/left/input/trigger/value", &triggerValuePath[(int)ControllerEnum::LEFT]);
         xrStringToPath(instance, "/user/hand/right/input/trigger/value", &triggerValuePath[(int)ControllerEnum::RIGHT]);
         xrStringToPath(instance, "/user/hand/left/input/trigger/click", &triggerClickPath[(int)ControllerEnum::LEFT]);
         xrStringToPath(instance, "/user/hand/right/input/trigger/click", &triggerClickPath[(int)ControllerEnum::RIGHT]);
+        xrStringToPath(instance, "/user/hand/left/input/trigger/touch", &triggerTouchPath[(int)ControllerEnum::LEFT]);
+        xrStringToPath(instance, "/user/hand/right/input/trigger/touch", &triggerTouchPath[(int)ControllerEnum::RIGHT]);
 
         xrStringToPath(instance, "/user/hand/left/input/squeeze/value", &squeezeValuePath[(int)ControllerEnum::LEFT]);
         xrStringToPath(instance, "/user/hand/right/input/squeeze/value", &squeezeValuePath[(int)ControllerEnum::RIGHT]);
@@ -284,8 +276,10 @@ Input::Input(XrInstance instance, XrSession session)
                 {actionSetData.selectClickAction, selectClickPath[(int)ControllerEnum::RIGHT]},
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::RIGHT]},
-
-
+                
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
+                
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
             }};
@@ -308,6 +302,7 @@ Input::Input(XrInstance instance, XrSession session)
         }
 
         // Suggest bindings for the Oculus Touch.
+        // https://docs.unity3d.com/Packages/com.unity.xr.openxr@1.6/manual/features/oculustouchcontrollerprofile.html
         {
             XrPath oculusTouchInteractionProfilePath;
             result = xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &oculusTouchInteractionProfilePath);
@@ -335,6 +330,12 @@ Input::Input(XrInstance instance, XrSession session)
                 {actionSetData.selectClickAction, aClickPath[(int)ControllerEnum::RIGHT]},
                 // [tdbe] note: only on left side!
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
+                 
+                // [tdbe] NOTE: Old oculus Rifts for some reason fail on this path,
+                // even though it's the official oculus binding. https://steamcommunity.com/app/250820/discussions/8/3088898048343567453/
+                // Uncomment if you're not supporting old devices.
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
 
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
@@ -389,7 +390,10 @@ Input::Input(XrInstance instance, XrSession session)
 
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::RIGHT]},
-
+                
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
+                
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
             }};
@@ -440,7 +444,10 @@ Input::Input(XrInstance instance, XrSession session)
                 // [tdbe] alt:
                 {actionSetData.menuClickAction, bClickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.menuClickAction, bClickPath[(int)ControllerEnum::RIGHT]},
-
+                
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
+                
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
             }};
@@ -494,7 +501,10 @@ Input::Input(XrInstance instance, XrSession session)
 
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::RIGHT]},
-
+                
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
+                
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
             }};
@@ -554,6 +564,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
     }
     
     // Update the actions
+    inputData.SizeVectors(ControllerEnum::COUNT, SideEnum::COUNT);
 
     // [tdbe] Head action poses
     inputData.eyePoseMatrixes[(int)SideEnum::LEFT] = util::poseToMatrix(eyePoses[(int)SideEnum::LEFT].pose);
@@ -577,7 +588,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
         if (aimPoseState.isActive)
         {
             XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
-            result = xrLocateSpace(actionSetData.controllerReferenceSpaces[i], xrReferenceSpace, predictedDisplayTime, 
+            result = xrLocateSpace(actionSetData.controllerReferenceSpaces_aim[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result)){
                 std::string cPlusPlusRemainsDumb = "2000; XrResult: ";
@@ -600,10 +611,10 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
 
         // [tdbe] Pose
         XrActionStatePose gripPoseState = Input::GetActionPoseState(actionSetData.gripPoseAction, ci);
-        if (aimPoseState.isActive)
+        if (gripPoseState.isActive)
         {
             XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
-            result = xrLocateSpace(actionSetData.controllerReferenceSpaces[i], xrReferenceSpace, predictedDisplayTime, 
+            result = xrLocateSpace(actionSetData.controllerReferenceSpaces_grip[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result)){
                 std::string cPlusPlusRemainsDumb = "2100; XrResult: ";
@@ -640,31 +651,45 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
         XrActionStateBoolean selectClickState = Input::GetActionBooleanState(actionSetData.selectClickAction, ci);
         inputData.selectClickState.at(i) = selectClickState;  
 
+        // [tdbe] State
+        //XrActionStateFloat triggerState = Input::GetActionFloatState(actionSetData.triggerAction, ci);
+        //inputData.triggerState.at(i) = triggerState;  
+
+        
+
         // [tdbe] Etc. add new actions as needed, from the existing bindings / paths / actions following these examples above ^
         
     }
-
     return true;
 }
 
-const Input::InputData Input::GetInputData() const
+const InputData& Input::GetInputData() const
 {
     return inputData;
 }
 
-void Input::ApplyHapticFeedback(ControllerEnum controllerIndex, 
-                            float amplitude01 = 0.5, 
-                            int64_t duration = XR_MIN_HAPTIC_DURATION, 
-                            float frequency = XR_FREQUENCY_UNSPECIFIED){
-    XrHapticVibration vibration{XR_TYPE_HAPTIC_VIBRATION};
-    vibration.amplitude = amplitude01;
-    vibration.duration = duration;
-    vibration.frequency = frequency;
+InputHaptics& Input::GetInputHaptics()
+{
+    return inputHaptics;
+}
 
-    XrHapticActionInfo hapticActionInfo{XR_TYPE_HAPTIC_ACTION_INFO};
-    hapticActionInfo.action = actionSetData.vibrateAction;
-    hapticActionInfo.subactionPath = actionSetData.controllerPaths[(int)controllerIndex];
-    xrApplyHapticFeedback(session, &hapticActionInfo, (XrHapticBaseHeader*)&vibration);
+void Input::ApplyHapticFeedbackRequests(InputHaptics& inputHaptics){
+    const std::vector<InputHaptics::HapticsData>& haptDataVect = inputHaptics.GetHapticFeedbackRequests();
+    size_t size = std::min(haptDataVect.size(), actionSetData.controllerPaths.size());
+    for(size_t i =0; i<size; i++){
+        if(!haptDataVect[i].isActive)
+            continue;
+        XrHapticVibration vibration{XR_TYPE_HAPTIC_VIBRATION};
+        vibration.amplitude = haptDataVect[i].amplitude01;
+        vibration.duration = haptDataVect[i].duration;
+        vibration.frequency = haptDataVect[i].frequency;
+
+        XrHapticActionInfo hapticActionInfo{XR_TYPE_HAPTIC_ACTION_INFO};
+        hapticActionInfo.action = actionSetData.vibrateAction;
+        hapticActionInfo.subactionPath = actionSetData.controllerPaths[i];
+        xrApplyHapticFeedback(session, &hapticActionInfo, (XrHapticBaseHeader*)&vibration);
+    }
+    inputHaptics.ClearHapticFeedbackRequests();
 }
 
 /// @param controller -- if you pass ControllerEnum::COUNT, it will get from any controller (ie from XR_NULL_PATH)
@@ -771,8 +796,15 @@ bool Input::isValid() const
 
 Input::~Input()
 {
-    if (!actionSetData.controllerReferenceSpaces.empty()){
-        for (const XrSpace& space : actionSetData.controllerReferenceSpaces)
+    if (!actionSetData.controllerReferenceSpaces_aim.empty()){
+        for (const XrSpace& space : actionSetData.controllerReferenceSpaces_aim)
+        {
+            xrDestroySpace(space);
+        }
+    }
+
+    if (!actionSetData.controllerReferenceSpaces_grip.empty()){
+        for (const XrSpace& space : actionSetData.controllerReferenceSpaces_grip)
         {
             xrDestroySpace(space);
         }
@@ -867,4 +899,10 @@ Input::~Input()
     {
         xrDestroyAction(actionSetData.grabAction);
     }
+
+    if (actionSetData.triggerAction)
+    {
+        xrDestroyAction(actionSetData.triggerAction);
+    }
+}
 }
