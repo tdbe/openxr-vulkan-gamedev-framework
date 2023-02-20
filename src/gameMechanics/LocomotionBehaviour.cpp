@@ -136,7 +136,7 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
     {
         // [tdbe] Change visuals state
         {
-            if(avgGrabInput>.5){
+            if(avgGrabInput>.5f && grabLeft.currentState > .25f && grabRight.currentState > .25f){
                 if(currentVisualsState != VisualsState::Start &&
                     currentVisualsState != VisualsState::Update &&
                     currentVisualsState != VisualsState::End)
@@ -187,8 +187,11 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
         }
     }
 
+    // [tdbe] Scene Panning and Rotating style.
+    {
     HandleVisualsState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
     HandleMovementState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
+    }
 }   
 
 LocomotionBehaviour::~LocomotionBehaviour(){

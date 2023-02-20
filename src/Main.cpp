@@ -116,9 +116,9 @@ int main()
   // [tdbe] all game mechanics, initial resource allocation here, 
   // and then update tick later in game loop
   std::vector<GameBehaviour*> gameBehaviours = {
+    new LocomotionBehaviour(cameraMatrix, handModelLeft, handModelRight, 1, 3, 1),
     new HandsBehaviour(handModelLeft, handModelRight),
     //new InputTesterBehaviour(),
-    new LocomotionBehaviour(cameraMatrix, handModelLeft, handModelRight, 1, 3, 1),
     new WorldObjectsMiscBehaviour(bikeModel)
   };
     
@@ -161,8 +161,9 @@ int main()
       gameTime += deltaTime;
 
       // [tdbe] Update
+      gameBehaviours[0]->Update(deltaTime, gameTime, inputData, inputHaptics, cameraMatrix);
       const glm::mat4 inverseCameraMatrix = glm::inverse(cameraMatrix);
-      for(size_t i = 0u; i < gameBehaviours.size(); i++){
+      for(size_t i = 1u; i < gameBehaviours.size(); i++){
         gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics, inverseCameraMatrix);
       }
       inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
