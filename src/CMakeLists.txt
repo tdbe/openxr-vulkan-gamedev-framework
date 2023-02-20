@@ -11,11 +11,23 @@ set(SHADER_SRC
 set(SRC
   Main.cpp
 
+  gameMechanics/WorldObjectsMiscBehaviour.cpp
+  gameMechanics/WorldObjectsMiscBehaviour.h
+  gameMechanics/LocomotionBehaviour.cpp
+  gameMechanics/LocomotionBehaviour.h
+  gameMechanics/HandsBehaviour.cpp
+  gameMechanics/HandsBehaviour.h
+  gameMechanics/InputTesterBehaviour.cpp
+  gameMechanics/InputTesterBehaviour.h
+  gameMechanics/GameBehaviour.cpp
+  gameMechanics/GameBehaviour.h
+
   Context.cpp
   Context.h
 
   Input.cpp
   Input.h
+  InputData.h
 
   DataBuffer.cpp
   DataBuffer.h
