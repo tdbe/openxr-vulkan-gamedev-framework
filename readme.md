@@ -10,6 +10,7 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
   - Mechanics system based on a list of `GameBehaviour`'s.
   - Each behaviour is processed by Main.
   - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
+  - Sample mechanics for Locomotion, Hands, Input testing, World Objects
 
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
