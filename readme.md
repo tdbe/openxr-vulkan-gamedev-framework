@@ -3,7 +3,7 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
 # My feature stack so far:
 
 ## XR Locomotion
-  - Mode: Panning and Rotating the scene with both hands, from a "tunnelvision" "external scene".
+  - Mode: Rotating and accelerated Panning the scene by grabbing with both hands, and seeing a "tunnelvision" "external scene".
   - Uses state machines for movment and for visuals.
 
 ## Base XR gameplay mechanics
@@ -24,8 +24,8 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
   - haptic feedback output.
   - exposes matrixes, and xr action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
 
-## Some Utils for XR, input, and extra gamedev math/utils.
-  - Utils class
+## `Utils` class
+  - Some Utils for XR, input, and extra gamedev math/utils.
 
 -------------------------------
 
