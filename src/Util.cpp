@@ -372,3 +372,10 @@ glm::vec3 util::slerp(const glm::vec3& start, const glm::vec3& end, float percen
     // The final result.
     return ((start*glm::cos(theta)) + (relativeVec * glm::sin(theta)));
 }
+
+// signed radian angle between  vectors, around a normal. vectors must be normalized.
+float util::vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, const glm::vec3& norm){
+  float dot = vec1.x*vec2.x + vec1.y*vec2.y + vec1.z*vec2.z;
+  float det = vec1.x*vec2.y*norm.z + vec2.x*norm.y*vec1.z + norm.x*vec1.y*vec2.z - vec1.z*vec2.y*norm.x - vec2.z*norm.y*vec1.x - norm.z*vec1.y*vec2.x;
+  return atan2(det, dot);
+}

@@ -123,4 +123,6 @@ glm::quat slerp(const glm::quat& start, const glm::quat& end, float percent);
 
 glm::vec3 slerp(const glm::vec3& start, const glm::vec3& end, float percent);
 
+float vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, const glm::vec3& norm);
+
 } // namespace util
