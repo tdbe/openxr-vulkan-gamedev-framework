@@ -1,12 +1,21 @@
+#pragma once
 #include "Context.h"
 #include "Input.h"
+#include "InputData.h"
 #include "Headset.h"
 #include "MeshData.h"
 #include "MirrorView.h"
 #include "Model.h"
 #include "Renderer.h"
+#include "gameMechanics/GameBehaviour.h"
+#include "gameMechanics/HandsBehaviour.h"
+#include "gameMechanics/InputTesterBehaviour.h"
+#include "gameMechanics/WorldObjectsMiscBehaviour.h"
+#include "gameMechanics/LocomotionBehaviour.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
+
+#include <stdio.h>
 
 namespace
 {
@@ -41,14 +50,14 @@ int main()
   }
 
   
-  Input inputSystem(context.getXrInstance(), headset.getXrSession());
+  Inputspace::Input inputSystem(context.getXrInstance(), headset.getXrSession());
   if (!inputSystem.isValid())
   {
     return EXIT_FAILURE;
   }
 
   Model gridModel, ruinsModel, carModelLeft, carModelRight, beetleModel, bikeModel, handModelLeft, handModelRight,
-    logoModel;
+    logoModel = {};
   std::vector<Model*> models = { &gridModel, &ruinsModel,    &carModelLeft,   &carModelRight, &beetleModel,
                                  &bikeModel, &handModelLeft, &handModelRight, &logoModel };
 
@@ -60,6 +69,7 @@ int main()
   beetleModel.worldMatrix =
     glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
   logoModel.worldMatrix = glm::translate(glm::mat4(1.0f), { 0.0f, 3.0f, -10.0f });
+  bikeModel.worldMatrix = glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
 
   MeshData* meshData = new MeshData;
   if (!meshData->loadModel("models/Grid.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
@@ -103,6 +113,17 @@ int main()
     return EXIT_FAILURE;
   }
 
+  // [tdbe] all game mechanics, initial resource allocation here, 
+  // and then update tick later in game loop
+  std::vector<GameBehaviour*> gameBehaviours = {
+    new HandsBehaviour(handModelLeft, handModelRight),
+    //new InputTesterBehaviour(),
+    new LocomotionBehaviour(cameraMatrix, handModelLeft, handModelRight, 1, 3, 1),
+    new WorldObjectsMiscBehaviour(bikeModel)
+  };
+    
+  static float gameTime = 0.0f;
+
   // Main loop
   std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
   while (!headset.isExitRequested() && !mirrorView.isExitRequested())
@@ -134,41 +155,22 @@ int main()
       {
         return EXIT_FAILURE;
       }
-      Input::InputData inputData = inputSystem.GetInputData();
+      const Inputspace::InputData& inputData = inputSystem.GetInputData();
+      Inputspace::InputHaptics& inputHaptics = inputSystem.GetInputHaptics();
       
-      static float time = 0.0f;
-      time += deltaTime;
+      gameTime += deltaTime;
 
-      // Update
-      /*
-      for (size_t controllerIndex = 0u; controllerIndex < 2u; ++controllerIndex)
-      {
-        const float flySpeed = input.getFlySpeed(controllerIndex);
-        if (flySpeed > 0.0f)
-        {
-          const glm::vec3 forward = glm::normalize(input.getPose(controllerIndex)[2]);
-          cameraMatrix = glm::translate(cameraMatrix, forward * flySpeed * flySpeedMultiplier * deltaTime);
-        }
+      // [tdbe] Update
+      const glm::mat4 inverseCameraMatrix = glm::inverse(cameraMatrix);
+      for(size_t i = 0u; i < gameBehaviours.size(); i++){
+        gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics, inverseCameraMatrix);
       }
-
-      const glm::mat4 inverseCameraMatrix = glm::inverse(cameraMatrix);
-      handModelLeft.worldMatrix = inverseCameraMatrix * input.getPose(0u);
-      handModelRight.worldMatrix = inverseCameraMatrix * input.getPose(1u);
-      handModelRight.worldMatrix = glm::scale(handModelRight.worldMatrix, { -1.0f, 1.0f, 1.0f });
-      */
-
-      const glm::mat4 inverseCameraMatrix = glm::inverse(cameraMatrix);
-      handModelLeft.worldMatrix = inverseCameraMatrix * inputData.controllerGripPoseMatrixes[(int)Input::ControllerEnum::LEFT];
-      handModelRight.worldMatrix = inverseCameraMatrix * inputData.controllerGripPoseMatrixes[(int)Input::ControllerEnum::RIGHT];
-      handModelRight.worldMatrix = glm::scale(handModelRight.worldMatrix, { -1.0f, 1.0f, 1.0f });
-
-      bikeModel.worldMatrix =
-        glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), time * 0.2f, { 0.0f, 1.0f, 0.0f });
+      inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
 
       // [tdbe] TODO: do a xrRequestExitSession(session); ?
 
       // Render
-      renderer.render(cameraMatrix, swapchainImageIndex, time);
+      renderer.render(cameraMatrix, swapchainImageIndex, gameTime);
 
       const MirrorView::RenderResult mirrorResult = mirrorView.render(swapchainImageIndex);
       if (mirrorResult == MirrorView::RenderResult::Error)
@@ -184,7 +186,14 @@ int main()
         mirrorView.present();
       }
     }
-    headset.endFrame();
+    if (frameResult == Headset::BeginFrameResult::RenderFully || frameResult == Headset::BeginFrameResult::SkipRender)
+    {
+      headset.endFrame();
+    }
+  }
+
+  for(size_t i=0; i<gameBehaviours.size(); i++){
+    delete(gameBehaviours[i]);
   }
 
   context.sync(); // Sync before destroying so that resources are free
