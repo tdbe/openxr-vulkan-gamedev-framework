@@ -17,8 +17,8 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
   - tba
 
 ## `Input` class and `InputData`'s in `Inputspace`.
-  - nicely accessible through `InputData` and `InputHaptics`.
   - "proper" xr input, supporting "all" controllers/headsetss, with customizable binding paths and action sets.
+  - nicely accessible through `InputData` and `InputHaptics`.
   - poses for controllers and for head.
   - actions (buttons, sticks, triggers, pressure, proximity etc).
   - user presence / headset activity state.
