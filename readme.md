@@ -1,4 +1,6 @@
-Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch more foundational stuff.
+OpenXR/Vulkan/C++ Gameplay, Input, and Rendering fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example.
+
+Quickly make a performant XR game with common sense gamedev principles. Explained; technical but friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit fo evidence that khronos(openxr&vulkan) know not of what hoo-man is. 🙃
 
 # My feature stack so far:
 
@@ -10,11 +12,18 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
   - Mechanics system based on a list of `GameBehaviour`'s.
   - Each behaviour is processed by Main.
   - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
-  - Sample mechanics for Locomotion, Hands, Input testing, World Objects
+  - Sample mechanics for Locomotion, Hands, Input testing, World Objects.
 
+## `GameData.h`
+  - GameObject{Material, Model, Properties (e.g. worldMatrix, isVisible)}.
+  - PlayerObject{GameObject's, PlayerActiveStates}.
+  - Material{Shader, Descriptor-set data (uniforms), optional unique vulkan Pipelines (e.g. blend ops)}
+  
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
-  - tba
+  - Explained and tweaked the renderer/pipeline; look for "// [tdbe]" 
+  - Per-material, per-model, per-pipeline properties. Easy to create a material e.g. transparent, doublesided; add properties / new shader etc.
+  - Render pipeline knows if you modified any default properties in materials and in that case creates unique mats/pipelines.
 
 ## `Input` class and `InputData`'s in `Inputspace`.
   - "proper" xr input, supporting "all" controllers/headsetss, with customizable binding paths and action sets.
@@ -30,7 +39,7 @@ Forked @janhsimon's excellent timesaving openxr-vulkan-example to add a bunch mo
 
 -------------------------------
 
-## Below is Janhsimon's original readme:
+# Below is Janhsimon's original readme:
 
 -------------------------------
 
