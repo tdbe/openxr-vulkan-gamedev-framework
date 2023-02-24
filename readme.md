@@ -9,8 +9,7 @@ Quickly make a performant XR game with common sense gamedev principles. Explaine
   - Uses state machines for movment and for visuals.
 
 ## Base XR gameplay mechanics
-  - Mechanics system based on a list of `GameBehaviour`'s.
-  - Each behaviour is processed by Main.
+  - Mechanics system based on a list of `GameBehaviour`'s processed by Main's loop.
   - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
   - Sample mechanics for Locomotion, Hands, Input testing, World Objects.
 
