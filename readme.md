@@ -11,17 +11,17 @@ Quickly make a performant XR game with common sense gamedev principles. Explaine
 ## Base XR gameplay mechanics
   - Mechanics system based on a list of `GameBehaviour`'s processed by Main's loop.
   - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
-  - Sample mechanics for Locomotion, Hands, Input testing, World Objects.
+  - Sample mechanics for Locomotion, Hands, XR Input testing, World Objects.
 
 ## `GameData.h`
-  - GameObject{Material, Model, Properties (e.g. worldMatrix, isVisible)}.
-  - PlayerObject{GameObject's, PlayerActiveStates}.
-  - Material{Shader, Descriptor-set data (uniforms), optional unique vulkan Pipelines (e.g. blend ops)}
+  - `GameObject`{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
+  - `PlayerObject`s{`GameObject`s, `PlayerActiveStates`}.
+  - `Material`s{`Shader`, Descriptor-set `niformData`, optional/shared `Pipeline`s (for e.g blend ops)}
   
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
-  - Explained and tweaked the renderer/pipeline; look for "// [tdbe]" 
-  - Per-material, per-model, per-pipeline properties. Easy to create a material e.g. transparent, doublesided; add properties / new shader etc.
+  - Explained and tweaked the `Renderer`/Pipeline; look for "// [tdbe]" 
+  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add properties / new shader etc.
   - Render pipeline knows if you modified any default properties in materials and in that case creates unique mats/pipelines.
 
 ## `Input` class and `InputData`'s in `Inputspace`.
