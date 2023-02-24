@@ -1,9 +1,10 @@
 #extension GL_EXT_multiview : enable
 
-layout(binding = 0) uniform World
+layout(binding = 0) uniform DynBufData
 {
-    mat4 matrix;
-} world;
+    mat4 worldMatrix;
+    vec4 colorMultiplier;
+} dynBufData;
 
 layout(binding = 1) uniform ViewProjection
 {
@@ -12,15 +13,17 @@ layout(binding = 1) uniform ViewProjection
 
 layout(location = 0) in vec3 inPosition;
 layout(location = 2) in vec3 inColor;
+//layout(location = 3) in vec3 colorMultiplier;
 
 layout(location = 0) out vec3 position; // In world space
 layout(location = 1) out vec3 color;
 
 void main()
 {
-  vec4 pos = world.matrix * vec4(inPosition, 1.0);
+  vec4 pos = dynBufData.worldMatrix * vec4(inPosition, 1.0);
   gl_Position = viewProjection.matrices[gl_ViewIndex] * pos;
   position = pos.xyz;
 
-  color = inColor;
+  color = inColor
+          *dynBufData.colorMultiplier.xyz;
 }

@@ -1,10 +1,9 @@
 #extension GL_EXT_multiview : enable
 
-layout(binding = 0) uniform DynBufData
+layout(binding = 0) uniform World
 {
-    mat4 worldMatrix;
-    vec4 colorMultiplier;
-} dynBufData;
+    mat4 matrix;
+} world;
 
 layout(binding = 1) uniform ViewProjection
 {
@@ -21,9 +20,9 @@ layout(location = 1) out vec3 color;
 
 void main()
 {
-  gl_Position = viewProjection.matrices[gl_ViewIndex] * dynBufData.worldMatrix * vec4(inPosition, 1.0);
+  gl_Position = viewProjection.matrices[gl_ViewIndex] * world.matrix * vec4(inPosition, 1.0);
 
-  normal = normalize(vec3(dynBufData.worldMatrix * vec4(inNormal, 0.0)));
+  normal = normalize(vec3(world.matrix * vec4(inNormal, 0.0)));
   color = inColor
-          * dynBufData.colorMultiplier.xyz;
+          ;//*colorMultiplier;
 }
