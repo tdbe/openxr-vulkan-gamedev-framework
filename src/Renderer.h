@@ -6,11 +6,15 @@
 
 #include <vector>
 
+#include "GameData.h"
+
+
 class Context;
 class DataBuffer;
 class Headset;
 class MeshData;
 struct Model;
+struct Material;
 class Pipeline;
 class RenderProcess;
 
@@ -20,10 +24,14 @@ class RenderProcess;
  * render processes. Note that all resources that need to be duplicated in order to be able to render several frames in
  * parallel are held by this number of render processes.
  */
+/*
+* [tdbe] Look for "// [tdbe]" comments in Renderer.cpp, and in GameData.h/Material. I have explained some of the confusing 
+* vulkan bits for you and I modified it for a Material style workflow, with per-material pipeline support, and/or descriptor sets.
+*/
 class Renderer final
 {
 public:
-  Renderer(const Context* context, const Headset* headset, const MeshData* meshData, const std::vector<Model*>& models);
+  Renderer(const Context* context, const Headset* headset, const MeshData* meshData, const std::vector<Material*>& materials, const std::vector<GameObject*>& gameObjects);
   ~Renderer();
 
   void render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time);
@@ -45,9 +53,12 @@ private:
   VkDescriptorSetLayout descriptorSetLayout = nullptr;
   std::vector<RenderProcess*> renderProcesses;
   VkPipelineLayout pipelineLayout = nullptr;
-  Pipeline *gridPipeline = nullptr, *diffusePipeline = nullptr;
+  std::vector<Pipeline *> pipelines;
   DataBuffer* vertexIndexBuffer = nullptr;
-  std::vector<Model*> models;
+  std::vector<Material*> materials;
+  std::vector<GameObject*> gameObjects;
   size_t indexOffset = 0u;
   size_t currentRenderProcessIndex = 0u;
+
+  const int findExistingPipeline(const std::string& vertShader, const std::string& fragShader, const PipelineMaterialPayload& pipelineData) const;
 };

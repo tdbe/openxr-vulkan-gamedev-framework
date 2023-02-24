@@ -1,4 +1,6 @@
+#pragma once
 #include "Pipeline.h"
+
 
 #include "Context.h"
 #include "Util.h"
@@ -6,16 +8,24 @@
 #include <array>
 #include <sstream>
 
+
+
 Pipeline::Pipeline(const Context* context,
                    VkPipelineLayout pipelineLayout,
                    VkRenderPass renderPass,
                    const std::string& vertexFilename,
                    const std::string& fragmentFilename,
                    const std::vector<VkVertexInputBindingDescription>& vertexInputBindingDescriptions,
-                   const std::vector<VkVertexInputAttributeDescription>& vertexInputAttributeDescriptions)
+                   const std::vector<VkVertexInputAttributeDescription>& vertexInputAttributeDescriptions,
+                   PipelineMaterialPayload pipelineData
+                   )
 : context(context)
 {
   const VkDevice device = context->getVkDevice();
+
+  this->pipelineData = pipelineData;
+  vertShaderName = vertexFilename;
+  fragShaderName = fragmentFilename;
 
   // Load the vertex shader
   VkShaderModule vertexShaderModule;
@@ -82,7 +92,7 @@ Pipeline::Pipeline(const Context* context,
   };
   pipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
   pipelineRasterizationStateCreateInfo.lineWidth = 1.0f;
-  pipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_NONE;
+  pipelineRasterizationStateCreateInfo.cullMode = pipelineData.cullMode;
 
   VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo{
     VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
@@ -96,12 +106,12 @@ Pipeline::Pipeline(const Context* context,
   pipelineColorBlendAttachmentState.colorWriteMask =
     VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
   pipelineColorBlendAttachmentState.blendEnable = VK_TRUE;
-  pipelineColorBlendAttachmentState.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-  pipelineColorBlendAttachmentState.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-  pipelineColorBlendAttachmentState.colorBlendOp = VK_BLEND_OP_ADD;
-  pipelineColorBlendAttachmentState.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-  pipelineColorBlendAttachmentState.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-  pipelineColorBlendAttachmentState.alphaBlendOp = VK_BLEND_OP_ADD;
+  pipelineColorBlendAttachmentState.srcColorBlendFactor = pipelineData.srcColorBlendFactor;
+  pipelineColorBlendAttachmentState.dstColorBlendFactor = pipelineData.dstColorBlendFactor;
+  pipelineColorBlendAttachmentState.colorBlendOp = pipelineData.colorBlendOp;
+  pipelineColorBlendAttachmentState.srcAlphaBlendFactor = pipelineData.srcAlphaBlendFactor;
+  pipelineColorBlendAttachmentState.dstAlphaBlendFactor = pipelineData.dstAlphaBlendFactor;
+  pipelineColorBlendAttachmentState.alphaBlendOp = pipelineData.alphaBlendOp;
 
   pipelineColorBlendStateCreateInfo.attachmentCount = 1;
   pipelineColorBlendStateCreateInfo.pAttachments = &pipelineColorBlendAttachmentState;
@@ -143,6 +153,7 @@ Pipeline::Pipeline(const Context* context,
   // These shader modules can now be destroyed
   vkDestroyShaderModule(device, vertexShaderModule, nullptr);
   vkDestroyShaderModule(device, fragmentShaderModule, nullptr);
+  valid = true;
 }
 
 Pipeline::~Pipeline()
@@ -154,7 +165,7 @@ Pipeline::~Pipeline()
   }
 }
 
-void Pipeline::bind(VkCommandBuffer commandBuffer) const
+void Pipeline::bindPipeline(VkCommandBuffer commandBuffer) const
 {
   vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
@@ -162,4 +173,16 @@ void Pipeline::bind(VkCommandBuffer commandBuffer) const
 bool Pipeline::isValid() const
 {
   return valid;
+}
+
+const std::string Pipeline::getVertShaderName() const{
+  return vertShaderName;
+}
+
+const std::string Pipeline::getFragShaderName() const{
+  return fragShaderName;
+}
+
+const PipelineMaterialPayload& Pipeline::getPipelineMaterialData() const{
+  return pipelineData;
 }

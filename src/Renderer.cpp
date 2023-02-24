@@ -4,13 +4,15 @@
 #include "DataBuffer.h"
 #include "Headset.h"
 #include "MeshData.h"
-#include "Model.h"
+#include "GameData.h"
 #include "Pipeline.h"
 #include "RenderProcess.h"
 #include "RenderTarget.h"
 #include "Util.h"
 
 #include <array>
+#include <stdio.h>
+
 
 namespace
 {
@@ -20,8 +22,10 @@ constexpr size_t framesInFlightCount = 2u;
 Renderer::Renderer(const Context* context,
                    const Headset* headset,
                    const MeshData* meshData,
-                   const std::vector<Model*>& models)
-: context(context), headset(headset), models(models)
+                   const std::vector<Material*>& materials,
+                   const std::vector<GameObject*>& gameObjects
+                   )
+: context(context), headset(headset), materials(materials), gameObjects(gameObjects)
 {
   const VkDevice device = context->getVkDevice();
 
@@ -56,21 +60,43 @@ Renderer::Renderer(const Context* context,
     return;
   }
 
+  // [tdbe] Pipelines in Vulkan:
+  // [tdbe] Uness you are using some kind of large "Standard Shader" / "Uber Shader", you want to make one 
+  //        pipeline per type of shader. E.g. BRDF Opaque, Simple Transparent, etc. Every time you have a
+  //        new shader, if it takes very different inputs, the vukan way to do it is to have a new pipeline.
+  //        "Pipeline" can be a confusing term.
+  //        You can have one pipeline for one shader for one vertex-fragment or render stage / subpass. 
+  //        But also you can bind different uniforms to the same shader. Ie, the "material" workflow we are
+  //        are all familiar with.
+  //        Each GameData/`Material` -can- run a unique pipeline if you need. Set it up in here. One pipeline per shader.
+  //        Also, each Material can hold different descriptor set data (ie properties (DynamicMaterialUniformData)), 
+  //        such that if it fits the main pipeline's layout's descriptor set layout (🙂), you don't need to make 
+  //        a new pipeline or a new descriptor.
+
+  // [tdbe] NOTE: TODO: We also need a descriptor set layout that supports textures, 
+  // and a descriptor set per-material, (or descriptor set data per-materal), 
+  // to bind textures to each material.
+  // Rn we have one universal descriptor set for all our materials, and can only push floats, arrays etc.
+
   // Create a descriptor set layout
   std::array<VkDescriptorSetLayoutBinding, 3u> descriptorSetLayoutBindings;
 
+  // [tdbe] per model/mesh data, vertex dynamic; 
+  //        and also per-material data go here.
   descriptorSetLayoutBindings.at(0u).binding = 0u;
   descriptorSetLayoutBindings.at(0u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
   descriptorSetLayoutBindings.at(0u).descriptorCount = 1u;
   descriptorSetLayoutBindings.at(0u).stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
   descriptorSetLayoutBindings.at(0u).pImmutableSamplers = nullptr;
 
+  // [tdbe] cross-shader global (pipeline/descriptorset wide) vertex static
   descriptorSetLayoutBindings.at(1u).binding = 1u;
   descriptorSetLayoutBindings.at(1u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
   descriptorSetLayoutBindings.at(1u).descriptorCount = 1u;
   descriptorSetLayoutBindings.at(1u).stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
   descriptorSetLayoutBindings.at(1u).pImmutableSamplers = nullptr;
 
+  // [tdbe] cross-shader global (pipeline/descriptorset wide) fragment static
   descriptorSetLayoutBindings.at(2u).binding = 2u;
   descriptorSetLayoutBindings.at(2u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
   descriptorSetLayoutBindings.at(2u).descriptorCount = 1u;
@@ -102,7 +128,7 @@ Renderer::Renderer(const Context* context,
   renderProcesses.resize(framesInFlightCount);
   for (RenderProcess*& renderProcess : renderProcesses)
   {
-    renderProcess = new RenderProcess(context, commandPool, descriptorPool, descriptorSetLayout, models.size());
+    renderProcess = new RenderProcess(context, commandPool, descriptorPool, descriptorSetLayout, gameObjects.size(), materials.size());
     if (!renderProcess->isValid())
     {
       valid = false;
@@ -110,12 +136,15 @@ Renderer::Renderer(const Context* context,
     }
   }
 
-  // Create the grid pipeline
+  // Create the pipeline
   VkVertexInputBindingDescription vertexInputBindingDescription;
   vertexInputBindingDescription.binding = 0u;
   vertexInputBindingDescription.stride = sizeof(Vertex);
   vertexInputBindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
+  // [tdbe] This is where you bind vertex uniform data for shader input 
+  // (e.g. vertex pos, vertex normal, vertex color), and assign per-pipeline.
+  // (not related to the descriptor set layout above)
   VkVertexInputAttributeDescription vertexInputAttributePosition;
   vertexInputAttributePosition.binding = 0u;
   vertexInputAttributePosition.location = 0u;
@@ -133,27 +162,49 @@ Renderer::Renderer(const Context* context,
   vertexInputAttributeColor.location = 2u;
   vertexInputAttributeColor.format = VK_FORMAT_R32G32B32_SFLOAT;
   vertexInputAttributeColor.offset = offsetof(Vertex, color);
+  
+  PipelineMaterialPayload pipelineMaterialPayload = {};
+  pipelines.resize(2);
+  pipelines[0] = new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), "shaders/Grid.vert.spv", "shaders/Grid.frag.spv",
+                    { vertexInputBindingDescription }, 
+                    { vertexInputAttributePosition, vertexInputAttributeColor
+                    },
+                    pipelineMaterialPayload);
+  pipelines[1] = new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), "shaders/Diffuse.vert.spv", "shaders/Diffuse.frag.spv",
+                    { vertexInputBindingDescription }, 
+                    { vertexInputAttributePosition, vertexInputAttributeNormal, vertexInputAttributeColor
+                    },
+                    pipelineMaterialPayload);
 
-  gridPipeline =
-    new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), "shaders/Grid.vert.spv", "shaders/Grid.frag.spv",
-                 { vertexInputBindingDescription }, { vertexInputAttributePosition, vertexInputAttributeColor });
-  if (!gridPipeline->isValid())
-  {
-    valid = false;
-    return;
+  for(size_t i=0; i<materials.size(); i++){
+    int pipelineExistsAt = findExistingPipeline(materials[i]->vertShaderName, materials[i]->fragShaderName, materials[i]->pipelineData);
+    //std::printf("\n[Renderer][log] pipelining materials: index: {%d}, shader.name: {%s}, exists: {%d}", i, materials[i]->fragShaderName.c_str(), pipelineExistsAt );
+    // [tdbe] default grid pipeline
+    if(i==0){   
+      materials[0]->pipeline = pipelines[0];
+        
+    }// [tdbe] default diffuse pipeline
+    else if (pipelineExistsAt > -1)
+    {
+      materials[i]->pipeline = pipelines[pipelineExistsAt];
+    }// [tdbe] create a new pipeline from material shader name, with default parameters
+    else{
+      pipelines.emplace_back(new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), 
+                    materials[i]->vertShaderName, materials[i]->fragShaderName,
+                    { vertexInputBindingDescription }, 
+                    { vertexInputAttributePosition, vertexInputAttributeNormal, vertexInputAttributeColor
+                    },
+                    materials[i]->pipelineData));
+      materials[i]->pipeline = pipelines[pipelines.size()-1];
+    }
+    
+    if (!materials[i]->pipeline->isValid())
+    {
+      valid = false;
+      return; 
+    }
   }
-
-  // Create the diffuse pipeline
-  diffusePipeline =
-    new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), "shaders/Diffuse.vert.spv",
-                 "shaders/Diffuse.frag.spv", { vertexInputBindingDescription },
-                 { vertexInputAttributePosition, vertexInputAttributeNormal, vertexInputAttributeColor });
-  if (!diffusePipeline->isValid())
-  {
-    valid = false;
-    return;
-  }
-
+  
   // Create a vertex index buffer
   {
     // Create a staging buffer
@@ -207,12 +258,16 @@ Renderer::Renderer(const Context* context,
 Renderer::~Renderer()
 {
   delete vertexIndexBuffer;
-  delete diffusePipeline;
-  delete gridPipeline;
+  
+  for (size_t i = 0; i<pipelines.size(); i++) {
+    //vkDestroyPipeline(device, materials[i]->pipeline, nullptr);
+    delete pipelines[i];
+  }
 
   const VkDevice device = context->getVkDevice();
   if (device)
   {
+
     if (pipelineLayout)
     {
       vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -238,6 +293,21 @@ Renderer::~Renderer()
   {
     vkDestroyCommandPool(device, commandPool, nullptr);
   }
+}
+
+// returns i of pipeline vectors, or -1 if a pipeline for these shaders hasn't been created yet.
+const int Renderer::findExistingPipeline(const std::string& vertShader, const std::string& fragShader, const PipelineMaterialPayload& pipelineData) const{
+  for(size_t i = 0; i< pipelines.size(); i++){
+    if(pipelines[i]->getVertShaderName() == vertShader &&
+      pipelines[i]->getFragShaderName() == fragShader
+      ){
+        if(pipelineData == pipelines[i]->getPipelineMaterialData()){
+          return (int)i;
+        }
+        
+    }
+  }
+  return -1;
 }
 
 void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time)
@@ -274,9 +344,10 @@ void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex,
 
   // Update the uniform buffer data
   {
-    for (size_t modelIndex = 0u; modelIndex < models.size(); ++modelIndex)
+    for (size_t goIndex = 0u; goIndex < gameObjects.size(); ++goIndex)
     {
-      renderProcess->dynamicVertexUniformData.at(modelIndex).worldMatrix = models.at(modelIndex)->worldMatrix;
+      renderProcess->dynamicVertexUniformData[goIndex].worldMatrix = gameObjects.at(goIndex)->worldMatrix;
+      renderProcess->dynamicVertexUniformData[goIndex].colorMultiplier = gameObjects.at(goIndex)->material->dynamicUniformData.colorMultiplier;
     }
 
     for (size_t eyeIndex = 0u; eyeIndex < headset->getEyeCount(); ++eyeIndex)
@@ -328,30 +399,27 @@ void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex,
 
   // Draw each model
   const VkDescriptorSet descriptorSet = renderProcess->getDescriptorSet();
-  for (size_t modelIndex = 0u; modelIndex < models.size(); ++modelIndex)
+  for (size_t goIndex = 0u; goIndex < gameObjects.size(); ++goIndex)
   {
-    const Model* model = models.at(modelIndex);
+    const GameObject* gameObject = gameObjects.at(goIndex);
+    //std::printf("\n[Renderer][log] render() goIndex: {%d}, go.name: {%s}", goIndex, gameObject->name.c_str());
+    if(!gameObject->isVisible)
+      continue;
 
-    // Bind the uniform buffer
+    // Bind the uniform buffer for per model/mesh dynamic, vertex
     const uint32_t uniformBufferOffset =
       static_cast<uint32_t>(util::align(static_cast<VkDeviceSize>(sizeof(RenderProcess::DynamicVertexUniformData)),
                                         context->getUniformBufferOffsetAlignment()) *
-                            static_cast<VkDeviceSize>(modelIndex));
+                            static_cast<VkDeviceSize>(goIndex)); 
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0u, 1u, &descriptorSet, 1u,
                             &uniformBufferOffset);
 
-    // Bind the pipeline
-    if (modelIndex == 0u)
-    {
-      gridPipeline->bind(commandBuffer);
-    }
-    else if (modelIndex == 1u)
-    {
-      diffusePipeline->bind(commandBuffer);
-    }
+    // TODO: bind the DynamicMaterialxUniformData somehow... "per pipeline" uniform data...
 
-    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(model->indexCount), 1u,
-                     static_cast<uint32_t>(model->firstIndex), 0u, 0u);
+    // [tdbe] fetch the material for this GO and bind its "pipeline" to the command buffer.
+    gameObject->material->pipeline->bindPipeline(commandBuffer);
+    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(gameObject->model->indexCount), 1u,
+                     static_cast<uint32_t>(gameObject->model->firstIndex), 0u, 0u);
   }
 
   vkCmdEndRenderPass(commandBuffer);

@@ -10,17 +10,21 @@ RenderProcess::RenderProcess(const Context* context,
                              VkCommandPool commandPool,
                              VkDescriptorPool descriptorPool,
                              VkDescriptorSetLayout descriptorSetLayout,
-                             size_t modelCount)
+                             size_t gameObjectCount,
+                             size_t materialsCount
+                             )
 : context(context)
 {
   // Initialize the uniform buffer data
-  dynamicVertexUniformData.resize(modelCount);
-  for (size_t modelIndex = 0u; modelIndex < modelCount; ++modelIndex)
+  dynamicVertexUniformData.resize(gameObjectCount);
+  for (size_t modelIndex = 0u; modelIndex < gameObjectCount; ++modelIndex)
   {
-    dynamicVertexUniformData.at(modelIndex).worldMatrix = glm::mat4(1.0f);
+    dynamicVertexUniformData[modelIndex].worldMatrix = glm::mat4(1.0f);
+    dynamicVertexUniformData[modelIndex].colorMultiplier = glm::vec4(1.0f);
   }
 
-  for (glm::mat4& viewProjectionMatrix : staticVertexUniformData.viewProjectionMatrices)
+  // Initialize the uniform buffer data
+   for (glm::mat4& viewProjectionMatrix : staticVertexUniformData.viewProjectionMatrices)
   {
     viewProjectionMatrix = glm::mat4(1.0f);
   }
@@ -86,10 +90,10 @@ RenderProcess::RenderProcess(const Context* context,
   descriptorBufferInfos.at(0u).range = sizeof(DynamicVertexUniformData);
 
   descriptorBufferInfos.at(1u).offset = util::align(descriptorBufferInfos.at(0u).range, uniformBufferOffsetAlignment) *
-                                        static_cast<VkDeviceSize>(modelCount);
+                                        static_cast<VkDeviceSize>(gameObjectCount);
   descriptorBufferInfos.at(1u).range = sizeof(StaticVertexUniformData);
 
-  descriptorBufferInfos.at(2u).offset =
+  descriptorBufferInfos.at(2u).offset = 
     descriptorBufferInfos.at(1u).offset + util::align(descriptorBufferInfos.at(1u).range, uniformBufferOffsetAlignment);
   descriptorBufferInfos.at(2u).range = sizeof(StaticFragmentUniformData);
 
@@ -252,4 +256,6 @@ void RenderProcess::updateUniformBufferData() const
 
   length = sizeof(StaticFragmentUniformData);
   memcpy(offset, &staticFragmentUniformData, length);
+  offset += util::align(length, uniformBufferOffsetAlignment);
+
 }
