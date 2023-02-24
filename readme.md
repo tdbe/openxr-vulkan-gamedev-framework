@@ -1,6 +1,6 @@
 OpenXR/Vulkan/C++ Gameplay, Input, and Rendering fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example.
 
-Quickly make a performant XR game with common-sense gamedev principles. Explained; technical + friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit fo evidence that khronos(openxr&vulkan) know not of what a hoo-man is. 🙃
+Quickly make a performant XR game with common-sense gamedev principles. Explained; technical + friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit of evidence that khronos(openxr&vulkan) know not of what a hoo-man is. 🙃
 
 # My feature stack so far:
 
@@ -14,9 +14,9 @@ Quickly make a performant XR game with common-sense gamedev principles. Explaine
   - Sample mechanics for Locomotion, Hands, XR Input testing, World Objects.
 
 ## `GameData.h`
-  - `GameObject`{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
-  - `PlayerObject`s{`GameObject`s, `PlayerActiveStates`}.
-  - `Material`s{`Shader`, Descriptor-set `niformData`, optional/shared `Pipeline`s (for e.g blend ops)}
+  - `GameObject`'s{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
+  - `PlayerObject`'s{`GameObject`'s, `PlayerActiveStates`}.
+  - `Material`'s{`Shader`, Descriptor-set `niformData`, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
