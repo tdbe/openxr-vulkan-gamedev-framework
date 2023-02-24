@@ -5,7 +5,7 @@
 #include "Headset.h"
 #include "MeshData.h"
 #include "MirrorView.h"
-#include "Model.h"
+#include "GameData.h"
 #include "Renderer.h"
 #include "gameMechanics/GameBehaviour.h"
 #include "gameMechanics/HandsBehaviour.h"
@@ -60,16 +60,49 @@ int main()
     logoModel = {};
   std::vector<Model*> models = { &gridModel, &ruinsModel,    &carModelLeft,   &carModelRight, &beetleModel,
                                  &bikeModel, &handModelLeft, &handModelRight, &logoModel };
+  
+  Material gridMaterial, diffuseMaterial, bikeMaterial, logoMaterial, locomotionMaterial, skyMaterial = {};
+  // [tdbe] init any non-default material props here.
+  gridMaterial.vertShaderName = "shaders/Grid.vert.spv";
+  gridMaterial.fragShaderName = "shaders/Grid.frag.spv";
+  gridMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f);
+  diffuseMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
+  diffuseMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
+  diffuseMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  bikeMaterial.vertShaderName = "shaders/DiffuseTransparent.vert.spv";
+  bikeMaterial.fragShaderName = "shaders/DiffuseTransparent.frag.spv";
+  //bikeMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
+  //bikeMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
+  bikeMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
+  bikeMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 0.0f, 0.1f, 0.66f);
+  logoMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
+  logoMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
+  logoMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  logoMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
+  std::vector<Material*> materials = { &gridMaterial, &diffuseMaterial, &bikeMaterial, &logoMaterial, &locomotionMaterial, &skyMaterial};
+  
+  GameObject head = GameObject();
+  head.worldMatrix = glm::inverse(cameraMatrix);
+  GameObject handLeft = GameObject(&handModelLeft, &logoMaterial, true, "handLeft");
+  GameObject handRight = GameObject(&handModelRight, &logoMaterial, true, "handRight");
+  GameObject grid = GameObject(&gridModel, &gridMaterial, true, "grid");
+  GameObject ruins = GameObject(&ruinsModel, &diffuseMaterial, true, "ruins");
+  GameObject carLeft = GameObject(&carModelLeft, &diffuseMaterial, true, "carLeft");
+  GameObject carRight = GameObject(&carModelRight, &diffuseMaterial, true, "handRight");
+  GameObject beetle = GameObject(&beetleModel, &diffuseMaterial, true, "beetle");
+  GameObject bike = GameObject(&bikeModel, &bikeMaterial, true, "bike");
+  GameObject logo = GameObject(&logoModel, &logoMaterial, true, "logo");
+  std::vector<GameObject*> gameObjects = { &grid, &ruins, &carLeft, &carRight, &beetle, &bike, &handLeft, &handRight, &logo };
+  PlayerObject playerObject = PlayerObject("XR Player 1", &head, &handLeft, &handRight);
 
-  gridModel.worldMatrix = ruinsModel.worldMatrix = glm::mat4(1.0f);
-  carModelLeft.worldMatrix =
+  carLeft.worldMatrix =
     glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -7.0f }), glm::radians(75.0f), { 0.0f, 1.0f, 0.0f });
-  carModelRight.worldMatrix =
+  carRight.worldMatrix =
     glm::rotate(glm::translate(glm::mat4(1.0f), { 8.0f, 0.0f, -15.0f }), glm::radians(-15.0f), { 0.0f, 1.0f, 0.0f });
-  beetleModel.worldMatrix =
+  beetle.worldMatrix =
     glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
-  logoModel.worldMatrix = glm::translate(glm::mat4(1.0f), { 0.0f, 3.0f, -10.0f });
-  bikeModel.worldMatrix = glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
+  logo.worldMatrix = glm::translate(glm::mat4(1.0f), { 0.0f, 3.0f, -10.0f });
+  bike.worldMatrix = glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
 
   MeshData* meshData = new MeshData;
   if (!meshData->loadModel("models/Grid.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
@@ -100,7 +133,7 @@ int main()
     return EXIT_FAILURE;
   }
 
-  Renderer renderer(&context, &headset, meshData, models);
+  Renderer renderer(&context, &headset, meshData, materials, gameObjects);
   if (!renderer.isValid())
   {
     return EXIT_FAILURE;
@@ -116,14 +149,14 @@ int main()
   // [tdbe] all game mechanics, initial resource allocation here, 
   // and then update tick later in game loop
   std::vector<GameBehaviour*> gameBehaviours = {
-    new LocomotionBehaviour(cameraMatrix, handModelLeft, handModelRight, 1, 3, 1),
-    new HandsBehaviour(handModelLeft, handModelRight),
+    new LocomotionBehaviour(playerObject, 1, 3, 1),
+    new HandsBehaviour(playerObject),
     //new InputTesterBehaviour(),
-    new WorldObjectsMiscBehaviour(bikeModel)
+    new WorldObjectsMiscBehaviour(bike, logoMaterial)
   };
     
   static float gameTime = 0.0f;
-
+  
   // Main loop
   std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
   while (!headset.isExitRequested() && !mirrorView.isExitRequested())
@@ -161,17 +194,15 @@ int main()
       gameTime += deltaTime;
 
       // [tdbe] Update
-      gameBehaviours[0]->Update(deltaTime, gameTime, inputData, inputHaptics, cameraMatrix);
-      const glm::mat4 inverseCameraMatrix = glm::inverse(cameraMatrix);
-      for(size_t i = 1u; i < gameBehaviours.size(); i++){
-        gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics, inverseCameraMatrix);
+      for(size_t i = 0; i < gameBehaviours.size(); i++){
+        gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics);
       }
       inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
 
       // [tdbe] TODO: do a xrRequestExitSession(session); ?
 
       // Render
-      renderer.render(cameraMatrix, swapchainImageIndex, gameTime);
+      renderer.render(glm::inverse(head.worldMatrix), swapchainImageIndex, gameTime);
 
       const MirrorView::RenderResult mirrorResult = mirrorView.render(swapchainImageIndex);
       if (mirrorResult == MirrorView::RenderResult::Error)

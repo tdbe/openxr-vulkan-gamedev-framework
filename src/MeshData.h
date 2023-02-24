@@ -27,6 +27,7 @@ struct Vertex final
 class MeshData final
 {
 public:
+  // [tdbe] TODO: actually load vertex.colors from 3D model file instead of this.
   enum class Color
   {
     White,

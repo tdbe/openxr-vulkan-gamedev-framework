@@ -1,6 +1,6 @@
 #include "MeshData.h"
 
-#include "Model.h"
+#include "GameData.h"
 #include "Util.h"
 
 #include <tinyobjloader/tiny_obj_loader.h>
