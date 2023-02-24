@@ -1,6 +1,6 @@
 OpenXR/Vulkan/C++ Gameplay, Input, and Rendering fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example.
 
-Quickly make a performant XR game with common sense gamedev principles. Explained; technical but friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit fo evidence that khronos(openxr&vulkan) know not of what hoo-man is. 🙃
+Quickly make a performant XR game with common-sense gamedev principles. Explained; technical + friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit fo evidence that khronos(openxr&vulkan) know not of what a hoo-man is. 🙃
 
 # My feature stack so far:
 
