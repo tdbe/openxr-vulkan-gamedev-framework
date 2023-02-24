@@ -1,6 +1,12 @@
 set(TARGET_NAME openxr-vulkan-example)
 
 set(SHADER_SRC
+  shaders/Sky.vert
+  shaders/Sky.frag
+  
+  shaders/DiffuseTransparent.vert
+  shaders/DiffuseTransparent.frag
+
   shaders/Diffuse.vert
   shaders/Diffuse.frag
 
@@ -44,7 +50,7 @@ set(SRC
   MirrorView.cpp
   MirrorView.h
 
-  Model.h
+  GameData.h
 
   Pipeline.cpp
   Pipeline.h
