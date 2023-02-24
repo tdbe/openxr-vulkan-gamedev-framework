@@ -16,12 +16,12 @@ Quickly make a performant XR game with common-sense gamedev principles. Explaine
 ## `GameData.h`
   - `GameObject`'s{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
   - `PlayerObject`'s{`GameObject`'s, `PlayerActiveStates`}.
-  - `Material`'s{`Shader`, Descriptor-set `niformData`, optional/shared `Pipeline` (for e.g blend ops)}
+  - `Material`'s{`Shader`, Descriptor-set `UniformData`, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
   - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
   - Explained and tweaked the `Renderer`/Pipeline; look for "// [tdbe]" 
-  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add properties / new shader etc.
+  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add uniforms / new shader etc.
   - Render pipeline knows if you modified any default properties in materials and in that case creates unique mats/pipelines.
 
 ## `Input` class and `InputData`'s in `Inputspace`.
