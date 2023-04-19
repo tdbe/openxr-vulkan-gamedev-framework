@@ -378,17 +378,40 @@ glm::vec3 util::slerp(const glm::vec3& start, const glm::vec3& end, float percen
     return ((start*glm::cos(theta)) + (relativeVec * glm::sin(theta)));
 }
 
-// signed radian angle between  vectors, around a normal. vectors must be normalized.
-float util::vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, const glm::vec3& norm){
+// signed radian angle between 2 vectors, around a normal. vectors must be normalized.
+float util::vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, const glm::vec3& norm)
+{
   float dot = vec1.x*vec2.x + vec1.y*vec2.y + vec1.z*vec2.z;
   float det = vec1.x*vec2.y*norm.z + vec2.x*norm.y*vec1.z + norm.x*vec1.y*vec2.z - vec1.z*vec2.y*norm.x - vec2.z*norm.y*vec1.x - norm.z*vec1.y*vec2.x;
   return atan2(det, dot);
 }
 
-glm::mat4 util::rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix){
+glm::mat4 util::rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix)
+{
   glm::mat4 translateToPoint = glm::translate(glm::mat4(), 
                                                  glm::vec3(point.x, point.y, point.z)
                                                  );
   glm::mat4 inverseTranslate = glm::inverse( translateToPoint );
   return translateToPoint * rotationMatrix * inverseTranslate;
+}
+
+void util::quaternionToAngleAxis(const glm::quat& quat, float& angle, glm::vec3& axis)
+{
+  angle = 2 * acos(quat.w);
+
+  axis.x = quat.x / sqrt(1-quat.w*quat.w);
+  axis.y = quat.y / sqrt(1-quat.w*quat.w);
+  axis.z = quat.z / sqrt(1-quat.w*quat.w);
+}
+
+glm::quat util::quaternionFromAngleAxis(const float& angle, const glm::vec3& axis)
+{
+  glm::quat quat = glm::quat_identity;
+
+  quat.x = axis.x * sin(angle/2);
+  quat.y = axis.y * sin(angle/2);
+  quat.z = axis.z * sin(angle/2);
+  quat.w = cos(angle/2);
+
+  return quat;
 }

@@ -133,4 +133,8 @@ float vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, cons
 
 glm::mat4 rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix);
 
+void util::quaternionToAngleAxis(const glm::quat& quat, float& angle, glm::vec3& axis);
+
+glm::quat util::quaternionFromAngleAxis(const float& angle, const glm::vec3& axis);
+
 } // namespace util
