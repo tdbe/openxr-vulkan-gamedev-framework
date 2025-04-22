@@ -1,6 +1,6 @@
 set(PROJECT_NAME openxr-vulkan-example)
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 project(${PROJECT_NAME})
 
 include(FindVulkan)

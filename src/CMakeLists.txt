@@ -14,8 +14,8 @@ set(SRC
   Context.cpp
   Context.h
 
-  Controllers.cpp
-  Controllers.h
+  Input.cpp
+  Input.h
 
   DataBuffer.cpp
   DataBuffer.h
@@ -51,6 +51,11 @@ set(SRC
 
   ${SHADER_SRC}
 )
+
+set(ENV{VULKAN_SDK} "C:/VulkanSDK/1.4.309.0/Include/")
+
+find_package(Vulkan REQUIRED)
+#target_link_libraries(target ${Vulkan_LIBRARIES})
 
 add_executable(${TARGET_NAME})
 target_sources(${TARGET_NAME} PRIVATE ${SRC})
