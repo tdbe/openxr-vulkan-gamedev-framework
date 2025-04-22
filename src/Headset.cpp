@@ -678,6 +678,16 @@ glm::mat4 Headset::getEyeProjectionMatrix(size_t eyeIndex) const
   return eyeProjectionMatrices.at(eyeIndex);
 }
 
+std::vector<XrView> Headset::getEyePoses() const
+{
+  return eyePoses;
+}
+
+XrSessionState Headset::getSessionState() const
+{
+  return sessionState;
+}
+
 RenderTarget* Headset::getRenderTarget(size_t swapchainImageIndex) const
 {
   return swapchainRenderTargets.at(swapchainImageIndex);
