@@ -505,7 +505,7 @@ Context::~Context()
   }
 }
 
-bool Context::createDevice(VkSurfaceKHR mirrorSurface)
+bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface only used to check compatibility
 {
   // Retrieve the physical device from OpenXR
   XrVulkanGraphicsDeviceGetInfoKHR vulkanGraphicsDeviceGetInfo{ XR_TYPE_VULKAN_GRAPHICS_DEVICE_GET_INFO_KHR };

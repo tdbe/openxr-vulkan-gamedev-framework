@@ -16,7 +16,7 @@
 namespace
 {
 constexpr XrReferenceSpaceType spaceType = XR_REFERENCE_SPACE_TYPE_STAGE;
-constexpr VkFormat colorFormat = VK_FORMAT_R8G8B8A8_SRGB;
+constexpr VkFormat colorFormat = VK_FORMAT_R8G8B8A8_SRGB;//_RGBA8UnormSrgb
 constexpr VkFormat depthFormat = VK_FORMAT_D32_SFLOAT;
 } // namespace
 
@@ -29,6 +29,13 @@ Headset::Headset(const Context* context) : context(context)
   {
     constexpr uint32_t viewMask = 0b00000011;
     constexpr uint32_t correlationMask = 0b00000011;
+
+    // [tdbe] Single pass / multiview explanation:
+    // [tdbe] We feed this multiview create info into the regular vk render pass creation.
+    // [tdbe] Vulklan will execute the render pipeline twice (or whatever number is in pViewMasks)
+    // [tdbe] To use multiview, in the shader you enable the GL_EXT_multiview extension, and then
+    // [tdbe] get a glViewIndex depending on what multiview view you are about to output to. So you
+    // [tdbe] can use e.g. an array of transformation matrixes indexed by this.
 
     VkRenderPassMultiviewCreateInfo renderPassMultiviewCreateInfo{
       VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO
@@ -170,6 +177,9 @@ Headset::Headset(const Context* context) : context(context)
   }
 
   // Create a play space
+  // [tdbe] This is a reference space. There are multiple XrReferenceSpaceType's 
+  // [tdbe] e.g. XR_REFERENCE_SPACE_TYPE_VIEW, XR_REFERENCE_SPACE_TYPE_LOCAL, XR_REFERENCE_SPACE_TYPE_STAGE
+  // [tdbe] and they're used for positional information.
   XrReferenceSpaceCreateInfo referenceSpaceCreateInfo{ XR_TYPE_REFERENCE_SPACE_CREATE_INFO };
   referenceSpaceCreateInfo.referenceSpaceType = spaceType;
   referenceSpaceCreateInfo.poseInReferenceSpace = util::makeIdentity();
@@ -269,6 +279,8 @@ Headset::Headset(const Context* context) : context(context)
   }
 
   // Create a depth buffer
+  // [tdbe] Note: the depth buffer is not necessary. I guess it's used for passthrough or other xr depth effects,
+  // [tdbe] but it's not required for rendering geometry to the headset color buffer. (It's not "the" depth buffer.)
   depthBuffer = new ImageBuffer(context, eyeResolution, depthFormat, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                 context->getMultisampleCount(), VK_IMAGE_ASPECT_DEPTH_BIT, 2u);
   if (!depthBuffer->isValid())
@@ -278,6 +290,7 @@ Headset::Headset(const Context* context) : context(context)
   }
 
   // Create a swapchain and render targets
+  // [tdbe] Because we're rendering in singlepass / multiview, we create just one swapchain. But it has 2 images (layers).
   {
     const XrViewConfigurationView& eyeImageInfo = eyeImageInfos.at(0u);
 
@@ -287,7 +300,7 @@ Headset::Headset(const Context* context) : context(context)
     swapchainCreateInfo.sampleCount = eyeImageInfo.recommendedSwapchainSampleCount;
     swapchainCreateInfo.width = eyeImageInfo.recommendedImageRectWidth;
     swapchainCreateInfo.height = eyeImageInfo.recommendedImageRectHeight;
-    swapchainCreateInfo.arraySize = static_cast<uint32_t>(eyeCount);
+    swapchainCreateInfo.arraySize = static_cast<uint32_t>(eyeCount);// [tdbe] e.g. swapchain image layer array count: 2
     swapchainCreateInfo.faceCount = 1u;
     swapchainCreateInfo.mipCount = 1u;
     swapchainCreateInfo.usageFlags = XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT | XR_SWAPCHAIN_USAGE_TRANSFER_SRC_BIT;
@@ -301,6 +314,10 @@ Headset::Headset(const Context* context) : context(context)
     }
 
     // Get the number of swapchain images
+    // [tdbe] We do have 1 swapchain image, within the just 1 swapchain. 
+    // [tdbe] And we also have 1 multiview image, with 2 layers.
+    // [tdbe] HOWEVER, we need to use xrEnumerateSwapchainImages. Which creates 2 XR swapchain images.
+    // [tdbe] What we do is we bind these 2 openxr swapchain images, to the 2 layers of the multiview image. 🙂
     uint32_t swapchainImageCount;
     result = xrEnumerateSwapchainImages(swapchain, 0u, &swapchainImageCount, nullptr);
     if (XR_FAILED(result))
@@ -311,6 +328,7 @@ Headset::Headset(const Context* context) : context(context)
     }
 
     // Retrieve the swapchain images
+    // [tdbe] 1 for every openxr swapchain image / layer.
     std::vector<XrSwapchainImageVulkan2KHR> swapchainImages;
     swapchainImages.resize(swapchainImageCount);
     for (XrSwapchainImageVulkan2KHR& swapchainImage : swapchainImages)
@@ -330,6 +348,8 @@ Headset::Headset(const Context* context) : context(context)
 
     // Create the render targets
     swapchainRenderTargets.resize(swapchainImages.size());
+    // [tdbe] Again, the renderTarget / xr image pairs correspond to the vulkan swapchain layers we created earlier.
+    // [tdbe] Multiple redertargets set up this way will use the same render pass.
     for (size_t renderTargetIndex = 0u; renderTargetIndex < swapchainRenderTargets.size(); ++renderTargetIndex)
     {
       RenderTarget*& renderTarget = swapchainRenderTargets.at(renderTargetIndex);

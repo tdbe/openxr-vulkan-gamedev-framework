@@ -29,7 +29,7 @@ int main()
     return EXIT_FAILURE;
   }
 
-  if (!context.createDevice(mirrorView.getSurface()))
+  if (!context.createDevice(mirrorView.getSurface())) // [tdbe] the mirrorView is only used for checking compatibility
   {
     return EXIT_FAILURE;
   }
@@ -116,7 +116,7 @@ int main()
 
     mirrorView.processWindowEvents();
 
-    uint32_t swapchainImageIndex;
+    uint32_t swapchainImageIndex; // [tdbe] this is for one multiview swapchain image (two eyes one image)
     const Headset::BeginFrameResult frameResult = headset.beginFrame(swapchainImageIndex);
     if (frameResult == Headset::BeginFrameResult::Error)
     {
