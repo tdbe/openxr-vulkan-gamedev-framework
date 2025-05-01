@@ -1,5 +1,5 @@
 #include "GameBehaviour.h"
-#include "../Model.h"
+#include "../GameData.h"
 
 /* [tdbe] 
  *  Mechanics for moving around (xr locomotion)
@@ -10,12 +10,12 @@
 class LocomotionBehaviour : public GameBehaviour
 {
     public:
-        LocomotionBehaviour(glm::mat4& cameraMatrix, Model& handModelLeft, Model& handModelRight, float movementSpeedScaler_, float movementAccelerationPow_, float rotationSpeedScaler_);
+        LocomotionBehaviour(PlayerObject& playerObject, float movementSpeedScaler_, float movementAccelerationPow_, float rotationSpeedScaler_);
         virtual ~LocomotionBehaviour();
 
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics, const glm::mat4 &inverseCameraMatrix);
+                            Inputspace::InputHaptics &inputHaptics);
 
     private:
         enum class VisualsState{
@@ -57,9 +57,7 @@ class LocomotionBehaviour : public GameBehaviour
         };
         MoveStateData moveStateData;
 
-        glm::mat4& cameraMatrix;
-        Model& handModelLeft;
-        Model& handModelRight;
+        PlayerObject& playerObject;
         float movementSpeedScaler;
         float movementAccelerationPow;
         float rotationSpeedScaler;

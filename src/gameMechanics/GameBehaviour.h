@@ -2,7 +2,7 @@
 
 #include "../Util.h"
 #include "../InputData.h"
-#include "../Model.h"
+#include "../GameData.h"
 
 /* [tdbe] 
  *  Quick base class as a base for all game mechanics.
@@ -14,7 +14,7 @@ class GameBehaviour
         virtual ~GameBehaviour();
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics, const glm::mat4 &inverseCameraMatrix);
+                            Inputspace::InputHaptics &inputHaptics);
 
     private:
 

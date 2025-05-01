@@ -1,5 +1,5 @@
 #include "GameBehaviour.h"
-#include "../Model.h"
+#include "../GameData.h"
 
 /* [tdbe] 
  *  Mechanics for displaying/moving hands
@@ -7,14 +7,13 @@
 class HandsBehaviour : public GameBehaviour
 {
     public:
-        HandsBehaviour(Model &handModelLeft, Model &handModelRight);
+        HandsBehaviour(PlayerObject& playerObject);
         virtual ~HandsBehaviour();
 
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics, const glm::mat4 &inverseCameraMatrix);
+                            Inputspace::InputHaptics &inputHaptics);
 
     private:
-        Model &handModelLeft;
-        Model &handModelRight;
+        PlayerObject& playerObject;
 };

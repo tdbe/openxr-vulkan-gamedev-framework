@@ -12,7 +12,7 @@ class InputTesterBehaviour : public GameBehaviour
 
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics, const glm::mat4 &inverseCameraMatrix);
+                            Inputspace::InputHaptics &inputHaptics);
 
     private:
         void Mechanic_GrabState(const Inputspace::InputData &inputData, Inputspace::InputHaptics &inputHaptics);

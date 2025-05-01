@@ -1,8 +1,8 @@
 #include "LocomotionBehaviour.h"
 #include <stdio.h>
 
-LocomotionBehaviour::LocomotionBehaviour(glm::mat4& cameraMatrix, Model& handModelLeft, Model& handModelRight, float movementSpeedScaler_, float movementAccelerationPow_, float rotationSpeedScaler_):
-                                        cameraMatrix(cameraMatrix), handModelLeft(handModelLeft), handModelRight(handModelRight)
+LocomotionBehaviour::LocomotionBehaviour(PlayerObject& playerObject, float movementSpeedScaler_, float movementAccelerationPow_, float rotationSpeedScaler_):
+                                        playerObject(playerObject)
 {
     movementSpeedScaler = movementSpeedScaler_;
     movementAccelerationPow = movementAccelerationPow_;
@@ -57,8 +57,8 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
 void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Inputspace::InputData &inputData, XrActionStateFloat& grabLeft, XrActionStateFloat& grabRight, float avgGrabInput, Inputspace::InputHaptics &inputHaptics){
     
     if(currentMovementState == MovementState::Start){
-        moveStateData.prevPosLeft = inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::LEFT].position;
-        moveStateData.prevPosRight = inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::RIGHT].position;
+        moveStateData.prevPosLeft = glm::vec3(( inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT])[3]);//inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::LEFT].position;
+        moveStateData.prevPosRight = glm::vec3(( inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT])[3]);//inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::RIGHT].position;
         moveStateData.prevPosMiddle = 0.5f*(moveStateData.prevPosLeft + moveStateData.prevPosRight);
         moveStateData.prevPosMiddle.y = 0;
 
@@ -74,8 +74,8 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         currentMovementState = MovementState::Update;
     }
     else if(currentMovementState == MovementState::Update){
-        moveStateData.posLeft = inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::LEFT].position;
-        moveStateData.posRight = inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::RIGHT].position;
+        moveStateData.posLeft = glm::vec3(( inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT])[3]);//inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::LEFT].position;
+        moveStateData.posRight = glm::vec3(( inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT])[3]);//inputData.controllerGripPoses[(int)Inputspace::ControllerEnum::RIGHT].position;
         moveStateData.posMiddle = 0.5f*(moveStateData.posLeft + moveStateData.posRight);
         moveStateData.posMiddle.y = 0;
         moveStateData.moveDir = moveStateData.posMiddle - moveStateData.prevPosMiddle;
@@ -88,12 +88,12 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         
         // [tdbe] move player along moveDir, with a speed scaled by hand movement speed.
         float moveSpeed = avgGrabInput * movementSpeedScaler * glm::pow(moveStateData.moveInputSpeed, movementAccelerationPow);
-        glm::vec3 moveVec = 100.0f * moveStateData.moveDir * moveSpeed * deltaTime;
-        printf("\n[LocomotionBehaviour][log] moveSpeed: {%f}, moveVec: {%f}{%f}{%f}", moveSpeed, moveVec.x, moveVec.y, moveVec.z);
-        cameraMatrix = glm::translate(cameraMatrix, moveVec);
-        handModelLeft.worldMatrix = glm::translate(handModelLeft.worldMatrix, -moveVec);
+        glm::vec3 moveVec = -100.0f * moveStateData.moveDir * moveSpeed * deltaTime;
+        //printf("\n[LocomotionBehaviour][log] moveSpeed: {%f}, moveVec: {%f}{%f}{%f}", moveSpeed, moveVec.x, moveVec.y, moveVec.z);
+        playerObject.head->worldMatrix = glm::translate(playerObject.head->worldMatrix, moveVec);
+        playerObject.handLeft->worldMatrix = glm::translate(playerObject.handLeft->worldMatrix, -moveVec);
         moveVec.x = -moveVec.x;// because right hand is a flipped left hand model
-        handModelRight.worldMatrix = glm::translate(handModelRight.worldMatrix, -moveVec);
+        playerObject.handRight->worldMatrix = glm::translate(playerObject.handRight->worldMatrix, -moveVec);
 
         // [tdbe] rotate player based on line between the hands
         moveStateData.dirLeftRight = moveStateData.posRight - moveStateData.posLeft;
@@ -101,15 +101,16 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         moveStateData.dirLeftRight = moveStateData.dirLeftRight / (float)moveStateData.dirLeftRight.length();
         glm::vec3 norm = glm::vec3(0,1,0);
         float radang = util::vectorAngleAroundNormal(moveStateData.dirLeftRight,moveStateData.prevDirLeftRight, norm);
-        radang = -100.0f * avgGrabInput * rotationSpeedScaler * radang * deltaTime;
-        printf("\n[LocomotionBehaviour][log] rotation angle rad: %f", radang);
-        cameraMatrix = glm::rotate(cameraMatrix, radang, norm);
+        radang = 100.0f * avgGrabInput * rotationSpeedScaler * radang * deltaTime;
+        //printf("\n[LocomotionBehaviour][log] rotation angle rad: %f", radang);
+        glm::vec3 camPos = glm::vec3(playerObject.head->worldMatrix[3]);
+        playerObject.head->worldMatrix = glm::rotate(playerObject.head->worldMatrix, radang, norm);
 
         moveStateData.prevPosLeft = moveStateData.posLeft;
         moveStateData.prevPosRight = moveStateData.posRight;
         moveStateData.prevPosMiddle = moveStateData.posMiddle;
         moveStateData.prevDirLeftRight = moveStateData.dirLeftRight;
-        printf("\n[LocomotionBehaviour][log] MovementState::Update");
+        //printf("\n[LocomotionBehaviour][log] MovementState::Update");
     }
     else if(currentMovementState == MovementState::End){
         // [tdbe] clear any data here
@@ -127,8 +128,7 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
 
 void LocomotionBehaviour::Update(const float deltaTime, const float gameTime, 
                             const Inputspace::InputData &inputData,
-                            Inputspace::InputHaptics &inputHaptics,  
-                            const glm::mat4 &inverseCameraMatrix){
+                            Inputspace::InputHaptics &inputHaptics){
     XrActionStateFloat grabLeft = inputData.grabState[(int)Inputspace::ControllerEnum::LEFT];
     XrActionStateFloat grabRight = inputData.grabState[(int)Inputspace::ControllerEnum::RIGHT];
     float avgGrabInput = .5f*(grabLeft.currentState + grabRight.currentState);
@@ -156,7 +156,7 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
             
         }
         // [tdbe] Change move state
-        // Handle move mechanics only after specific visual animations finish
+        //        Handle move mechanics only after specific visual animations finish
         {
             if(avgGrabInput>.95){
                 if(currentVisualsState != VisualsState::Start && 
@@ -191,6 +191,15 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
     {
     HandleVisualsState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
     HandleMovementState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
+    }
+
+    // [tdbe] Flagging so other interactions scripts can know they shouldn't e.g. grab stuff 
+    //        while in inappropriate states.
+    if(currentVisualsState == VisualsState::Clear && currentMovementState == MovementState::Clear){
+        playerObject.playerActiveStates[(int)PlayerStates::LocomotionState] = true;
+    }
+    else{
+        playerObject.playerActiveStates[(int)PlayerStates::LocomotionState] = false;
     }
 }   
 

@@ -22,8 +22,7 @@ void InputTesterBehaviour::Mechanic_GrabState(const Inputspace::InputData &input
 
 void InputTesterBehaviour::Update(const float deltaTime, const float gameTime, 
                             const Inputspace::InputData &inputData,
-                            Inputspace::InputHaptics &inputHaptics, 
-                            const glm::mat4 &inverseCameraMatrix){
+                            Inputspace::InputHaptics &inputHaptics){
     Mechanic_GrabState(inputData, inputHaptics);
 
     for(size_t i = 0; i<inputData.selectClickState.size(); i++){

@@ -1,19 +1,18 @@
 #include "HandsBehaviour.h"
 
-HandsBehaviour::HandsBehaviour(Model &handModelLeft, Model &handModelRight):
-                handModelLeft(handModelLeft), handModelRight(handModelRight)
+HandsBehaviour::HandsBehaviour(PlayerObject& playerObject):
+                playerObject(playerObject)
 {
 }
 
 void HandsBehaviour::Update(const float deltaTime, const float gameTime, 
                             const Inputspace::InputData &inputData,
-                            Inputspace::InputHaptics &inputHaptics,  
-                            const glm::mat4 &inverseCameraMatrix){
-    handModelLeft.worldMatrix = inverseCameraMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
-    handModelLeft.worldMatrix = glm::translate(handModelLeft.worldMatrix, { 0.0f, 0.0f, -0.015f });
-    handModelRight.worldMatrix = inverseCameraMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
-    handModelRight.worldMatrix = glm::scale(handModelRight.worldMatrix, { -1.0f, 1.0f, 1.0f });
-    handModelRight.worldMatrix = glm::translate(handModelRight.worldMatrix, { 0.0f, 0.0f, -0.015f });
+                            Inputspace::InputHaptics &inputHaptics){
+    playerObject.handLeft->worldMatrix = playerObject.head->worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
+    playerObject.handLeft->worldMatrix = glm::translate(playerObject.handLeft->worldMatrix, { 0.0f, 0.0f, -0.015f });
+    playerObject.handRight->worldMatrix = playerObject.head->worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
+    playerObject.handRight->worldMatrix = glm::scale(playerObject.handRight->worldMatrix, { -1.0f, 1.0f, 1.0f });
+    playerObject.handRight->worldMatrix = glm::translate(playerObject.handRight->worldMatrix, { 0.0f, 0.0f, -0.015f });
 }   
 
 HandsBehaviour::~HandsBehaviour(){
