@@ -1,9 +1,5 @@
 #include "Util.h"
-
-
-
 #include <boxer/boxer.h>
-
 #include <cstring>
 #include <fstream>
 #include <sstream>
@@ -406,7 +402,7 @@ void util::quaternionToAngleAxis(const glm::quat& quat, float& angle, glm::vec3&
 
 glm::quat util::quaternionFromAngleAxis(const float& angle, const glm::vec3& axis)
 {
-  glm::quat quat = glm::quat_identity;
+  glm::quat quat = glm::quat_identity<float, glm::packed_highp>();
 
   quat.x = axis.x * sin(angle/2);
   quat.y = axis.y * sin(angle/2);
