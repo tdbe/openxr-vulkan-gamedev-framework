@@ -15,8 +15,8 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
     if(currentVisualsState == VisualsState::Start){
         
         // [tdbe] request haptics
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15, XR_MIN_HAPTIC_DURATION, 0.25);
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15, XR_MIN_HAPTIC_DURATION, 0.25);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
 
         printf("\n[LocomotionBehaviour][log] VisualsState::Start");
         currentVisualsState = VisualsState::Update;
@@ -34,8 +34,8 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
     else if(currentVisualsState == VisualsState::StartBackwards){
 
         // [tdbe] request haptics
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15, XR_MIN_HAPTIC_DURATION, 0.25);
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15, XR_MIN_HAPTIC_DURATION, 0.25);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
 
         printf("\n[LocomotionBehaviour][log] VisualsState::StartBackwards");
         currentVisualsState = VisualsState::UpdateBackwards;
@@ -79,7 +79,7 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         moveStateData.posMiddle = 0.5f*(moveStateData.posLeft + moveStateData.posRight);
         moveStateData.posMiddle.y = 0;
         moveStateData.moveDir = moveStateData.posMiddle - moveStateData.prevPosMiddle;
-        moveStateData.moveInputSpeed = moveStateData.moveDir.length();
+        moveStateData.moveInputSpeed = (float)moveStateData.moveDir.length();
         moveStateData.moveDir = moveStateData.moveDir / moveStateData.moveInputSpeed;
 
         // [tdbe] TODO: 

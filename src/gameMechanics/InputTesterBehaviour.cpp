@@ -28,16 +28,16 @@ void InputTesterBehaviour::Update(const float deltaTime, const float gameTime,
 
     for(size_t i = 0; i<inputData.selectClickState.size(); i++){
         if(inputData.selectClickState[i].isActive && inputData.selectClickState[i].currentState){
-            printf("\n[InputTesterBehaviour][log] inputData.selectClickState[i{%d}].currentState: %d", i, inputData.selectClickState[i].currentState);
+            printf("\n[InputTesterBehaviour][log] inputData.selectClickState[i{%d}].currentState: %d", (int)i, inputData.selectClickState[i].currentState);
         }
 
         if(inputData.menuClickState[i].isActive && inputData.menuClickState[i].currentState){
-            printf("\n[InputTesterBehaviour][log] inputData.menuClickState[i{%d}].currentState: %d", i, inputData.menuClickState[i].currentState);
+            printf("\n[InputTesterBehaviour][log] inputData.menuClickState[i{%d}].currentState: %d", (int)i, inputData.menuClickState[i].currentState);
         }
 
         if(inputData.thumbStickState[i].isActive && 
             (std::abs(inputData.thumbStickState[i].currentState.x)>0.05f || std::abs(inputData.thumbStickState[i].currentState.y)>0.05f)){
-            printf("\n[InputTesterBehaviour][log] inputData.thumbStickState[i{%d}].currentState: x{%f}, y{%f}", i, inputData.thumbStickState[i].currentState.x, inputData.thumbStickState[i].currentState.y);
+            printf("\n[InputTesterBehaviour][log] inputData.thumbStickState[i{%d}].currentState: x{%f}, y{%f}", (int)i, inputData.thumbStickState[i].currentState.x, inputData.thumbStickState[i].currentState.y);
         }
 
         //if(inputData.triggerState[i].isActive && 
