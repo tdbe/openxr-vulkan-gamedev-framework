@@ -182,17 +182,9 @@ bool util::createAction(XrActionSet actionSet,
   XrResult result = xrCreateAction(actionSet, &actionCreateInfo, &action);
   if (XR_FAILED(result))
   {
-    std::string cPlusPlusRemainsDumb = "XrResult: ";
-    cPlusPlusRemainsDumb.append(std::to_string((int)result));
-    cPlusPlusRemainsDumb.append("\n");
-    cPlusPlusRemainsDumb.append(actionCreateInfo.actionName);
-    cPlusPlusRemainsDumb.append("\n");
-    cPlusPlusRemainsDumb.append(actionCreateInfo.localizedActionName);
-    cPlusPlusRemainsDumb.append("\n");
-    cPlusPlusRemainsDumb.append(std::to_string(paths.size()));
-    cPlusPlusRemainsDumb.append("\n");
-
-    boxer::show(cPlusPlusRemainsDumb.c_str(), "CreateAction Error", boxer::Style::Error);
+    std::string res = "XrResult: " + std::to_string((int)result) + "\n" + actionCreateInfo.actionName + "\n" +
+                      actionCreateInfo.localizedActionName + "\n" + std::to_string(paths.size()) + "\n";
+    boxer::show(res.c_str(), "CreateAction Error", boxer::Style::Error);
     return false;
   }
 
@@ -315,14 +307,27 @@ float util::clampf(float num, float left, float right){
   return num;
 }
 
-float util::lengthVector3(const glm::vec3& vec){
-  return glm::sqrt(vec.x*vec.x + vec.y*vec.y + vec.z*vec.z);
+float util::lengthSquared(const glm::vec3& vec){
+  return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
 }
 
+float util::length(const glm::vec3& vec){
+  return glm::sqrt(util::lengthSquared(vec));
+}
 
-glm::vec3 util::normalizeVector3(const glm::vec3& vec){
-  float len  = util::lengthVector3(vec);
+glm::vec3 util::normalize(const glm::vec3& vec){
+  float len  = util::length(vec);
   return vec / len;
+}
+
+float util::distanceSquared(const glm::vec3& vec1, const glm::vec3& vec2)
+{    
+  return (float)glm::pow(vec1.x - vec2.x, 2) + (float)glm::pow(vec1.y - vec2.y, 2);
+}
+
+float util::distance(const glm::vec3& vec1, const glm::vec3& vec2)
+{    
+  return glm::sqrt(util::distanceSquared(vec1, vec2));
 }
 
 glm::quat util::slerp(const glm::quat& start, const glm::quat& end, float percent)
@@ -366,7 +371,7 @@ glm::vec3 util::slerp(const glm::vec3& start, const glm::vec3& end, float percen
     glm::vec3 relativeVec = {};
     relativeVec = end - startDotted;
 
-    util::normalizeVector3(relativeVec);
+    util::normalize(relativeVec);
 
     // Orthonormal basis
     // The final result.
@@ -378,4 +383,12 @@ float util::vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2
   float dot = vec1.x*vec2.x + vec1.y*vec2.y + vec1.z*vec2.z;
   float det = vec1.x*vec2.y*norm.z + vec2.x*norm.y*vec1.z + norm.x*vec1.y*vec2.z - vec1.z*vec2.y*norm.x - vec2.z*norm.y*vec1.x - norm.z*vec1.y*vec2.x;
   return atan2(det, dot);
+}
+
+glm::mat4 util::rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix){
+  glm::mat4 translateToPoint = glm::translate(glm::mat4(), 
+                                                 glm::vec3(point.x, point.y, point.z)
+                                                 );
+  glm::mat4 inverseTranslate = glm::inverse( translateToPoint );
+  return translateToPoint * rotationMatrix * inverseTranslate;
 }

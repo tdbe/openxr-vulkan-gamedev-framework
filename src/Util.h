@@ -115,14 +115,22 @@ glm::vec3 crossProductVector3(const glm::vec3& vector_a, const glm::vec3& vector
 
 float clampf(float num, float left, float right);
 
-float lengthVector3(const glm::vec3& vec);
+float lengthSquared(const glm::vec3& vec);
 
-glm::vec3 normalizeVector3(const glm::vec3& vec);
+float length(const glm::vec3& vec);
+
+glm::vec3 normalize(const glm::vec3& vec);
+
+float distanceSquared(const glm::vec3& vec1, const glm::vec3& vec2);
+
+float distance(const glm::vec3& vec1, const glm::vec3& vec2);
 
 glm::quat slerp(const glm::quat& start, const glm::quat& end, float percent);
 
 glm::vec3 slerp(const glm::vec3& start, const glm::vec3& end, float percent);
 
 float vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2, const glm::vec3& norm);
+
+glm::mat4 rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix);
 
 } // namespace util
