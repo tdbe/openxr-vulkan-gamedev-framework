@@ -16,7 +16,7 @@
 namespace
 {
 constexpr XrReferenceSpaceType spaceType = XR_REFERENCE_SPACE_TYPE_STAGE;
-constexpr VkFormat colorFormat = VK_FORMAT_R8G8B8A8_SRGB;//_RGBA8UnormSrgb
+constexpr VkFormat colorFormat = VK_FORMAT_R8G8B8A8_SRGB;//_RGBA8UnormSrgb//_RGBA8UnormSrgb
 constexpr VkFormat depthFormat = VK_FORMAT_D32_SFLOAT;
 } // namespace
 
@@ -36,7 +36,6 @@ Headset::Headset(const Context* context) : context(context)
     // [tdbe] To use multiview, in the shader you enable the GL_EXT_multiview extension, and then
     // [tdbe] get a glViewIndex depending on what multiview view you are about to output to. So you
     // [tdbe] can use e.g. an array of transformation matrixes indexed by this.
-
     VkRenderPassMultiviewCreateInfo renderPassMultiviewCreateInfo{
       VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO
     };
@@ -329,7 +328,7 @@ Headset::Headset(const Context* context) : context(context)
 
     // Retrieve the swapchain images
     // [tdbe] 1 for every openxr swapchain image / layer.
-    std::vector<XrSwapchainImageVulkan2KHR> swapchainImages;
+    std::vector<XrSwapchainImageVulkanKHR> swapchainImages;
     swapchainImages.resize(swapchainImageCount);
     for (XrSwapchainImageVulkan2KHR& swapchainImage : swapchainImages)
     {
@@ -444,7 +443,7 @@ Headset::~Headset()
   }
 }
 
-Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
+Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex) 
 {
   const XrInstance instance = context->getXrInstance();
 
