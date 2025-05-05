@@ -1,40 +1,54 @@
-OpenXR/Vulkan/C++ Gameplay, Input, and Rendering fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example.
+# TL;DR: 
+Ready to play performant open source XR with OpenXR / Vulkan / C++.
 
-Quickly make a performant XR game with common-sense gamedev principles. Explained; technical + friendly, conversational, human-speak tutorial style of how it's set up. Because there's quite a bit of evidence that khronos(openxr&vulkan) know not of what a hoo-man is. 🙃
+\[[my github blog where you can also comment](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
+
+Demystifying Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example. 
+
+A boilerplate / engine starter set. Actually just make an XR game quickly.
+
+![Teaser2](teaser2.gif)
+
+# Abstract: 
+\*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but their impaired emotion and empathy makes them hard to understand by hu-mans. I've managed to translate their stack, for hu-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
+
+(PS: it didn't help that OpenXR Single-Pass rendering (the performant & industry-standard linchpin of rendering) was like the only thing they [didn't want to cover](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9).)
+
+## To set up and build:
+- See [Build-ProjectSetup.Readme.md](blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/`
 
 # My feature stack so far:
 
 ## XR Locomotion
-  - Mode: Rotating and accelerated Panning the scene by grabbing with both hands, and seeing a "tunnelvision" "external scene".
-  - Uses state machines for movment and for visuals.
+  - Mode: Rotating and accelerated Panning the scene by grabbing with both hands, and seeing a "tunnelvision style chaperone".
+  - Use state machines for movment and for visuals.
 
 ## Base XR gameplay mechanics
-  - Mechanics system based on a list of `GameBehaviour`'s processed by Main's loop.
-  - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and at the end Destroyed.
-  - Sample mechanics for Locomotion, Hands, XR Input testing, World Objects.
+  - Mechanics system based on a list of `GameBehaviour`'s set up as FSMs.
+  - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and Destroyed.
+  - Sample mechanics for locomotion, hands, XR Input testing, world objects.
 
-## `GameData.h`
+## GameData
   - `GameObject`'s{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
   - `PlayerObject`'s{`GameObject`'s, `PlayerActiveStates`}.
   - `Material`'s{`Shader`, Descriptor-set `UniformData`, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
-  - Eplained in Janhsimon's Headset & Context classes, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent api like webgpu.
-  - Explained and tweaked the `Renderer`/Pipeline; look for "// [tdbe]" 
-  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add uniforms / new shader etc.
+  - Eplained and expanded Khronos' & Janhsimon's Headset & Context classes, and the Renderer/pipeline, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
+  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add uniforms / new `shaders` etc.
   - Render pipeline knows if you modified any default properties in materials and in that case creates unique mats/pipelines.
 
 ## `Input` class and `InputData`'s in `Inputspace`.
-  - "proper" xr input, supporting "all" controllers/headsetss, with customizable binding paths and action sets.
-  - nicely accessible through `InputData` and `InputHaptics`.
+  - A 'proper' universal xr input class, supporting (probably) all controllers/headsetss, with customizable binding paths and action sets.
+  - nicely accessible data through `InputData` and `InputHaptics`, including matrixes and other tracked XR positional data.
   - poses for controllers and for head.
   - actions (buttons, sticks, triggers, pressure, proximity etc).
   - user presence / headset activity state.
   - haptic feedback output.
-  - exposes matrixes, and xr action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
+  - exposes action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
 
-## `Utils` class
-  - Some Utils for XR, input, and extra gamedev math/utils.
+## Utils
+  - Some Utils and math for XR, input, and extra gamedev stuff.
 
 -------------------------------
 

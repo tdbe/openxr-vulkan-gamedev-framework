@@ -1,17 +1,30 @@
-For everyone's sanity and ease of reproduceability (and using Windows + VSCode), I chose the most "click to install and it just works" method of compiling & building C++: 
+(for convenience I also included an executable windows x64 build in the `/out/` folder)
 
-- We just use the MSVC compiler / cl.exe from your Visual Studio Community, by setting VSCode to use it. 
-- Install VS Community, with `Desktopdevelopment with C++` (including MSVC, CMake, Windows 11 SDK etc.).
+## To set up and build this project:
+
+For XR/gaming  I use Windows (x64) (and CMake):
+
+- Install VS Community, with `Desktop development with C++` (including MSVC, CMake, Windows 11 SDK etc.).
+- Download Vulkan SDK: https://vulkan.lunarg.com/sdk/home#windows
+
+If you want to stick with Visual Studio, that's it. You're done. Just open the folder in VS and you can click the green play button 🙂 It will recognize the CMakeLists, no need for a `.sln`.
+
+(You can also use whatever compiler and platform/OS you want, with CMake)
+
+### To use VSCode
+
+For the most "it just works" method of compiling & building C++, just set VSCode to find and use the MSVC compiler / cl.exe from your Visual Studio Community (above):
+
 - Install VSCode and extensions: C/C++ and C/C++ Extension Pack (which includes CMake Tools)
-- Then in vscode File->Open Workspace: ./vscode.code-workspace.
+- Then in vscode File->Open Workspace: `./vscode.code-workspace`.
 - If Intellisense in VSCode says it can't find the Vulkan SDK: read Note[1].
 - Now, when you build, vscode probably won't find cl.exe (the one from Visual Studio). There's 2 things we need to do as described in this answer: https://stackoverflow.com/questions/78961556/how-to-permanently-configure-vscode-to-use-cl-exe-without-launching-it-from-the:
-- Set `C:\Program Files\Microsoft Visual Studio\[year]\Community\VC\Tools\MSVC\[version]\bin\Hostx64\x64\cl.exe` to your system Path
-- And set the other env vars. For me the Envvars.bat looks like this: Note[2].
+1. Set `C:\Program Files\Microsoft Visual Studio\[year]\Community\VC\Tools\MSVC\[version]\bin\Hostx64\x64\cl.exe` to your system Path
+2. And set the other env vars. For me the Envvars.bat looks like this: Note[2].
 - Restart the PC for the env vars to take effect.
-- When you build in VSCode, it'll ask in the top bar which compiler to use, choose the windows compiler / msvc.
+- When you build in VSCode, it'll ask in the top bar which compiler to use, choose the windows compiler cl/msvc.
 
-Now you can build & run from VSCode and all you have to worry about is cmake files. 
+Now you can build & run from VSCode and all you have to worry about is update your cmake files when you create a new file etc. 
 
 
 ------------------
