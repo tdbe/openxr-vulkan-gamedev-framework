@@ -10,12 +10,13 @@
 class LocomotionBehaviour : public GameBehaviour
 {
     public:
-        LocomotionBehaviour(PlayerObject& playerObject, float movementSpeedScaler_, float movementAccelerationPow_, float rotationSpeedScaler_);
+        LocomotionBehaviour(PlayerObject& playerObject, GameObject& holePlaneTempChaperone, float movementSpeedScaler_, 
+            float movementAccelerationPow_, float rotationSpeedScaler_);
         virtual ~LocomotionBehaviour();
 
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics);
+            Inputspace::InputHaptics &inputHaptics);
 
     private:
         enum class VisualsState{
@@ -58,6 +59,7 @@ class LocomotionBehaviour : public GameBehaviour
         MoveStateData moveStateData;
 
         PlayerObject& playerObject;
+        GameObject& holePlaneTempChaperone;
         float movementSpeedScaler;
         float movementAccelerationPow;
         float rotationSpeedScaler;

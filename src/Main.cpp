@@ -14,7 +14,6 @@
 #include "gameMechanics/LocomotionBehaviour.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
-
 #include <stdio.h>
 
 namespace
@@ -57,10 +56,12 @@ int main()
   }
 
   Model gridModel, ruinsModel, carModelLeft, carModelRight, beetleModel, bikeModel, handModelLeft, handModelRight,
-    logoModel = {};
+    cubeModel, logoModel, holePlaneTempChaperoneModel = {};
   std::vector<Model*> models = { &gridModel, &ruinsModel,    &carModelLeft,   &carModelRight, &beetleModel,
-                                 &bikeModel, &handModelLeft, &handModelRight, &logoModel };
+                                 &bikeModel, &handModelLeft, &handModelRight, &cubeModel, &logoModel, &holePlaneTempChaperoneModel };
   
+  // [tdbe] Just having different materials won't really affect rendering performance; rederer queues per-mesh right now, sampling materials which are identical by default.
+  // Materials are a collection of kinds of data that modify the vulkan descriptor or pipeline used, only if you change a corresponding property.
   Material gridMaterial, diffuseMaterial, bikeMaterial, logoMaterial, locomotionMaterial, skyMaterial = {};
   // [tdbe] init any non-default material props here.
   gridMaterial.vertShaderName = "shaders/Grid.vert.spv";
@@ -69,6 +70,10 @@ int main()
   diffuseMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
   diffuseMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
   diffuseMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  locomotionMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  locomotionMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_FRONT_BIT;
+  locomotionMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
+  locomotionMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
   bikeMaterial.vertShaderName = "shaders/DiffuseTransparent.vert.spv";
   bikeMaterial.fragShaderName = "shaders/DiffuseTransparent.frag.spv";
   //bikeMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
@@ -92,9 +97,12 @@ int main()
   GameObject beetle = GameObject(&beetleModel, &diffuseMaterial, true, "beetle");
   GameObject bike = GameObject(&bikeModel, &bikeMaterial, true, "bike");
   GameObject logo = GameObject(&logoModel, &logoMaterial, true, "logo");
-  std::vector<GameObject*> gameObjects = { &grid, &ruins, &carLeft, &carRight, &beetle, &bike, &handLeft, &handRight, &logo };
+  GameObject cube = GameObject(&cubeModel, &diffuseMaterial, true, "cube");
+  GameObject holePlaneTempChaperone = GameObject(&holePlaneTempChaperoneModel, &locomotionMaterial, true, "holePlaneTempChaperone");
+  std::vector<GameObject*> gameObjects = { &grid, &ruins, &carLeft, &carRight, &beetle, &bike, &handLeft, &handRight, &cube, &logo, &holePlaneTempChaperone};
   PlayerObject playerObject = PlayerObject("XR Player 1", &head, &handLeft, &handRight);
-
+  
+  grid.worldMatrix = glm::scale(grid.worldMatrix, { 15, 15, 15 });
   carLeft.worldMatrix =
     glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -7.0f }), glm::radians(75.0f), { 0.0f, 1.0f, 0.0f });
   carRight.worldMatrix =
@@ -103,9 +111,10 @@ int main()
     glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
   logo.worldMatrix = glm::translate(glm::mat4(1.0f), { 0.0f, 3.0f, -10.0f });
   bike.worldMatrix = glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
-
+  cube.worldMatrix = glm::scale(glm::translate(glm::mat4(1.0f), { 2.0f, 2.0f, -2.0f }), { 0.5f, 0.5f, 0.5f });
+  
   MeshData* meshData = new MeshData;
-  if (!meshData->loadModel("models/Grid.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
+  if (!meshData->loadModel("models/quad.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
     return EXIT_FAILURE;
   }
 
@@ -129,7 +138,15 @@ int main()
     return EXIT_FAILURE;
   }
 
-  if (!meshData->loadModel("models/Logo.obj", MeshData::Color::White, models, 8u, 1u)) {
+  if (!meshData->loadModel("models/cube.obj", MeshData::Color::White, models, 8u, 1u)) {
+    return EXIT_FAILURE;
+  }
+
+  if (!meshData->loadModel("models/Logo.obj", MeshData::Color::White, models, 9u, 1u)) {
+    return EXIT_FAILURE;
+  }
+
+  if (!meshData->loadModel("models/holePlaneTempChaperone.obj", MeshData::Color::White, models, 10u, 1u)) {
     return EXIT_FAILURE;
   }
 
@@ -149,7 +166,7 @@ int main()
   // [tdbe] all game mechanics, initial resource allocation here, 
   // and then update tick later in game loop
   std::vector<GameBehaviour*> gameBehaviours = {
-    new LocomotionBehaviour(playerObject, 1, 3, 1),
+    new LocomotionBehaviour(playerObject, holePlaneTempChaperone, 1, 3, 1),
     new HandsBehaviour(playerObject),
     //new InputTesterBehaviour(),
     new WorldObjectsMiscBehaviour(bike, logoMaterial)
@@ -184,7 +201,7 @@ int main()
     {
       
       if (!inputSystem.Sync(headset.getXrSpace(), headset.getXrFrameState().predictedDisplayTime, 
-                            headset.getEyePoses(), headset.getSessionState()))
+                            headset.getEyePoses(), headset.getHeadPosition(), headset.getSessionState()))
       {
         return EXIT_FAILURE;
       }
@@ -194,7 +211,8 @@ int main()
       gameTime += deltaTime;
 
       // [tdbe] Update
-      for(size_t i = 0; i < gameBehaviours.size(); i++){
+      for(size_t i = 0; i < gameBehaviours.size(); i++)
+      {
         gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics);
       }
       inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
