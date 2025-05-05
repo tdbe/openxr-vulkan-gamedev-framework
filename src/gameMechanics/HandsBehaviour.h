@@ -12,8 +12,7 @@ class HandsBehaviour : public GameBehaviour
 
         //Start();
         virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                            Inputspace::InputHaptics &inputHaptics);
-
+            Inputspace::InputHaptics& inputHaptics);
     private:
         PlayerObject& playerObject;
 };

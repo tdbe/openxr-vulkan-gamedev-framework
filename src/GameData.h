@@ -51,8 +51,8 @@ struct GameObject{
 };
 
 // [tdbe] Note: this is meant to be used in a list or a table of states.
-//				because a player can be in locomotion and grabbing with each hand,
-//				all at the same time.
+//	because a player can be in locomotion and grabbing with each hand,
+//	all at the same time.
 // Use for example in a: std::array<bool, (int)PlayerStates::COUNT> playerStatesList;
 // Used as flagging so other interactions scripts can know they shouldn't e.g. grab stuff while in inappropriate states. 
 enum class PlayerStates{
@@ -65,14 +65,14 @@ enum class PlayerStates{
 
 struct PlayerObject{
 	std::string name = "player object";
-	GameObject* head = nullptr;
+	GameObject* root = nullptr;
 	GameObject* handLeft = nullptr;
 	GameObject* handRight = nullptr;
 	// [tdbe] Please see PlayerStates definition for info.
 	std::array<bool, (int)PlayerStates::COUNT> playerActiveStates = {true, false, false, false};
 	PlayerObject(std::string name_ = "player object", GameObject* head_ = nullptr, GameObject* handLeft_ = nullptr, GameObject* handRight_ = nullptr){
 		name = name_;
-		head = head_;
+		root = head_;
 		handLeft = handLeft_;
 		handRight = handRight_;
 	}

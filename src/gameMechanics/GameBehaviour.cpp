@@ -1,12 +1,15 @@
 #include "GameBehaviour.h"
 
 
-GameBehaviour::GameBehaviour(){
+GameBehaviour::GameBehaviour()
+{
 }
 
 void GameBehaviour::Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-                           Inputspace::InputHaptics &inputHaptics){
+    Inputspace::InputHaptics &inputHaptics)
+{
 }
 
-GameBehaviour::~GameBehaviour(){
+GameBehaviour::~GameBehaviour()
+{
 }
