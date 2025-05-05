@@ -682,6 +682,13 @@ std::vector<XrView> Headset::getEyePoses() const
   return eyePoses;
 }
 
+glm::vec3 Headset::getHeadPosition() const
+{
+  return 0.5f * glm::vec3(eyePoses[0].pose.position.x + eyePoses[1].pose.position.x,
+                          eyePoses[0].pose.position.y + eyePoses[1].pose.position.y,
+                          eyePoses[0].pose.position.z + eyePoses[1].pose.position.z);
+}
+
 XrSessionState Headset::getSessionState() const
 {
   return sessionState;

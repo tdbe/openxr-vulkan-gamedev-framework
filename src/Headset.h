@@ -48,6 +48,7 @@ public:
   glm::mat4 getEyeViewMatrix(size_t eyeIndex) const;
   glm::mat4 getEyeProjectionMatrix(size_t eyeIndex) const;
   std::vector<XrView> getEyePoses() const;
+  glm::vec3 getHeadPosition() const;
 
   XrSessionState getSessionState() const;
 

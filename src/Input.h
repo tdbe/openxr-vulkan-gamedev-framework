@@ -29,7 +29,8 @@ namespace Inputspace{
         ~Input();
         bool isValid() const;
 
-        bool Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, XrSessionState sessionState);
+        bool Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, 
+            glm::vec3 headPosition, XrSessionState sessionState);
         const InputData& GetInputData() const;
         InputHaptics& GetInputHaptics();
         void ApplyHapticFeedbackRequests(Inputspace::InputHaptics& inputHaptics);

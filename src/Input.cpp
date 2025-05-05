@@ -545,7 +545,8 @@ Input::Input(XrInstance instance, XrSession session)
     }
 }
 
-bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, XrSessionState sessionState)
+bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, 
+    glm::vec3 headPosition, XrSessionState sessionState)
 {
     // Sync the actions 
     const XrActiveActionSet activeActionSet{actionSetData.actionSet, XR_NULL_PATH};// Wildcard for all
@@ -573,8 +574,8 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
     inputData.eyePoses[(int)SideEnum::RIGHT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::RIGHT].pose);
     // [tdbe] TODO: figure out what/how head poses/joints work in openxr https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html
     inputData.headPose = {
-        .orientation = util::slerp(inputData.eyePoses[(int)SideEnum::LEFT].orientation, inputData.eyePoses[(int)SideEnum::RIGHT].orientation, .5),
-        .position = util::slerp(inputData.eyePoses[(int)SideEnum::LEFT].position, inputData.eyePoses[(int)SideEnum::RIGHT].position, .5)
+        .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,//util::slerp(inputData.eyePoses[(int)SideEnum::LEFT].orientation, inputData.eyePoses[(int)SideEnum::RIGHT].orientation, .5),
+        .position = headPosition
     };
     inputData.headPoseMatrix = util::poseToMatrix(inputData.headPose);
 
