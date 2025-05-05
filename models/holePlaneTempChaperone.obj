@@ -1,7 +1,7 @@
 # Blender v2.93.5 OBJ File: ''
 # www.blender.org
-mtllib holePlaneHack.mtl
-o HolePlaneHack
+mtllib holePlaneTempChaperone.mtl
+o holePlaneTempChaperone
 v 0.000000 1.000000 -1.000000
 v 0.000000 0.070711 -0.070711
 v 0.000000 0.063439 -0.077301
