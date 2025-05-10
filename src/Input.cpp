@@ -22,10 +22,9 @@ Input::Input(XrInstance instance, XrSession session)
         memcpy(actionSetCreateInfo.localizedActionSetName, localizedActionSetName.data(), localizedActionSetName.length() + 1u);
 
         result = xrCreateActionSet(instance, &actionSetCreateInfo, &actionSetData.actionSet);
-        if (XR_FAILED(result)){
-            std::string cPlusPlusRemainsDumbUntilV23 = "100; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+        if (XR_FAILED(result))
+        {
+            util::error(Error::GenericOpenXR, "100; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -44,9 +43,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "handpose", "Hand Pose", XR_ACTION_TYPE_POSE_INPUT, actionSetData.aimPoseAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "110; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "110; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -54,9 +51,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "grippose", "Grip Pose", XR_ACTION_TYPE_POSE_INPUT, actionSetData.gripPoseAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "120; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "120; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -65,9 +60,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "trigger_v_action", "Trigger", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.triggerValueAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "200; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "200; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -75,9 +68,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "squeeze_v_action", "Squeeze", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.squeezeValueAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "300; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "300; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -86,9 +77,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "grab_action", "Grab Action", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.grabAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "400; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "400; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -97,9 +86,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "thumbstick_action", "Thumbstick Action", XR_ACTION_TYPE_VECTOR2F_INPUT, actionSetData.thumbstickAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "500; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "500; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -108,9 +95,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "menu_action", "Menu Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.menuClickAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "600; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "600; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -119,9 +104,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "select_action", "Select Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.selectClickAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "610; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "610; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -130,9 +113,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "vibrate_action", "Vibration Action", XR_ACTION_TYPE_VIBRATION_OUTPUT, actionSetData.vibrateAction))
         {
-            std::string cPlusPlusRemainsDumbUntilV23 = "700; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            util::error(Error::GenericOpenXR, "700; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -155,20 +136,18 @@ Input::Input(XrInstance instance, XrSession session)
         actionSpaceInfo.poseInActionSpace.position = {.x = 0, .y = 0, .z = 0};
 
         result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_aim[ci]);
-        if (XR_FAILED(result)){
-            std::string cPlusPlusRemainsDumbUntilV23 = "800; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+        if (XR_FAILED(result))
+        {
+            util::error(Error::GenericOpenXR, "800; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
 
         actionSpaceInfo.action = actionSetData.gripPoseAction; 
         result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_grip[ci]);
-        if (XR_FAILED(result)){
-            std::string cPlusPlusRemainsDumbUntilV23 = "810; XrResult: ";
-            cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-            util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+        if (XR_FAILED(result))
+        {
+            util::error(Error::GenericOpenXR, "810; XrResult: " + std::to_string((int)result));
             valid = false;
             return;
         }
@@ -252,10 +231,9 @@ Input::Input(XrInstance instance, XrSession session)
         {
             XrPath khrSimpleInteractionProfilePath;
             result = xrStringToPath(instance, "/interaction_profiles/khr/simple_controller", &khrSimpleInteractionProfilePath);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "900; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "900; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -292,10 +270,9 @@ Input::Input(XrInstance instance, XrSession session)
             };
 
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1000; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1000; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -306,10 +283,9 @@ Input::Input(XrInstance instance, XrSession session)
         {
             XrPath oculusTouchInteractionProfilePath;
             result = xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &oculusTouchInteractionProfilePath);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1100; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1100; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -350,10 +326,9 @@ Input::Input(XrInstance instance, XrSession session)
             };
             
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1200; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1200; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -363,10 +338,9 @@ Input::Input(XrInstance instance, XrSession session)
         {
             XrPath viveControllerInteractionProfilePath;
             result = xrStringToPath(instance, "/interaction_profiles/htc/vive_controller", &viveControllerInteractionProfilePath);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1300; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1300; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -406,10 +380,9 @@ Input::Input(XrInstance instance, XrSession session)
             };
             
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1400; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1400; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -461,10 +434,9 @@ Input::Input(XrInstance instance, XrSession session)
             };
 
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1500; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1500; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -475,10 +447,9 @@ Input::Input(XrInstance instance, XrSession session)
             XrPath microsoftMixedRealityInteractionProfilePath;
             result = xrStringToPath(instance, "/interaction_profiles/microsoft/motion_controller",
                                         &microsoftMixedRealityInteractionProfilePath);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1600; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1600; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -518,10 +489,9 @@ Input::Input(XrInstance instance, XrSession session)
             };
 
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
-            if (XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "1700; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if (XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "1700; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return;
             }
@@ -536,10 +506,9 @@ Input::Input(XrInstance instance, XrSession session)
         .actionSets = &actionSetData.actionSet
         };
     result = xrAttachSessionActionSets(session, &xrSessionAattachInfo);
-    if (XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "1800; XrResult: ";
-        cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-        util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if (XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "1800; XrResult: " + std::to_string((int)result));
         valid = false;
         return;
     }
@@ -556,10 +525,9 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
                                         .activeActionSets = &activeActionSet};
                                         
     XrResult result = xrSyncActions(session, &actionsSyncInfo);
-    if(XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "1900; XrResult: ";
-        cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-        util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if(XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "1900; XrResult: " + std::to_string((int)result));
         valid = false;
         return valid;
     }
@@ -591,10 +559,9 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
             XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_aim[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
-            if(XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "2000; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if(XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "2000; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return valid;
             }
@@ -617,10 +584,9 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
             XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_grip[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
-            if(XR_FAILED(result)){
-                std::string cPlusPlusRemainsDumbUntilV23 = "2100; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+            if(XR_FAILED(result))
+            {
+                util::error(Error::GenericOpenXR, "2100; XrResult: " + std::to_string((int)result));
                 valid = false;
                 return valid;
             }
@@ -707,10 +673,9 @@ XrActionStatePose Input::GetActionPoseState(XrAction targetAction, ControllerEnu
     XrActionStatePose poseState{.type = XR_TYPE_ACTION_STATE_POSE};
     XrResult result = xrGetActionStatePose(session, &getInfo, &poseState);
 
-    if(XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "2200; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if(XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "2200; XrResult: " + std::to_string((int)result));
         valid = false;
         return poseState;
     }
@@ -731,10 +696,9 @@ XrActionStateBoolean Input::GetActionBooleanState(XrAction targetAction, Control
     XrActionStateBoolean poseState{.type = XR_TYPE_ACTION_STATE_BOOLEAN};
     XrResult result = xrGetActionStateBoolean(session, &getInfo, &poseState);
 
-    if(XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "2300; XrResult: ";
-                cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-                util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if(XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "2300; XrResult: " + std::to_string((int)result));
         valid = false;
         return poseState;
     }
@@ -755,10 +719,9 @@ XrActionStateFloat Input::GetActionFloatState(XrAction targetAction, ControllerE
     XrActionStateFloat poseState{.type = XR_TYPE_ACTION_STATE_FLOAT};
     XrResult result = xrGetActionStateFloat(session, &getInfo, &poseState);
 
-    if(XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "2400; XrResult: ";
-        cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-        util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if(XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "2400; XrResult: " + std::to_string((int)result));
         valid = false;
         return poseState;
     }
@@ -779,10 +742,9 @@ XrActionStateVector2f Input::GetActionVector2fState(XrAction targetAction, Contr
     XrActionStateVector2f poseState{.type = XR_TYPE_ACTION_STATE_VECTOR2F};
     XrResult result = xrGetActionStateVector2f(session, &getInfo, &poseState);
 
-    if(XR_FAILED(result)){
-        std::string cPlusPlusRemainsDumbUntilV23 = "2500; XrResult: ";
-        cPlusPlusRemainsDumbUntilV23.append(std::to_string((int)result));
-        util::error(Error::GenericOpenXR, cPlusPlusRemainsDumbUntilV23);
+    if(XR_FAILED(result))
+    {
+        util::error(Error::GenericOpenXR, "2500; XrResult: " + std::to_string((int)result));
         valid = false;
         return poseState;
     }
