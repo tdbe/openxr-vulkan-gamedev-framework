@@ -42,7 +42,9 @@ struct GameObject{
 	glm::mat4 worldMatrix = glm::mat4(1.0f);
 	Model *model = nullptr;
 	Material *material = nullptr;
-	GameObject(Model *model_ = nullptr, Material *material_ = nullptr, bool isVisible_ = true, std::string name_ = "game object"){
+	GameObject(Model *model_ = nullptr, Material *material_ = nullptr,
+		bool isVisible_ = true, std::string name_ = "game object")
+	{
 		name = name_;
 		model = model_;
 		material = material_;
@@ -55,7 +57,8 @@ struct GameObject{
 //	all at the same time.
 // Use for example in a: std::array<bool, (int)PlayerStates::COUNT> playerStatesList;
 // Used as flagging so other interactions scripts can know they shouldn't e.g. grab stuff while in inappropriate states. 
-enum class PlayerStates{
+enum class PlayerStates
+{
 	Idle = 0,
 	LocomotionState = 1,
 	GrabbingLeft = 2,
@@ -63,17 +66,25 @@ enum class PlayerStates{
 	COUNT = 4
 };
 
-struct PlayerObject{
+struct PlayerObject
+{
 	std::string name = "player object";
-	GameObject* root = nullptr;
+	/// <summary>
+	/// [tdbe] Use this <see crwef="worldRoot"/> for player locomotion and also add it to any objects that move with the player.
+	/// E.g. the head and hands matrixes will only show the relative movement/rotation of those devices, 
+	/// will not also include the position of the player due to locomotion within the game world, ie the <see crwef="worldRoot"/>.
+	/// </summary>
+	GameObject* worldRoot = nullptr;
 	GameObject* handLeft = nullptr;
 	GameObject* handRight = nullptr;
 	// [tdbe] Please see PlayerStates definition for info.
 	std::array<bool, (int)PlayerStates::COUNT> playerActiveStates = {true, false, false, false};
-	PlayerObject(std::string name_ = "player object", GameObject* head_ = nullptr, GameObject* handLeft_ = nullptr, GameObject* handRight_ = nullptr){
-		name = name_;
-		root = head_;
-		handLeft = handLeft_;
-		handRight = handRight_;
+	PlayerObject(std::string name = "player object", GameObject* root = nullptr,
+		GameObject* handLeft = nullptr, GameObject* handRight = nullptr)
+	{
+		this->name = name;
+		this->worldRoot = root;
+		this->handLeft = handLeft;
+		this->handRight = handRight;
 	}
 };

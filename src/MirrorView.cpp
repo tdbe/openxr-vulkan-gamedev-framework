@@ -16,7 +16,7 @@
 namespace
 {
 constexpr const char* windowTitle = "OpenXR Vulkan Example";
-constexpr VkFormat colorFormat = VK_FORMAT_B8G8R8A8_SRGB;
+constexpr VkFormat COLOR_FORMAT = VK_FORMAT_B8G8R8A8_SRGB;
 constexpr VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
 constexpr size_t mirrorEyeIndex = 1u; // Eye index to mirror, 0 = left, 1 = right
 
@@ -390,7 +390,7 @@ bool MirrorView::recreateSwapchain()
     bool surfaceFormatFound = false;
     for (const VkSurfaceFormatKHR& surfaceFormatCandidate : surfaceFormats)
     {
-      if (surfaceFormatCandidate.format == colorFormat)
+      if (surfaceFormatCandidate.format == COLOR_FORMAT)
       {
         surfaceFormat = surfaceFormatCandidate;
         surfaceFormatFound = true;
