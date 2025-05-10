@@ -23,8 +23,6 @@ constexpr float flySpeedMultiplier = 2.5f;
 
 int main()
 {
-  glm::mat4 cameraMatrix = glm::mat4(1.0f); // Transform from world to stage space
-
   Context context;
   if (!context.isValid())
   {
@@ -58,7 +56,7 @@ int main()
   Model gridModel, ruinsModel, carModelLeft, carModelRight, beetleModel, bikeModel, handModelLeft, handModelRight,
     cubeModel, logoModel, holePlaneTempChaperoneModel = {};
   std::vector<Model*> models = { &gridModel, &ruinsModel,    &carModelLeft,   &carModelRight, &beetleModel,
-                                 &bikeModel, &handModelLeft, &handModelRight, &cubeModel, &logoModel, &holePlaneTempChaperoneModel };
+    &bikeModel, &handModelLeft, &handModelRight, &cubeModel, &logoModel, &holePlaneTempChaperoneModel };
   
   // [tdbe] Just having different materials won't really affect rendering performance; rederer queues per-mesh right now, sampling materials which are identical by default.
   // Materials are a collection of kinds of data that modify the vulkan descriptor or pipeline used, only if you change a corresponding property.
@@ -86,8 +84,8 @@ int main()
   logoMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
   std::vector<Material*> materials = { &gridMaterial, &diffuseMaterial, &bikeMaterial, &logoMaterial, &locomotionMaterial, &skyMaterial};
   
-  GameObject head = GameObject();
-  head.worldMatrix = glm::inverse(cameraMatrix);
+  GameObject worldRoot = GameObject();
+  worldRoot.worldMatrix = glm::mat4(1.0f);
   GameObject handLeft = GameObject(&handModelLeft, &logoMaterial, true, "handLeft");
   GameObject handRight = GameObject(&handModelRight, &logoMaterial, true, "handRight");
   GameObject grid = GameObject(&gridModel, &gridMaterial, true, "grid");
@@ -100,18 +98,18 @@ int main()
   GameObject cube = GameObject(&cubeModel, &diffuseMaterial, true, "cube");
   GameObject holePlaneTempChaperone = GameObject(&holePlaneTempChaperoneModel, &locomotionMaterial, true, "holePlaneTempChaperone");
   std::vector<GameObject*> gameObjects = { &grid, &ruins, &carLeft, &carRight, &beetle, &bike, &handLeft, &handRight, &cube, &logo, &holePlaneTempChaperone};
-  PlayerObject playerObject = PlayerObject("XR Player 1", &head, &handLeft, &handRight);
+  PlayerObject playerObject = PlayerObject("XR Player 1", &worldRoot, &handLeft, &handRight);
   
-  grid.worldMatrix = glm::scale(grid.worldMatrix, { 15, 15, 15 });
+  grid.worldMatrix = glm::scale(worldRoot.worldMatrix, { 15, 15, 15 });
   carLeft.worldMatrix =
-    glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -7.0f }), glm::radians(75.0f), { 0.0f, 1.0f, 0.0f });
+    glm::rotate(glm::translate(worldRoot.worldMatrix, { -3.5f, 0.0f, -7.0f }), glm::radians(75.0f), { 0.0f, 1.0f, 0.0f });
   carRight.worldMatrix =
-    glm::rotate(glm::translate(glm::mat4(1.0f), { 8.0f, 0.0f, -15.0f }), glm::radians(-15.0f), { 0.0f, 1.0f, 0.0f });
+    glm::rotate(glm::translate(worldRoot.worldMatrix, { 8.0f, 0.0f, -15.0f }), glm::radians(-15.0f), { 0.0f, 1.0f, 0.0f });
   beetle.worldMatrix =
-    glm::rotate(glm::translate(glm::mat4(1.0f), { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
-  logo.worldMatrix = glm::translate(glm::mat4(1.0f), { 0.0f, 3.0f, -10.0f });
-  bike.worldMatrix = glm::rotate(glm::translate(glm::mat4(1.0f), { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
-  cube.worldMatrix = glm::scale(glm::translate(glm::mat4(1.0f), { 2.0f, 2.0f, -2.0f }), { 0.5f, 0.5f, 0.5f });
+    glm::rotate(glm::translate(worldRoot.worldMatrix, { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
+  logo.worldMatrix = glm::translate(worldRoot.worldMatrix, { 0.0f, 3.0f, -10.0f });
+  bike.worldMatrix = glm::rotate(glm::translate(worldRoot.worldMatrix, { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
+  cube.worldMatrix = glm::scale(glm::translate(worldRoot.worldMatrix, { 2.0f, 2.0f, -2.0f }), { 0.5f, 0.5f, 0.5f });
   
   MeshData* meshData = new MeshData;
   if (!meshData->loadModel("models/quad.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
@@ -197,11 +195,10 @@ int main()
     {
 	 continue;
     }
-	  else if (frameResult == Headset::BeginFrameResult::RenderFully)
+	else if (frameResult == Headset::BeginFrameResult::RenderFully)
     {
-      
-      if (!inputSystem.Sync(headset.getXrSpace(), headset.getXrFrameState().predictedDisplayTime, 
-                            headset.getEyePoses(), headset.getHeadPosition(), headset.getSessionState()))
+      if (!inputSystem.Sync(headset.getXrSpace(), headset.getEyePoses(), 
+          headset.getXrFrameState().predictedDisplayTime, headset.getSessionState()))
       {
         return EXIT_FAILURE;
       }
@@ -209,19 +206,22 @@ int main()
       Inputspace::InputHaptics& inputHaptics = inputSystem.GetInputHaptics();
       
       gameTime += deltaTime;
-
       // [tdbe] Update
       for(size_t i = 0; i < gameBehaviours.size(); i++)
       {
         gameBehaviours[i]->Update(deltaTime, gameTime, inputData, inputHaptics);
       }
-      inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
 
+      // [tdbe] apply all the haptics we accumulated in our behaviours above
+      inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
+      
+      // headset.setXrReferenceSpacePose(stage space update matrix);
+      
       // [tdbe] TODO: do a xrRequestExitSession(session); ?
 
       // Render
-      renderer.render(glm::inverse(head.worldMatrix), swapchainImageIndex, gameTime);
-
+      renderer.render(glm::inverse(playerObject.worldRoot->worldMatrix), swapchainImageIndex, gameTime);
+      
       const MirrorView::RenderResult mirrorResult = mirrorView.render(swapchainImageIndex);
       if (mirrorResult == MirrorView::RenderResult::Error)
       {
