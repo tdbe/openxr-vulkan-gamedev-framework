@@ -48,8 +48,8 @@ public:
   glm::mat4 getEyeViewMatrix(size_t eyeIndex) const;
   glm::mat4 getEyeProjectionMatrix(size_t eyeIndex) const;
   std::vector<XrView> getEyePoses() const;
-  glm::vec3 getHeadPosition() const;
-
+  XrPosef getXrReferenceSpacePose() const;
+  void setXrReferenceSpacePose(glm::mat4 newWorldPoseMatrix);
   XrSessionState getSessionState() const;
 
   RenderTarget* getRenderTarget(size_t swapchainImageIndex) const;
@@ -66,7 +66,16 @@ private:
 
   XrSession session = nullptr;
   XrSessionState sessionState = XR_SESSION_STATE_UNKNOWN;
-  XrSpace space = nullptr;
+  /// <summary>
+  /// [tdbe] The worldspace XR stage.
+  /// Can be recreated at runtime to move the stage 
+  /// </summary>
+  XrPosef xrReferenceSpacePose = {};
+  /// <summary>
+  /// [tdbe] stage space is a sort of worldspace, but it's meant to represent some IRL tracked area(s) e.g. floor rectangle(s).
+  /// https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#spaces
+  /// </summary>
+  XrSpace game_world_stage_space = nullptr;
   XrFrameState frameState = {};
   XrViewState viewState = {};
 
@@ -83,4 +92,6 @@ private:
 
   bool beginSession() const;
   bool endSession() const;
+  XrResult createReferenceSpaces(XrResult result);
+  void reCreateReferenceSpaces();
 };

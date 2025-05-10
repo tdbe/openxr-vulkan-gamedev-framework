@@ -15,15 +15,18 @@
 
 namespace
 {
-constexpr XrReferenceSpaceType spaceType = XR_REFERENCE_SPACE_TYPE_STAGE;
-constexpr VkFormat colorFormat = VK_FORMAT_R8G8B8A8_SRGB;//_RGBA8UnormSrgb//_RGBA8UnormSrgb
-constexpr VkFormat depthFormat = VK_FORMAT_D32_SFLOAT;
+constexpr XrReferenceSpaceType STAGE_SPACE_TYPE = XR_REFERENCE_SPACE_TYPE_STAGE;
+constexpr XrReferenceSpaceType LOCAL_SPACE_TYPE = XR_REFERENCE_SPACE_TYPE_LOCAL;
+constexpr XrReferenceSpaceType VIEW_SPACE_TYPE = XR_REFERENCE_SPACE_TYPE_VIEW;
+constexpr VkFormat COLOR_FORMAT = VK_FORMAT_R8G8B8A8_SRGB;//_RGBA8UnormSrgb//_RGBA8UnormSrgb
+constexpr VkFormat DEPTH_FORMAT = VK_FORMAT_D32_SFLOAT;
 } // namespace
 
 Headset::Headset(const Context* context) : context(context)
 {
   const VkDevice device = context->getVkDevice();
   const VkSampleCountFlagBits multisampleCount = context->getMultisampleCount();
+  xrReferenceSpacePose = util::makeIdentity();
 
   // Create a render pass
   {
@@ -45,7 +48,7 @@ Headset::Headset(const Context* context) : context(context)
     renderPassMultiviewCreateInfo.pCorrelationMasks = &correlationMask;
 
     VkAttachmentDescription colorAttachmentDescription{};
-    colorAttachmentDescription.format = colorFormat;
+    colorAttachmentDescription.format = COLOR_FORMAT;
     colorAttachmentDescription.samples = multisampleCount;
     colorAttachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -59,7 +62,7 @@ Headset::Headset(const Context* context) : context(context)
     colorAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
     VkAttachmentDescription depthAttachmentDescription{};
-    depthAttachmentDescription.format = depthFormat;
+    depthAttachmentDescription.format = DEPTH_FORMAT;
     depthAttachmentDescription.samples = multisampleCount;
     depthAttachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -73,7 +76,7 @@ Headset::Headset(const Context* context) : context(context)
     depthAttachmentReference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
     VkAttachmentDescription resolveAttachmentDescription{};
-    resolveAttachmentDescription.format = colorFormat;
+    resolveAttachmentDescription.format = COLOR_FORMAT;
     resolveAttachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
     resolveAttachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     resolveAttachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -174,15 +177,8 @@ Headset::Headset(const Context* context) : context(context)
     valid = false;
     return;
   }
-
-  // Create a play space
-  // [tdbe] This is a reference space. There are multiple XrReferenceSpaceType's 
-  // [tdbe] e.g. XR_REFERENCE_SPACE_TYPE_VIEW, XR_REFERENCE_SPACE_TYPE_LOCAL, XR_REFERENCE_SPACE_TYPE_STAGE
-  // [tdbe] and they're used for positional information.
-  XrReferenceSpaceCreateInfo referenceSpaceCreateInfo{ XR_TYPE_REFERENCE_SPACE_CREATE_INFO };
-  referenceSpaceCreateInfo.referenceSpaceType = spaceType;
-  referenceSpaceCreateInfo.poseInReferenceSpace = util::makeIdentity();
-  result = xrCreateReferenceSpace(session, &referenceSpaceCreateInfo, &space);
+  
+  result = createReferenceSpaces(result);
   if (XR_FAILED(result))
   {
     util::error(Error::GenericOpenXR);
@@ -251,7 +247,7 @@ Headset::Headset(const Context* context) : context(context)
     bool formatFound = false;
     for (const int64_t& format : formats)
     {
-      if (format == static_cast<int64_t>(colorFormat))
+      if (format == static_cast<int64_t>(COLOR_FORMAT))
       {
         formatFound = true;
         break;
@@ -269,7 +265,7 @@ Headset::Headset(const Context* context) : context(context)
   const VkExtent2D eyeResolution = getEyeResolution(0u);
 
   // Create a color buffer
-  colorBuffer = new ImageBuffer(context, eyeResolution, colorFormat, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+  colorBuffer = new ImageBuffer(context, eyeResolution, COLOR_FORMAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                                 context->getMultisampleCount(), VK_IMAGE_ASPECT_COLOR_BIT, 2u);
   if (!colorBuffer->isValid())
   {
@@ -280,7 +276,7 @@ Headset::Headset(const Context* context) : context(context)
   // Create a depth buffer
   // [tdbe] Note: the depth buffer is not necessary. I guess it's used for passthrough or other xr depth effects,
   // [tdbe] but it's not required for rendering geometry to the headset color buffer. (It's not "the" depth buffer.)
-  depthBuffer = new ImageBuffer(context, eyeResolution, depthFormat, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+  depthBuffer = new ImageBuffer(context, eyeResolution, DEPTH_FORMAT, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                                 context->getMultisampleCount(), VK_IMAGE_ASPECT_DEPTH_BIT, 2u);
   if (!depthBuffer->isValid())
   {
@@ -295,7 +291,7 @@ Headset::Headset(const Context* context) : context(context)
 
     // Create a swapchain
     XrSwapchainCreateInfo swapchainCreateInfo{ XR_TYPE_SWAPCHAIN_CREATE_INFO };
-    swapchainCreateInfo.format = colorFormat;
+    swapchainCreateInfo.format = COLOR_FORMAT;
     swapchainCreateInfo.sampleCount = eyeImageInfo.recommendedSwapchainSampleCount;
     swapchainCreateInfo.width = eyeImageInfo.recommendedImageRectWidth;
     swapchainCreateInfo.height = eyeImageInfo.recommendedImageRectHeight;
@@ -355,7 +351,7 @@ Headset::Headset(const Context* context) : context(context)
 
       const VkImage image = swapchainImages.at(renderTargetIndex).image;
       renderTarget = new RenderTarget(device, image, colorBuffer->getImageView(), depthBuffer->getImageView(),
-                                      eyeResolution, colorFormat, renderPass, 2u);
+                                      eyeResolution, COLOR_FORMAT, renderPass, 2u);
       if (!renderTarget->isValid())
       {
         valid = false;
@@ -415,9 +411,9 @@ Headset::~Headset()
     delete renderTarget;
   }
 
-  if (space)
+  if (game_world_stage_space != NULL)
   {
-    xrDestroySpace(space);
+    xrDestroySpace(game_world_stage_space);
   }
 
   if (session)
@@ -441,6 +437,38 @@ Headset::~Headset()
   {
     vkDestroyRenderPass(vkDevice, renderPass, nullptr);
   }
+}
+
+/// <summary>
+/// <see cref="createReferenceSpaces"/>
+/// </summary>
+void Headset::reCreateReferenceSpaces()
+{
+  if (game_world_stage_space != NULL)
+    xrDestroySpace(game_world_stage_space);
+  createReferenceSpaces(XR_SUCCESS);
+}
+
+/// <summary>
+/// [tdbe] Create a play space
+/// [tdbe] This is a reference space. There are multiple XrReferenceSpaceType's
+/// [tdbe] e.g. XR_REFERENCE_SPACE_TYPE_VIEW, XR_REFERENCE_SPACE_TYPE_LOCAL, XR_REFERENCE_SPACE_TYPE_STAGE
+/// [tdbe] and they're used for positional information.
+/// [tdbe] "stage_space" means worldspace but it's meant to represent your IRL walkable area e.g. floor rectangle.
+/// </summary>
+XrResult Headset::createReferenceSpaces(XrResult result)
+{
+  XrReferenceSpaceCreateInfo referenceSpaceCreateInfo{ XR_TYPE_REFERENCE_SPACE_CREATE_INFO };
+  referenceSpaceCreateInfo.referenceSpaceType = STAGE_SPACE_TYPE;
+  referenceSpaceCreateInfo.poseInReferenceSpace = xrReferenceSpacePose;
+  result = xrCreateReferenceSpace(session, &referenceSpaceCreateInfo, &game_world_stage_space);
+  if (XR_FAILED(result))
+  {
+    return result;
+  }
+  // [tdbe] can also (re)create other (stage/local/view) spaces here.
+  
+  return result;
 }
 
 Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex) 
@@ -499,6 +527,7 @@ Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
   // Wait for the new frame
   frameState.type = XR_TYPE_FRAME_STATE;
   XrFrameWaitInfo frameWaitInfo{ XR_TYPE_FRAME_WAIT_INFO };
+  // [tdbe] xrWaitFrame gets the predictedDisplayTime to sync spaces and poses
   XrResult result = xrWaitFrame(session, &frameWaitInfo, &frameState);
   if (XR_FAILED(result))
   {
@@ -521,7 +550,7 @@ Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
   XrViewLocateInfo viewLocateInfo{ XR_TYPE_VIEW_LOCATE_INFO };
   viewLocateInfo.viewConfigurationType = context->getXrViewType();
   viewLocateInfo.displayTime = frameState.predictedDisplayTime;
-  viewLocateInfo.space = space;
+  viewLocateInfo.space = game_world_stage_space;
   result = xrLocateViews(session, &viewLocateInfo, &viewState, static_cast<uint32_t>(eyePoses.size()), &viewCount,
                          eyePoses.data());
   if (XR_FAILED(result))
@@ -603,7 +632,7 @@ void Headset::endFrame() const
 
   // End the frame
   XrCompositionLayerProjection compositionLayerProjection{ XR_TYPE_COMPOSITION_LAYER_PROJECTION };
-  compositionLayerProjection.space = space;
+  compositionLayerProjection.space = game_world_stage_space;
   compositionLayerProjection.viewCount = static_cast<uint32_t>(eyeRenderInfos.size());
   compositionLayerProjection.views = eyeRenderInfos.data();
 
@@ -643,7 +672,7 @@ XrSession Headset::getXrSession() const
 
 XrSpace Headset::getXrSpace() const
 {
-  return space;
+  return game_world_stage_space;
 }
 
 XrFrameState Headset::getXrFrameState() const
@@ -682,11 +711,20 @@ std::vector<XrView> Headset::getEyePoses() const
   return eyePoses;
 }
 
-glm::vec3 Headset::getHeadPosition() const
+XrPosef Headset::getXrReferenceSpacePose() const
 {
-  return 0.5f * glm::vec3(eyePoses[0].pose.position.x + eyePoses[1].pose.position.x,
-                          eyePoses[0].pose.position.y + eyePoses[1].pose.position.y,
-                          eyePoses[0].pose.position.z + eyePoses[1].pose.position.z);
+  return xrReferenceSpacePose;
+}
+
+/// <summary>
+/// [tdbe] Use this to recreate the (stage) space at runtime to move the stage.
+/// </summary>
+/// <param name="newPose">Typically the value of <see cref="getXrReferenceSpacePose"/> plus some offset you
+/// add.</param>
+void Headset::setXrReferenceSpacePose(glm::mat4 newWorldPoseMatrix)
+{
+  xrReferenceSpacePose = util::matrixToPose(newWorldPoseMatrix);
+  reCreateReferenceSpaces();
 }
 
 XrSessionState Headset::getSessionState() const
