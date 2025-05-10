@@ -195,6 +195,16 @@ XrPosef util::makeIdentity()
   return identity;
 }
 
+XrPosef util::matrixToPose(const glm::mat4 matrix)
+{
+  XrPosef pose = {};
+  pose.position = XrVector3f{ matrix[3].x, matrix[3].y, matrix[3].z };
+  glm::highp_quat quat = glm::toQuat(matrix);
+  pose.orientation = XrQuaternionf{ quat.x, quat.y, quat.z, quat.w };
+
+  return pose;
+}
+
 glm::mat4 util::poseToMatrix(const XrPosef& pose)
 {
   const glm::mat4 translation =

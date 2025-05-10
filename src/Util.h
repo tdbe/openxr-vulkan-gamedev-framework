@@ -76,17 +76,20 @@ namespace util
                       XrActionType type,
                       XrAction& action);
 
-    // Creates an OpenXR identity pose
+    /// Creates an OpenXR identity pose
     XrPosef makeIdentity();
 
-    // Converts an OpenXR pose to a transformation matrix
+    /// Converts a transformation matrix to an OpenXR pose
+    XrPosef matrixToPose(const glm::mat4 matrix);
+
+    /// Converts an OpenXR pose to a transformation matrix
     glm::mat4 poseToMatrix(const XrPosef& pose);
 
     glm::mat4 poseToMatrix(const util::posef& pose);
 
     util::posef xrPosefToGlmPosef(const XrPosef& xrPosef);
 
-    // Creates an OpenXR projection matrix
+    /// Creates an OpenXR projection matrix
     glm::mat4 createProjectionMatrix(XrFovf fov, float nearClip, float farClip);
 
     glm::quat xrQuaternionfToGlmQuat(const XrQuaternionf& src);
