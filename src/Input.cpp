@@ -514,15 +514,15 @@ Input::Input(XrInstance instance, XrSession session)
     }
 }
 
-bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, 
-    glm::vec3 headPosition, XrSessionState sessionState)
+bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses, 
+                 XrTime predictedDisplayTime, XrSessionState sessionState)
 {
     // Sync the actions 
     const XrActiveActionSet activeActionSet{actionSetData.actionSet, XR_NULL_PATH};// Wildcard for all
     
     XrActionsSyncInfo actionsSyncInfo = { .type = XR_TYPE_ACTIONS_SYNC_INFO, 
-                                        .countActiveActionSets = 1u,
-                                        .activeActionSets = &activeActionSet};
+                                          .countActiveActionSets = 1u,
+                                          .activeActionSets = &activeActionSet };
                                         
     XrResult result = xrSyncActions(session, &actionsSyncInfo);
     if(XR_FAILED(result))
@@ -535,28 +535,49 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
     // Update the actions
     inputData.SizeVectors(ControllerEnum::COUNT, SideEnum::COUNT);
 
-    // [tdbe] Head action poses
+    // [tdbe] Head poses
+    /*
+    XrSpaceLocation player_space_in_game_space = { XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
+    result = xrLocateSpace(xrHeadReferenceSpace, xrReferenceSpace, predictedDisplayTime, &player_space_in_game_space);
+    if (XR_FAILED(result))
+    {
+      util::error(Error::GenericOpenXR, "2200; XrResult: " + std::to_string((int)result));
+      valid = false;
+      return valid;
+    }
+    // Check that the position and orientation are valid and tracked
+    constexpr XrSpaceLocationFlags checkFlags =
+      XR_SPACE_LOCATION_POSITION_VALID_BIT | XR_SPACE_LOCATION_POSITION_TRACKED_BIT |
+      XR_SPACE_LOCATION_ORIENTATION_VALID_BIT | XR_SPACE_LOCATION_ORIENTATION_TRACKED_BIT;
+    if ((player_space_in_game_space.locationFlags & checkFlags) == checkFlags)
+    {
+      inputData.headPoseMatrix = util::poseToMatrix(player_space_in_game_space.pose);
+      inputData.headPose = util::xrPosefToGlmPosef(player_space_in_game_space.pose);
+    }*/
+    // [tdbe] TODO: figure out what/how head poses/joints work in openxr
+    // https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html
+    inputData.headPose = {
+        .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,
+        .position = 0.5f * (inputData.eyePoses[(int)SideEnum::LEFT].position + inputData.eyePoses[(int)SideEnum::RIGHT].position)
+    };
+    inputData.headPoseMatrix = util::poseToMatrix(inputData.headPose);
     inputData.eyePoseMatrixes[(int)SideEnum::LEFT] = util::poseToMatrix(eyePoses[(int)SideEnum::LEFT].pose);
     inputData.eyePoses[(int)SideEnum::LEFT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::LEFT].pose);
     inputData.eyePoseMatrixes[(int)SideEnum::RIGHT] = util::poseToMatrix(eyePoses[(int)SideEnum::RIGHT].pose);
     inputData.eyePoses[(int)SideEnum::RIGHT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::RIGHT].pose);
-    // [tdbe] TODO: figure out what/how head poses/joints work in openxr https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html
-    inputData.headPose = {
-        .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,//util::slerp(inputData.eyePoses[(int)SideEnum::LEFT].orientation, inputData.eyePoses[(int)SideEnum::RIGHT].orientation, .5),
-        .position = headPosition
-    };
-    inputData.headPoseMatrix = util::poseToMatrix(inputData.headPose);
+    
 
     // [tdbe] Headset State. Use to detect status / user proximity / user presence / user engagement https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#session-lifecycle
     inputData.headsetActivityState = sessionState;
 
+    // [tdbe] Controllers / hands
     for (size_t i = 0u; i < (int)ControllerEnum::COUNT; i++){
         auto ci = static_cast<ControllerEnum>(i);
-        // [tdbe] Pose
+        // [tdbe] Controller Pose
         XrActionStatePose aimPoseState = Input::GetActionPoseState(actionSetData.aimPoseAction, ci);
         if (aimPoseState.isActive)
         {
-            XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
+            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_aim[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result))
@@ -577,11 +598,11 @@ bool Input::Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vec
             }
         }
 
-        // [tdbe] Pose
+        // [tdbe] Controller Pose
         XrActionStatePose gripPoseState = Input::GetActionPoseState(actionSetData.gripPoseAction, ci);
         if (gripPoseState.isActive)
         {
-            XrSpaceLocation spaceLocation{.type = XR_TYPE_SPACE_LOCATION};   
+            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_grip[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result))

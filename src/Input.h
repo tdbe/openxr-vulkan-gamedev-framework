@@ -2,8 +2,6 @@
 #include <array>
 #include "InputData.h"
 
-// [tdbe] Note: [tdbe] prefix means I'm the author (/ of the comment).
-
 /* [tdbe]
  * This input class aims to handle all OpenXR inputs for all available XR controllers and headset. Using the OpenXR API, it sets up 
  * and syncs the latest action poses (position, rotation) of controllers (joints), and head, as well as the action states e.g. buttons, 
@@ -29,8 +27,8 @@ namespace Inputspace{
         ~Input();
         bool isValid() const;
 
-        bool Sync(XrSpace xrReferenceSpace, XrTime predictedDisplayTime, std::vector<XrView> eyePoses, 
-            glm::vec3 headPosition, XrSessionState sessionState);
+        bool Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses, 
+            XrTime predictedDisplayTime, XrSessionState sessionState);
         const InputData& GetInputData() const;
         InputHaptics& GetInputHaptics();
         void ApplyHapticFeedbackRequests(Inputspace::InputHaptics& inputHaptics);
@@ -74,6 +72,7 @@ namespace Inputspace{
 
             // [tdbe] used to get targets in openxr
             std::vector<XrPath> controllerPaths;
+            // [tdbe] similar to the XrSpace for view_space or stage_space in Headset, but for hand poses
             std::vector<XrSpace> controllerReferenceSpaces_aim;
             std::vector<XrSpace> controllerReferenceSpaces_grip;
         };
