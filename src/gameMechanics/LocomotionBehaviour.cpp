@@ -15,66 +15,63 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
     XrActionStateFloat& grabLeft, XrActionStateFloat& grabRight, float avgGrabInput, 
     Inputspace::InputHaptics& inputHaptics)
 {
-    // [tdbe] To stick a plane to your forehead / bridge of your nose:
-    glm::vec3 objectSpaceForwardArmLength = glm::vec3(0.85f, 0.0f, 0.0f);
+    // [tdbe] Stick a plane to your forehead / bridge of your nose. 
+    // (This is not the right way to do a graphics overlay but I didn't do the "post processing" layer yet.)
+    glm::vec3 objectSpaceForwardArmLength = glm::vec3(0.5f, 0.0f, 0.0f);
+    //glm::vec3 objectSpaceForwardArmLength = glm::vec3(0.3f, -0.033f, 0.1f);// centered on preview
     glm::vec3 groundNormal = { 0.0f, 1.0f, 0.0f };
     glm::mat4 viewRotationMatrix = inputData.eyePoseMatrixes[0];
-    holePlaneTempChaperone.worldMatrix =
-        playerObject.root->worldMatrix *
-        glm::translate(
-            glm::rotate(viewRotationMatrix, glm::radians(90.0f), groundNormal),
-        objectSpaceForwardArmLength);
+    holePlaneTempChaperone.worldMatrix = viewRotationMatrix;
+    holePlaneTempChaperone.worldMatrix = glm::rotate(holePlaneTempChaperone.worldMatrix, glm::radians(90.0f), groundNormal);
+    holePlaneTempChaperone.worldMatrix = glm::translate(holePlaneTempChaperone.worldMatrix, objectSpaceForwardArmLength);
+    holePlaneTempChaperone.worldMatrix = playerObject.worldRoot->worldMatrix * holePlaneTempChaperone.worldMatrix;
 
     if(currentVisualsState == VisualsState::Start)
     {
         // [tdbe] request haptics
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.5f, XR_MIN_HAPTIC_DURATION, 0.5f);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.5f, XR_MIN_HAPTIC_DURATION, 0.5f);
 
+        // do some intro tunel-vision chaperone animation
         holePlaneTempChaperone.isVisible = true;
 
         printf("\n[LocomotionBehaviour][log] VisualsState::Start");
-        currentVisualsState = VisualsState::Update;
+        currentVisualsState = VisualsState::Intro;
+    }
+    else if (currentVisualsState == VisualsState::Intro)
+    {
+
+      // do some intro tunel-vision chaperone animation
+
+      printf("\n[LocomotionBehaviour][log] VisualsState::Intro");
+      currentVisualsState = VisualsState::Update;
     }
     else if(currentVisualsState == VisualsState::Update)
     {
-        // use a tunel vision animation 
+        // do some looping tunel-vision chaperone animation or just wait
         printf("\n[LocomotionBehaviour][log] VisualsState::Update");
-        
-        currentVisualsState = VisualsState::End;
     }
-    else if(currentVisualsState == VisualsState::End)
-    {
-        // [tdbe] clear any data here
-
-        printf("\n[LocomotionBehaviour][log] VisualsState::End");
-        currentVisualsState = VisualsState::Clear;
-    }
-    else if(currentVisualsState == VisualsState::StartBackwards)
+    else if(currentVisualsState == VisualsState::Outro)
     {
         // [tdbe] request haptics
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
-        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.15f, XR_MIN_HAPTIC_DURATION, 0.25f);
-
-        printf("\n[LocomotionBehaviour][log] VisualsState::StartBackwards");
-        currentVisualsState = VisualsState::UpdateBackwards;
-    }
-    else if(currentVisualsState == VisualsState::UpdateBackwards)
-    {
-        printf("\n[LocomotionBehaviour][log] VisualsState::UpdateBackwards");
-
-        currentVisualsState = VisualsState::EndBackwards;
-    }
-    else if(currentVisualsState == VisualsState::EndBackwards)
-    {
-        // [tdbe] clear any data here
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::LEFT, 0.33f, XR_MIN_HAPTIC_DURATION, 0.33f);
+        inputHaptics.RequestHapticFeedback(Inputspace::ControllerEnum::RIGHT, 0.33f, XR_MIN_HAPTIC_DURATION, 0.33f);
         
-        printf("\n[LocomotionBehaviour][log] VisualsState::EndBackwards");
-        currentVisualsState = VisualsState::Clear;
+        // do some outro chaperone animation
+
+        printf("\n[LocomotionBehaviour][log] VisualsState::Outro");
+        currentVisualsState = VisualsState::End;
+    }
+    else if (currentVisualsState == VisualsState::End)
+    {
+      // [tdbe] clear any data here
+
+      printf("\n[LocomotionBehaviour][log] VisualsState::End");
+      currentVisualsState = VisualsState::Clear;
     }
     else if(currentVisualsState == VisualsState::Clear)
     {
-        holePlaneTempChaperone.isVisible = false;
+      holePlaneTempChaperone.isVisible = false;
     }
 }
 
@@ -112,14 +109,14 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         moveStateData.moveDir = moveStateData.moveDir / moveStateData.moveInputSpeed;
 
         // [tdbe] TODO: 
-        //          Perhaps add an inertia to be able to do flick moves :)
-        //          And if you have a larger world: A mode with a bit of an upward leap, like in that Lucid Trips VR game.
+        //  Perhaps add an inertia to be able to do flick moves :)
+        //  And if you have a larger world: A mode with a bit of an upward leap, like in that Lucid Trips VR game.
         
         // [tdbe] move player along moveDir, with a speed scaled by hand movement speed.
         float moveSpeed = avgGrabInput * movementSpeedScaler * glm::pow(moveStateData.moveInputSpeed, movementAccelerationPow);
         glm::vec3 moveVec = -100.0f * moveStateData.moveDir * moveSpeed * deltaTime;
-        //printf("\n[LocomotionBehaviour][log] moveSpeed: {%f}, moveVec: {%f}{%f}{%f}", moveSpeed, moveVec.x, moveVec.y, moveVec.z);
-        playerObject.root->worldMatrix = glm::translate(playerObject.root->worldMatrix, moveVec);
+        //printf("\n[LocomotionBehaviour][log] moveSpeed: {%f}, moveVec: {%f}{%f}{%f}, deltaTime: {%f}, moveStateData.moveDir: {%f}{%f}{%f}", moveSpeed, moveVec.x, moveVec.y, moveVec.z, deltaTime, moveStateData.moveDir.x, moveStateData.moveDir.y, moveStateData.moveDir.z);
+        playerObject.worldRoot->worldMatrix = glm::translate(playerObject.worldRoot->worldMatrix, moveVec);
         playerObject.handLeft->worldMatrix = glm::translate(playerObject.handLeft->worldMatrix, -moveVec);
         moveVec.x = -moveVec.x;// because right hand is a flipped left hand model
         playerObject.handRight->worldMatrix = glm::translate(playerObject.handRight->worldMatrix, -moveVec);
@@ -131,9 +128,9 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         moveStateData.dirLeftRight = moveStateData.dirLeftRight / (float)moveStateData.dirLeftRight.length();
         glm::vec3 norm = glm::vec3(0,1,0);
         float radang = util::vectorAngleAroundNormal(moveStateData.dirLeftRight, moveStateData.prevDirLeftRight, norm);
-        radang = distBetweenHands * 200.0f * avgGrabInput * rotationSpeedScaler * radang * deltaTime;
+        radang = distBetweenHands * 150.0f * avgGrabInput * rotationSpeedScaler * radang * deltaTime;
         //printf("\n[LocomotionBehaviour][log] rotation angle rad: %f", radang);
-        playerObject.root->worldMatrix = glm::rotate(playerObject.root->worldMatrix, radang, norm);
+        playerObject.worldRoot->worldMatrix = glm::rotate(playerObject.worldRoot->worldMatrix, radang, norm);
 
         moveStateData.prevPosLeft = moveStateData.posLeft;
         moveStateData.prevPosRight = moveStateData.posRight;
@@ -166,34 +163,37 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
     float avgGrabInput = .5f*(grabLeft.currentState + grabRight.currentState);
     if(grabLeft.isActive && grabLeft.isActive)
     {
-        // [tdbe] Change visuals state
+        // [tdbe] Set visuals state
         {
-            if(avgGrabInput>.5f && grabLeft.currentState > .25f && grabRight.currentState > .25f){
-                if(currentVisualsState != VisualsState::Start &&
+            if(avgGrabInput > .5f && grabLeft.currentState > .25f && grabRight.currentState > .25f)
+            {
+                if( currentVisualsState != VisualsState::Start &&
+                    currentVisualsState != VisualsState::Intro &&
                     currentVisualsState != VisualsState::Update &&
+                    currentVisualsState != VisualsState::Outro &&
                     currentVisualsState != VisualsState::End)
                 {
                     currentVisualsState = VisualsState::Start;
                 }
             }
-            else{
-                if(currentVisualsState != VisualsState::StartBackwards &&
-                    currentVisualsState != VisualsState::UpdateBackwards && 
-                    currentVisualsState != VisualsState::EndBackwards && 
+            else
+            {
+                if( currentVisualsState != VisualsState::Outro &&
+                    currentVisualsState != VisualsState::End && 
                     currentVisualsState != VisualsState::Clear)
                 {
-                    currentVisualsState = VisualsState::StartBackwards;
+                    currentVisualsState = VisualsState::Outro;
                 }
             }
             
         }
-        // [tdbe] Change move state
-        //        Handle move mechanics only after specific visual animations finish
+        // [tdbe] Set move state
         {
-            if(avgGrabInput>.95)
+            if(avgGrabInput > .95)
             {
-                if(currentVisualsState != VisualsState::Start && 
-                    currentVisualsState != VisualsState::Update &&
+                if( currentVisualsState != VisualsState::Start && 
+                    currentVisualsState != VisualsState::Intro &&
+                    currentMovementState != MovementState::Start &&
                     currentMovementState != MovementState::Update)
                 {
                     currentMovementState = MovementState::Start;
@@ -209,11 +209,11 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
         }
     }
     else{
-        if(currentVisualsState != VisualsState::Clear &&
-            currentVisualsState != VisualsState::End &&
-            currentVisualsState != VisualsState::UpdateBackwards )
+        if( currentVisualsState != VisualsState::Clear &&
+            currentVisualsState != VisualsState::Outro &&
+            currentVisualsState != VisualsState::End )
         {
-            currentVisualsState = VisualsState::StartBackwards;
+            currentVisualsState = VisualsState::Outro;
         }
         if(currentMovementState != MovementState::Clear){
             currentMovementState = MovementState::End;
@@ -221,13 +221,13 @@ void LocomotionBehaviour::Update(const float deltaTime, const float gameTime,
     }
 
     {
-    HandleVisualsState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
     HandleMovementState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
+    HandleVisualsState(deltaTime, inputData, grabLeft, grabRight, avgGrabInput, inputHaptics);
     }
 
     // [tdbe] Flagging so other interactions scripts can know they shouldn't e.g. grab stuff 
-    //  while in inappropriate states.
-    if(currentVisualsState == VisualsState::Clear && currentMovementState == MovementState::Clear)
+    // while in inappropriate states.
+    if (currentMovementState == MovementState::Update)
     {
         playerObject.playerActiveStates[(int)PlayerStates::LocomotionState] = true;
     }

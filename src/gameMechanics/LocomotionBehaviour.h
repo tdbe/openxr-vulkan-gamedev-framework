@@ -22,11 +22,10 @@ class LocomotionBehaviour : public GameBehaviour
         enum class VisualsState{
             Clear = 0,
             Start = 1,
-            Update = 2,
-            End = 3,
-            StartBackwards = 4,
-            UpdateBackwards = 5,
-            EndBackwards = 6
+            Intro = 2,
+            Update = 3,
+            Outro = 4,
+            End = 5,
         };
         VisualsState currentVisualsState = VisualsState::Clear;
         struct VisualsStateData{
