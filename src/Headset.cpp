@@ -388,9 +388,9 @@ Headset::Headset(const Context* context) : context(context)
                                                 static_cast<int32_t>(eyeImageInfo.recommendedImageRectHeight) };
   }
 
-  // Allocate view and projection matrices
-  eyeViewMatrices.resize(eyeCount);
-  eyeProjectionMatrices.resize(eyeCount);
+  // Allocate view and projection Matrixes
+  eyeViewMatrixes.resize(eyeCount);
+  eyeProjectionMatrixes.resize(eyeCount);
 }
 
 Headset::~Headset()
@@ -577,7 +577,7 @@ Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
     return BeginFrameResult::Error;
   }
 
-  // Update the eye render infos, view and projection matrices
+  // Update the eye render infos, view and projection Matrixes
   for (size_t eyeIndex = 0u; eyeIndex < eyeCount; ++eyeIndex)
   {
     // Copy the eye poses into the eye render infos
@@ -586,10 +586,10 @@ Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
     eyeRenderInfo.pose = eyePose.pose;
     eyeRenderInfo.fov = eyePose.fov;
 
-    // Update the view and projection matrices
+    // Update the view and projection Matrixes
     const XrPosef& pose = eyeRenderInfo.pose;
-    eyeViewMatrices.at(eyeIndex) = glm::inverse(util::poseToMatrix(pose));
-    eyeProjectionMatrices.at(eyeIndex) = util::createProjectionMatrix(eyeRenderInfo.fov, 0.01f, 250.0f);
+    eyeViewMatrixes.at(eyeIndex) = glm::inverse(util::poseToMatrix(pose));
+    eyeProjectionMatrixes.at(eyeIndex) = util::createProjectionMatrix(eyeRenderInfo.fov, 0.01f, 250.0f);
   }
 
   // Acquire the swapchain image
@@ -698,12 +698,12 @@ VkExtent2D Headset::getEyeResolution(size_t eyeIndex) const
 
 glm::mat4 Headset::getEyeViewMatrix(size_t eyeIndex) const
 {
-  return eyeViewMatrices.at(eyeIndex);
+  return eyeViewMatrixes.at(eyeIndex);
 }
 
 glm::mat4 Headset::getEyeProjectionMatrix(size_t eyeIndex) const
 {
-  return eyeProjectionMatrices.at(eyeIndex);
+  return eyeProjectionMatrixes.at(eyeIndex);
 }
 
 std::vector<XrView> Headset::getEyePoses() const

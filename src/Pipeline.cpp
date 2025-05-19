@@ -1,14 +1,11 @@
 #pragma once
 #include "Pipeline.h"
 
-
 #include "Context.h"
 #include "Util.h"
 
 #include <array>
 #include <sstream>
-
-
 
 Pipeline::Pipeline(const Context* context,
                    VkPipelineLayout pipelineLayout,
@@ -105,7 +102,7 @@ Pipeline::Pipeline(const Context* context,
   VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState{};
   pipelineColorBlendAttachmentState.colorWriteMask =
     VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-  pipelineColorBlendAttachmentState.blendEnable = VK_TRUE;
+  pipelineColorBlendAttachmentState.blendEnable = pipelineData.blendEnable;
   pipelineColorBlendAttachmentState.srcColorBlendFactor = pipelineData.srcColorBlendFactor;
   pipelineColorBlendAttachmentState.dstColorBlendFactor = pipelineData.dstColorBlendFactor;
   pipelineColorBlendAttachmentState.colorBlendOp = pipelineData.colorBlendOp;
@@ -126,9 +123,10 @@ Pipeline::Pipeline(const Context* context,
   VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo{
     VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
   };
-  pipelineDepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
-  pipelineDepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
-  pipelineDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
+  pipelineDepthStencilStateCreateInfo.depthTestEnable = pipelineData.depthTestEnable;
+  pipelineDepthStencilStateCreateInfo.depthWriteEnable = pipelineData.depthWriteEnable;
+  pipelineDepthStencilStateCreateInfo.depthCompareOp = pipelineData.depthCompareOp;
+
 
   VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
   graphicsPipelineCreateInfo.layout = pipelineLayout;

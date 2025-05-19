@@ -663,6 +663,7 @@ bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface on
     // Retrieve the physical device properties
     VkPhysicalDeviceProperties physicalDeviceProperties;
     vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
+    /// https://www.reddit.com/r/vulkan/comments/k3aprg/comment/ge742je/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     uniformBufferOffsetAlignment = physicalDeviceProperties.limits.minUniformBufferOffsetAlignment;
 
     // Determine the best supported multisample count, up to 4x MSAA

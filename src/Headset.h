@@ -61,8 +61,8 @@ private:
   const Context* context = nullptr;
 
   size_t eyeCount = 0u;
-  std::vector<glm::mat4> eyeViewMatrices;
-  std::vector<glm::mat4> eyeProjectionMatrices;
+  std::vector<glm::mat4> eyeViewMatrixes;
+  std::vector<glm::mat4> eyeProjectionMatrixes;
 
   XrSession session = nullptr;
   XrSessionState sessionState = XR_SESSION_STATE_UNKNOWN;

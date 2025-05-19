@@ -15,20 +15,40 @@ RenderProcess::RenderProcess(const Context* context,
                              )
 : context(context)
 {
-  // Initialize the uniform buffer data
+  // [tdbe] TODO: create a per-material buffer for e.g. the colorMultiplier, texture etc
+
+  // [tdbe] Initialize the vertex uniform buffer data (per object) 
   dynamicVertexUniformData.resize(gameObjectCount);
   for (size_t modelIndex = 0u; modelIndex < gameObjectCount; ++modelIndex)
   {
     dynamicVertexUniformData[modelIndex].worldMatrix = glm::mat4(1.0f);
     dynamicVertexUniformData[modelIndex].colorMultiplier = glm::vec4(1.0f);
+    dynamicVertexUniformData[modelIndex].perMaterialFlags = glm::vec4(1.0f);
+  }
+
+  // [tdbe] Initialize the fragment uniform buffer data
+  dynamicFragmentUniformData.resize(gameObjectCount);
+  for (size_t modelIndex = 0u; modelIndex < gameObjectCount; ++modelIndex)
+  {
+    dynamicVertexUniformData[modelIndex].perMaterialFlags = glm::vec4(1.0f);
   }
 
   // Initialize the uniform buffer data
-   for (glm::mat4& viewProjectionMatrix : staticVertexUniformData.viewProjectionMatrices)
+  for (glm::mat4& worldMatrix : staticVertexUniformData.cameraWorldMatrixes)
+  {
+    worldMatrix = glm::mat4(1.0f);
+  }
+  for (glm::mat4& viewMatrix : staticVertexUniformData.viewMatrixes)
+  {
+    viewMatrix = glm::mat4(1.0f);
+  }
+  for (glm::mat4& viewProjectionMatrix : staticVertexUniformData.viewProjectionMatrixes)
   {
     viewProjectionMatrix = glm::mat4(1.0f);
   }
 
+  staticFragmentUniformData.screenSizePixels = glm::vec2(0.0f);
+  staticFragmentUniformData.ipd = 0.0f;
   staticFragmentUniformData.time = 0.0f;
 
   const VkDevice device = context->getVkDevice();
@@ -56,6 +76,7 @@ RenderProcess::RenderProcess(const Context* context,
 #endif
 
   // Create semaphores
+  // [tdbe] in Vulkan, semaphores synchronize pending work queues on the GPU side only, GPU-GPU
   VkSemaphoreCreateInfo semaphoreCreateInfo{ VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
   if (vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &drawableSemaphore) != VK_SUCCESS)
   {
@@ -71,7 +92,8 @@ RenderProcess::RenderProcess(const Context* context,
     return;
   }
 
-  // Create a fence
+  // Create a fence 
+  // [tdbe] VKFences are like a vulkan semaphores but for GPU -> CPU synchronization instead of GPU-GPU
   VkFenceCreateInfo fenceCreateInfo{ VK_STRUCTURE_TYPE_FENCE_CREATE_INFO };
   fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT; // Make sure the fence starts off signaled
   if (vkCreateFence(device, &fenceCreateInfo, nullptr, &busyFence) != VK_SUCCESS)
@@ -83,22 +105,30 @@ RenderProcess::RenderProcess(const Context* context,
 
   const VkDeviceSize uniformBufferOffsetAlignment = context->getUniformBufferOffsetAlignment();
 
+  // [tdbe] TODO: create a per-material buffer for e.g. the colorMultiplier, texture etc
+
   // Partition the uniform buffer data
-  std::array<VkDescriptorBufferInfo, 3u> descriptorBufferInfos;
+  std::array<VkDescriptorBufferInfo, 4u> descriptorBufferInfos;
 
   descriptorBufferInfos.at(0u).offset = 0u;
-  descriptorBufferInfos.at(0u).range = sizeof(DynamicVertexUniformData);
+  descriptorBufferInfos.at(0u).range = sizeof(StaticVertexUniformData);
 
-  descriptorBufferInfos.at(1u).offset = util::align(descriptorBufferInfos.at(0u).range, uniformBufferOffsetAlignment) *
-                                        static_cast<VkDeviceSize>(gameObjectCount);
-  descriptorBufferInfos.at(1u).range = sizeof(StaticVertexUniformData);
+  descriptorBufferInfos.at(1u).offset = descriptorBufferInfos.at(0u).offset + 
+                                        util::align(descriptorBufferInfos.at(0u).range, uniformBufferOffsetAlignment);
+  descriptorBufferInfos.at(1u).range = sizeof(StaticFragmentUniformData);
 
-  descriptorBufferInfos.at(2u).offset = 
-    descriptorBufferInfos.at(1u).offset + util::align(descriptorBufferInfos.at(1u).range, uniformBufferOffsetAlignment);
-  descriptorBufferInfos.at(2u).range = sizeof(StaticFragmentUniformData);
+  descriptorBufferInfos.at(2u).offset = descriptorBufferInfos.at(1u).offset + 
+                                        util::align(descriptorBufferInfos.at(1u).range, uniformBufferOffsetAlignment);
+  descriptorBufferInfos.at(2u).range = sizeof(DynamicVertexUniformData);
+
+  descriptorBufferInfos.at(3u).offset = descriptorBufferInfos.at(2u).offset + 
+                                        util::align(descriptorBufferInfos.at(2u).range, uniformBufferOffsetAlignment) *
+                                        static_cast<VkDeviceSize>(gameObjectCount); // [tdbe] notice the dynamic object count here
+  descriptorBufferInfos.at(3u).range = sizeof(DynamicFragmentUniformData);
+
 
   // Create an empty uniform buffer
-  const VkDeviceSize uniformBufferSize = descriptorBufferInfos.at(2u).offset + descriptorBufferInfos.at(2u).range;
+  const VkDeviceSize uniformBufferSize = descriptorBufferInfos.at(3u).offset + descriptorBufferInfos.at(3u).range;
   uniformBuffer =
     new DataBuffer(context, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBufferSize);
@@ -135,8 +165,10 @@ RenderProcess::RenderProcess(const Context* context,
     descriptorBufferInfo.buffer = uniformBuffer->getBuffer();
   }
 
+  // [tdbe] TODO: create a per-material buffer for e.g. the colorMultiplier, texture etc
+
   // Update the descriptor sets
-  std::array<VkWriteDescriptorSet, 3u> writeDescriptorSets;
+  std::array<VkWriteDescriptorSet, 4u> writeDescriptorSets;
 
   writeDescriptorSets.at(0u).sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
   writeDescriptorSets.at(0u).pNext = nullptr;
@@ -144,7 +176,7 @@ RenderProcess::RenderProcess(const Context* context,
   writeDescriptorSets.at(0u).dstBinding = 0u;
   writeDescriptorSets.at(0u).dstArrayElement = 0u;
   writeDescriptorSets.at(0u).descriptorCount = 1u;
-  writeDescriptorSets.at(0u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+  writeDescriptorSets.at(0u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
   writeDescriptorSets.at(0u).pBufferInfo = &descriptorBufferInfos.at(0u);
   writeDescriptorSets.at(0u).pImageInfo = nullptr;
   writeDescriptorSets.at(0u).pTexelBufferView = nullptr;
@@ -166,10 +198,21 @@ RenderProcess::RenderProcess(const Context* context,
   writeDescriptorSets.at(2u).dstBinding = 2u;
   writeDescriptorSets.at(2u).dstArrayElement = 0u;
   writeDescriptorSets.at(2u).descriptorCount = 1u;
-  writeDescriptorSets.at(2u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+  writeDescriptorSets.at(2u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
   writeDescriptorSets.at(2u).pBufferInfo = &descriptorBufferInfos.at(2u);
   writeDescriptorSets.at(2u).pImageInfo = nullptr;
   writeDescriptorSets.at(2u).pTexelBufferView = nullptr;
+
+  writeDescriptorSets.at(3u).sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+  writeDescriptorSets.at(3u).pNext = nullptr;
+  writeDescriptorSets.at(3u).dstSet = descriptorSet;
+  writeDescriptorSets.at(3u).dstBinding = 3u;
+  writeDescriptorSets.at(3u).dstArrayElement = 0u;
+  writeDescriptorSets.at(3u).descriptorCount = 1u;
+  writeDescriptorSets.at(3u).descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+  writeDescriptorSets.at(3u).pBufferInfo = &descriptorBufferInfos.at(3u);
+  writeDescriptorSets.at(3u).pImageInfo = nullptr;
+  writeDescriptorSets.at(3u).pTexelBufferView = nullptr;
 
   vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0u,
                          nullptr);
@@ -243,14 +286,8 @@ void RenderProcess::updateUniformBufferData() const
   const VkDeviceSize uniformBufferOffsetAlignment = context->getUniformBufferOffsetAlignment();
 
   char* offset = static_cast<char*>(uniformBufferMemory);
-  VkDeviceSize length = sizeof(DynamicVertexUniformData);
-  for (const DynamicVertexUniformData& dynamicData : dynamicVertexUniformData)
-  {
-    memcpy(offset, &dynamicData, length);
-    offset += util::align(length, uniformBufferOffsetAlignment);
-  }
 
-  length = sizeof(StaticVertexUniformData);
+  VkDeviceSize length = sizeof(StaticVertexUniformData);
   memcpy(offset, &staticVertexUniformData, length);
   offset += util::align(length, uniformBufferOffsetAlignment);
 
@@ -258,4 +295,19 @@ void RenderProcess::updateUniformBufferData() const
   memcpy(offset, &staticFragmentUniformData, length);
   offset += util::align(length, uniformBufferOffsetAlignment);
 
+  length = sizeof(DynamicVertexUniformData);
+  for (const DynamicVertexUniformData& dynamicData : dynamicVertexUniformData)
+  {
+    memcpy(offset, &dynamicData, length);
+    offset += util::align(length, uniformBufferOffsetAlignment);
+  }
+
+  length = sizeof(DynamicFragmentUniformData);
+  for (const DynamicFragmentUniformData& dynamicData : dynamicFragmentUniformData)
+  {
+    memcpy(offset, &dynamicData, length);
+    offset += util::align(length, uniformBufferOffsetAlignment);
+  }
+
+  // [tdbe] TODO: create a per-material buffer for e.g. the colorMultiplier, texture etc
 }

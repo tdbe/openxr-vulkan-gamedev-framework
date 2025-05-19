@@ -34,25 +34,53 @@ public:
                 );
   ~RenderProcess();
 
-  // [tdbe] uniform properties to bind to per model.
-  // Also the per-material properties get sent here.
-  struct DynamicVertexUniformData{
-    // per model/mesh
+  // [tdbe] TODO: create a per-material buffer for e.g. the colorMultiplier, texture etc
+
+  /// [tdbe] vertex shader dynamic uniform properties to bind to per model / gameObject.
+  /// (in case you don't know: this struct is bound to a memory span slot on the gpu (one that you can name 
+  /// whatever you want on the gpu e.g. DynVertBufData in vert shaders), so that's why you can't find a 
+  /// direct reference between them)
+  struct DynamicVertexUniformData
+  {
+    /// [tdbe] per model/mesh
     glm::mat4 worldMatrix = glm::mat4(1.0f);
-    // "per material" (ie it doesn't -need- to be unique per model/mesh)
+    /// [tdbe]"per material" (ie it doesn't -need- to be unique per model/mesh)
     glm::vec4 colorMultiplier = glm::vec4(1.0f);
+    /// [tdbe] allocation for various flags for hacks and triggers sent to the vertex shaders
+    glm::vec4 perMaterialFlags = glm::vec4(1.0f);
   };
   std::vector<DynamicVertexUniformData> dynamicVertexUniformData;
 
-  // [tdbe] uniform properties available globally
+  /// [tdbe] vertex shader  global uniform properties
+  /// (in case you don't know: this struct is bound to a memory span slot on the gpu (one that you can name
+  /// whatever you want on the gpu e.g. StaVertBufData in vert shaders), so that's why you can't find a
+  /// direct reference between them)
   struct StaticVertexUniformData
   {
-    std::array<glm::mat4, 2u> viewProjectionMatrices; // 0 = left eye, 1 = right eye
+    std::array<glm::mat4, 2u> cameraWorldMatrixes; // 0 = left eye, 1 = right eye
+    std::array<glm::mat4, 2u> viewMatrixes; // 0 = left eye, 1 = right eye
+    std::array<glm::mat4, 2u> viewProjectionMatrixes; // 0 = left eye, 1 = right eye
   } staticVertexUniformData;
   
-  // [tdbe] uniform properties available globally
+  /// [tdbe] fragment shader dynamic uniform properties
+  struct DynamicFragmentUniformData
+  {
+    /// [tdbe] allocation for various flags for hacks and triggers sent to the fragment shaders
+    glm::vec4 perMaterialFlags = glm::vec4(1.0f);
+  };
+  std::vector<DynamicFragmentUniformData> dynamicFragmentUniformData;
+
+  /// [tdbe] fragment shader global uniform properties
   struct StaticFragmentUniformData
   {
+    /// [tdbe] used as a set of colors (and other flags) to simulate ambience until we do better sampling features
+    glm::mat4 ambientMultiplier = glm::mat4(0.351f, 0.422f, 0.562f, 1.0f,
+                                            0.5929f, 0.61f, 0.71f, 1.0f,
+                                            //0.396f, 0.376f, 0.353f, 1.0f,
+                                            0.1f, 0.08f, 0.12f, 1.0f,
+                                            0.5f, 0.46f, 0.54f, 0.01f);// [tdbe] fog color and density
+    glm::vec2 screenSizePixels;
+    float ipd; // [tdbe] Interpupillary distance, the headset's setting for the distance between your eyes.
     float time;
   } staticFragmentUniformData;
 
