@@ -220,7 +220,7 @@ int main()
       // [tdbe] TODO: do a xrRequestExitSession(session); ?
 
       // Render
-      renderer.render(glm::inverse(playerObject.worldRoot->worldMatrix), swapchainImageIndex, gameTime, inputData);
+      renderer.render(playerObject.worldRoot->worldMatrix, swapchainImageIndex, gameTime, inputData);
       
       const MirrorView::RenderResult mirrorResult = mirrorView.render(swapchainImageIndex);
       if (mirrorResult == MirrorView::RenderResult::Error)

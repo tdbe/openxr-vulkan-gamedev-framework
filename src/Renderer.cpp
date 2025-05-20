@@ -375,16 +375,16 @@ void Renderer::render(const glm::mat4& cameraMatrix,
         }
 
         renderProcess->staticVertexUniformData.handsWorldMatrixes.at((int)Inputspace::ControllerEnum::LEFT) =
-            inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
+            cameraMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
         renderProcess->staticVertexUniformData.handsWorldMatrixes.at((int)Inputspace::ControllerEnum::RIGHT) =
-            inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
+            cameraMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
         for (size_t eyeIndex = 0u; eyeIndex < headset->getEyeCount(); ++eyeIndex)
         {
             renderProcess->staticVertexUniformData.cameraWorldMatrixes.at(eyeIndex) = cameraMatrix;
             renderProcess->staticVertexUniformData.viewMatrixes.at(eyeIndex) =
-                headset->getEyeViewMatrix(eyeIndex) * cameraMatrix;
+                headset->getEyeViewMatrix(eyeIndex) * glm::inverse(cameraMatrix);
             renderProcess->staticVertexUniformData.viewProjectionMatrixes.at(eyeIndex) =
-                headset->getEyeProjectionMatrix(eyeIndex) * headset->getEyeViewMatrix(eyeIndex) * cameraMatrix;
+                headset->getEyeProjectionMatrix(eyeIndex) * headset->getEyeViewMatrix(eyeIndex) * glm::inverse(cameraMatrix);
         }
 
         renderProcess->staticFragmentUniformData.screenSizePixels =
