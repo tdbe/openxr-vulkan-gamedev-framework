@@ -14,7 +14,7 @@ void InputTesterBehaviour::Mechanic_GrabState(const Inputspace::InputData &input
         {
             if (inputData.grabState[i].currentState > 0.05f) 
             {
-                printf("\n[InputTesterBehaviour][log] mechanic_GrabState: Grabbing! grabStateArr[i{%d}].currentState: %f", 
+                printf("[InputTesterBehaviour][log] mechanic_GrabState: Grabbing! grabStateArr[i{%d}].currentState: %f\n", 
                         (int)i, inputData.grabState[i].currentState); 
                 
                 inputHaptics.RequestHapticFeedback((Inputspace::ControllerEnum)i);
@@ -33,24 +33,24 @@ void InputTesterBehaviour::Update(const float deltaTime, const float gameTime,
     {
         if(inputData.selectClickState[i].isActive && inputData.selectClickState[i].currentState)
         {
-            printf("\n[InputTesterBehaviour][log] inputData.selectClickState[i{%d}].currentState: %d", (int)i, inputData.selectClickState[i].currentState);
+            printf("[InputTesterBehaviour][log] inputData.selectClickState[i{%d}].currentState: %d\n", (int)i, inputData.selectClickState[i].currentState);
         }
 
         if(inputData.menuClickState[i].isActive && inputData.menuClickState[i].currentState)
         {
-            printf("\n[InputTesterBehaviour][log] inputData.menuClickState[i{%d}].currentState: %d", (int)i, inputData.menuClickState[i].currentState);
+            printf("[InputTesterBehaviour][log] inputData.menuClickState[i{%d}].currentState: %d\n", (int)i, inputData.menuClickState[i].currentState);
         }
 
         if(inputData.thumbStickState[i].isActive && 
             (std::abs(inputData.thumbStickState[i].currentState.x)>0.05f || std::abs(inputData.thumbStickState[i].currentState.y)>0.05f))
         {
-            printf("\n[InputTesterBehaviour][log] inputData.thumbStickState[i{%d}].currentState: x{%f}, y{%f}", (int)i, inputData.thumbStickState[i].currentState.x, inputData.thumbStickState[i].currentState.y);
+            printf("[InputTesterBehaviour][log] inputData.thumbStickState[i{%d}].currentState: x{%f}, y{%f}\n", (int)i, inputData.thumbStickState[i].currentState.x, inputData.thumbStickState[i].currentState.y);
         }
 
         //if(inputData.triggerState[i].isActive && 
         //    inputData.triggerState[i].currentState>0.05f)
         // {
-        //    printf("\n[InputTesterBehaviour][log] inputData.triggerState[i{%d}].currentState: %f", i, inputData.triggerState[i].currentState);
+        //    printf("[InputTesterBehaviour][log] inputData.triggerState[i{%d}].currentState: %f\n", i, inputData.triggerState[i].currentState);
         //}
     }
 }

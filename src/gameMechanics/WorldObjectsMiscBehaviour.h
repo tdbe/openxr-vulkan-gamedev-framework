@@ -7,7 +7,7 @@
 class WorldObjectsMiscBehaviour : public GameBehaviour
 {
     public:
-        WorldObjectsMiscBehaviour(GameObject& bikeObject, Material& logoMat);
+        WorldObjectsMiscBehaviour(GameObject& bikeObject, Material& logoMat, Material& handsMat);
         virtual ~WorldObjectsMiscBehaviour();
 
         //Start();
@@ -17,6 +17,7 @@ class WorldObjectsMiscBehaviour : public GameBehaviour
     private:
         GameObject& bikeObject;
         Material& logoMat;
+        Material& handsMat;
 
         void mechanic_bikeObject(const float gameTime);
         void rotateMatColor(const float gameTime);

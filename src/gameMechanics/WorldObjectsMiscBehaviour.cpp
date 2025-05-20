@@ -1,7 +1,8 @@
 #include "WorldObjectsMiscBehaviour.h"
 
 
-WorldObjectsMiscBehaviour::WorldObjectsMiscBehaviour(GameObject& bikeObject, Material& logoMat): bikeObject(bikeObject), logoMat(logoMat)
+WorldObjectsMiscBehaviour::WorldObjectsMiscBehaviour(GameObject& bikeObject, Material& logoMat, Material& handsMat)
+: bikeObject(bikeObject), logoMat(logoMat), handsMat(handsMat)
 {
 }
 
@@ -14,7 +15,9 @@ void WorldObjectsMiscBehaviour::mechanic_bikeObject(const float gameTime)
 
 void WorldObjectsMiscBehaviour::rotateMatColor(const float gameTime)
 {
-    logoMat.dynamicUniformData.colorMultiplier = glm::vec4(
+    logoMat.dynamicUniformData.colorMultiplier = 
+    handsMat.dynamicUniformData.colorMultiplier =
+        glm::vec4(
         glm::max(0.2f, glm::sin((float)glm::pow(gameTime,1.2))), 
         glm::max(0.2f, glm::sin((float)glm::pow(gameTime*0.3f,1.2))), 
         glm::max(0.2f, glm::sin((float)glm::pow(gameTime*0.6f,1.2))), 
