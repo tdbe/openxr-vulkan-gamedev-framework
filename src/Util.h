@@ -114,6 +114,8 @@ namespace util
 
     float clampf(float num, float left, float right);
 
+    float clampf01(float num);
+
     float lengthSquared(const glm::vec3& vec);
 
     float length(const glm::vec3& vec);
@@ -135,5 +137,7 @@ namespace util
     void quaternionToAngleAxis(const glm::quat& quat, float& angle, glm::vec3& axis);
 
     glm::quat quaternionFromAngleAxis(const float& angle, const glm::vec3& axis);
+
+    float remapInterval(float val, const float vmin, const float vmax, const float newmin, const float newmax);
 
 } // namespace util

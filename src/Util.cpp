@@ -313,6 +313,15 @@ float util::clampf(float num, float left, float right){
   return num;
 }
 
+float util::clampf01(float num)
+{
+    if (num < 0.0f)
+        num = 0.0f;
+    else if (num > 1.0f)
+        num = 1.0f;
+    return num;
+}
+
 float util::lengthSquared(const glm::vec3& vec){
   return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
 }
@@ -420,4 +429,11 @@ glm::quat util::quaternionFromAngleAxis(const float& angle, const glm::vec3& axi
   quat.w = cos(angle/2);
 
   return quat;
+}
+
+float util::remapInterval(float val, const float vmin, const float vmax, const float newmin, const float newmax)
+{
+    if (val < vmin)
+        val = vmin;
+    return (val - vmin) * (newmax - newmin) / (vmax - vmin) + newmin;
 }
