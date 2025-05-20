@@ -57,6 +57,7 @@ public:
   /// direct reference between them)
   struct StaticVertexUniformData
   {
+    std::array<glm::mat4, 2u> handsWorldMatrixes; // 0 = left hand, 1 = right hand
     std::array<glm::mat4, 2u> cameraWorldMatrixes; // 0 = left eye, 1 = right eye
     std::array<glm::mat4, 2u> viewMatrixes; // 0 = left eye, 1 = right eye
     std::array<glm::mat4, 2u> viewProjectionMatrixes; // 0 = left eye, 1 = right eye

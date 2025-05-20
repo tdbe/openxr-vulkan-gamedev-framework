@@ -12,6 +12,7 @@
 
 #include <array>
 #include <stdio.h>
+#include "InputData.h"
 
 
 namespace
@@ -316,7 +317,7 @@ const int Renderer::findExistingPipeline(const std::string& vertShader, const st
   return -1;
 }
 
-void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time)
+void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time, Inputspace::InputData& inputSystem)
 {
   currentRenderProcessIndex = (currentRenderProcessIndex + 1u) % renderProcesses.size();
 
@@ -359,6 +360,10 @@ void Renderer::render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex,
       renderProcess->dynamicFragmentUniformData[goIndex].perMaterialFlags = gameObjects.at(goIndex)->material->dynamicUniformData.perMaterialFragmentFlags;
     }
 
+    renderProcess->staticVertexUniformData.handsWorldMatrixes.at((int)Inputspace::ControllerEnum::LEFT) =
+        inputSystem.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
+    renderProcess->staticVertexUniformData.handsWorldMatrixes.at((int)Inputspace::ControllerEnum::RIGHT) =
+        inputSystem.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
     for (size_t eyeIndex = 0u; eyeIndex < headset->getEyeCount(); ++eyeIndex)
     {
       renderProcess->staticVertexUniformData.cameraWorldMatrixes.at(eyeIndex) =

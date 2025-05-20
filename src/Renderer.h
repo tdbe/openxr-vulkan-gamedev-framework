@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "GameData.h"
-
+#include "InputData.h"
 
 class Context;
 class DataBuffer;
@@ -34,7 +34,7 @@ public:
   Renderer(const Context* context, const Headset* headset, const MeshData* meshData, const std::vector<Material*>& materials, const std::vector<GameObject*>& gameObjects);
   ~Renderer();
 
-  void render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time);
+  void render(const glm::mat4& cameraMatrix, size_t swapchainImageIndex, float time, const Inputspace::InputData& inputData);
   void submit(bool useSemaphores) const;
 
   bool isValid() const;

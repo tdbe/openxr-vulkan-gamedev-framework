@@ -34,6 +34,10 @@ RenderProcess::RenderProcess(const Context* context,
   }
 
   // Initialize the uniform buffer data
+  for (glm::mat4& worldMatrix : staticVertexUniformData.handsWorldMatrixes)
+  {
+      worldMatrix = glm::mat4(1.0f);
+  }
   for (glm::mat4& worldMatrix : staticVertexUniformData.cameraWorldMatrixes)
   {
     worldMatrix = glm::mat4(1.0f);
