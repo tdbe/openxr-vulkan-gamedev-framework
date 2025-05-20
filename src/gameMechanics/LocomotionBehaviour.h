@@ -10,7 +10,8 @@
 class LocomotionBehaviour : public GameBehaviour
 {
     public:
-        LocomotionBehaviour(PlayerObject& playerObject, GameObject& holePlaneTempChaperone, float movementSpeedScaler_, 
+  LocomotionBehaviour(PlayerObject& playerObject, GameObject& floorGrid, GameObject& ceilingGrid, 
+      GameObject& icosphereSkybox, Material& handsMaterial, float movementSpeedScaler_, 
             float movementAccelerationPow_, float rotationSpeedScaler_);
         virtual ~LocomotionBehaviour();
 
@@ -58,7 +59,12 @@ class LocomotionBehaviour : public GameBehaviour
         MoveStateData moveStateData;
 
         PlayerObject& playerObject;
-        GameObject& holePlaneTempChaperone;
+        GameObject& floorGrid;
+        GameObject& ceilingGrid;
+        GameObject& icosphereSkybox;
+        glm::mat4 origFloorGrid;
+        glm::mat4 origSkybox;
+        Material& handsMaterial;
         float movementSpeedScaler;
         float movementAccelerationPow;
         float rotationSpeedScaler;

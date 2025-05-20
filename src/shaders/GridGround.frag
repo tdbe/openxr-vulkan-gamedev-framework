@@ -1,6 +1,6 @@
 layout(binding = 1) uniform StaFragUniData
 { 
-	mat4 ambientMultiplier; 
+    mat4 ambientMultiplier; 
 	vec2 screenSizePixels;
 	float ipd;
 	float time;
@@ -11,40 +11,75 @@ layout(binding = 3) uniform DynFragUniData
     vec4 perMaterialFlags;// [tdbe] x: tunnelvision radius; y: ring wobble stability (1 = stable, 0 = wild); z: ring & chaperone fade (0 is not faded, 1 is faded); w: change the sky's own depth
 } dynFragUniData;
 
-layout(location = 0) in vec3 normal;
+layout(location = 0) in vec3 position;
 layout(location = 1) in vec4 color;
-layout(location = 2) flat in int glViewIndex;
+layout(location = 2) flat in vec4 objPosition; // [tdbe] mesh position, scale
+layout(location = 3) flat in vec4 objRot; // [tdbe] mesh rotation
+layout(location = 4) flat in int glViewIndex;
 
 layout(location = 0) out vec4 outColor;
 
-float remapInterval(in float val, in float vmin, in float vmax, in float newmin, in float newmax)
+bool isOnGrid(float position, float threshold)
 {
-	if(val<vmin)
-		val = vmin;
-	return (val - vmin) * (newmax - newmin) / (vmax - vmin) + newmin;
+  return position < threshold || position > 1.0 - threshold;
 }
 
-/// [tdbe] takes the first 3 rows of ambientMultiplier and makes a crude gradient ambient
-vec3 sampleAmbient(vec3 normal, vec3 up)
+vec4 mulQuat(vec4 quat1, vec4 quat2)
 {
-	const float lu1d = dot(normal, up);
-	vec3 outColor = vec3(0,0,0);
-	if(lu1d > 0.2)
-		outColor.rgb = mix(staFragUniData.ambientMultiplier[1].rgb, staFragUniData.ambientMultiplier[0].rgb, remapInterval(lu1d, 0.2, 1.0, 0, 1));
-	else if(lu1d > 0.0)
-		outColor.rgb = staFragUniData.ambientMultiplier[1].rgb;
-	else if(lu1d > -0.2)
-		outColor.rgb = mix(staFragUniData.ambientMultiplier[1].rgb, staFragUniData.ambientMultiplier[2].rgb, remapInterval(abs(lu1d), 0.0, 0.2, 0, 1));
-	else
-		outColor.rgb = staFragUniData.ambientMultiplier[2].rgb;
+    return vec4(
+        quat2.xyz * quat1.w + quat1.xyz * quat2.w + cross(quat1.xyz, quat2.xyz),
+        quat1.w * quat2.w - dot(quat1.xyz, quat2.xyz)
+    );
+}
 
-	return outColor;
-	// [tdbe] some reference colors
-	// top: vec3(0.351, 0.422, 0.562);
-	// horiz: vec3(0.929, 1.0, 1.0);
-	// ground: vec3(0.396, 0.376, 0.353);
-	// purple? vec3(0.1, 0.08, 0.12);
-	// purpler? vec3(0.2, 0.18, 0.22);
+vec4 conjugateQuat(vec4 quat)
+{
+    return vec4(-quat.x, -quat.y, -quat.z, quat.w);
+}
+
+vec4 inverseQuat(vec4 quat)
+{
+    return conjugateQuat(quat) / 
+        (quat.x * quat.x + quat.y * quat.y + quat.z * quat.z + quat.w * quat.w);
+}
+
+vec4 multiplyQuat(vec4 quat1, vec4 quat2)
+{
+    return vec4(
+        quat2.xyz * quat1.w + quat1.xyz * quat2.w + cross(quat1.xyz, quat2.xyz),
+        quat1.w * quat2.w - dot(quat1.xyz, quat2.xyz)
+    );
+}
+
+vec3 rotateWithQuat(vec3 pointToRotate, vec4 quat)
+{
+    return multiplyQuat(quat, 
+                        multiplyQuat(
+                            vec4(pointToRotate, 0), 
+                            conjugateQuat(quat))
+                        ).xyz;
+}
+
+mat4 matAxisAngleClockwise(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
+}
+
+vec4 quatFromAngleAxis(float angle, vec3 axis)
+{
+  return vec4(
+      axis.x * sin(angle/2),
+      axis.y * sin(angle/2),
+      axis.z * sin(angle/2),
+      cos(angle/2)
+  );
 }
 
 // quick fog https://www.ozone3d.net/tutorials/glsl_fog/p04.php?lang=1
@@ -60,12 +95,19 @@ vec3 addFog(vec3 finalColor, vec3 fogColor, float density)
 	return mix(fogColor, finalColor, fogFactor);
 }
 
+float remapInterval(in float val, in float vmin, in float vmax, in float newmin, in float newmax)
+{
+	if(val<vmin)
+		val = vmin;
+	return (val - vmin) * (newmax - newmin) / (vmax - vmin) + newmin;
+}
+
 float getChaperoneTunnelDist(vec2 screenspacePos01)
 {
 	// [tdbe] annoying that all we get screenspace-wise by default in vulkan is gl_FragCoord (which is in pixels), and we don't at least also get the view size in pixels with it
 	// https://www.khronos.org/opengl/wiki/Fragment_Shader
-	//const vec2 screenspacePos01 = gl_FragCoord.xy / staFragUniData.screenSizePixels;
-	
+    //const vec2 screenspacePos01 = gl_FragCoord.xy / staFragUniData.screenSizePixels;
+
 	const float customDepth = 1.3;
 	float ipd = -staFragUniData.ipd * customDepth;
     if(glViewIndex == 0)
@@ -73,12 +115,6 @@ float getChaperoneTunnelDist(vec2 screenspacePos01)
     return remapInterval(
 			distance(screenspacePos01, vec2(0.5 + ipd, 0.5)),
 			0.0, 0.5, 0.0, 1.0);
-
-	/*
-	const vec2 absScaledViewspacePos = abs(viewspacePos.xy * 0.01);
-	const float dist = distance(vec2(0, 0), absScaledViewspacePos.xy);
-	return pow(dist, 9);
-	*/
 }
 
 float getRingDF(float tunnelDF)
@@ -91,11 +127,6 @@ float getRingDF(float tunnelDF)
 
 	clampedDist = remapInterval(diff, 0, dynFragUniData.perMaterialFlags.x, 1, 0);
 	return clamp(clampedDist, 0, 1);
-}
-
-float rand(vec2 co)
-{
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 // kinonik https://www.shadertoy.com/view/tlcBRl
@@ -288,55 +319,70 @@ vec3 fbmCurlWorley(vec2 uv, float freq, float t)
 
 void main()
 {
-    //The gl_FragCoord.z component is the depth value that would be used for the fragment's depth if no shader contained any writes to gl_FragDepth. 
     float fragdepth = gl_FragCoord.z;
+    if(dynFragUniData.perMaterialFlags.w < 1.0)
+    {
+        //The gl_FragCoord.z component is the depth value that would be used for the fragment's depth if no shader contained any writes to gl_FragDepth. 
+        vec3 pos = position - objPosition.xyz;
+        pos = rotateWithQuat(pos.xyz, objRot);
 
-	const vec3 ambient = sampleAmbient(normal, vec3(0,1,0));
+        const float scale = objPosition.w;
+        const float animation = abs(sin(staFragUniData.time + pos.x / 10.0 + pos.z / 10.0));
+        const float crossThickness = scale * 0.01 + animation * 0.0025;
+        const float crossLength = scale * 0.05 + animation * 0.01;
 
-	const vec3 lightDir = vec3(0.5, -1.0, -0.85);
-	const float diffuse = clamp(dot(normal, -lightDir), 0.0, 1.0);
+        //const vec3 backgroundColor = vec3(0.1, 0.08, 0.12);
+        const vec3 backgroundColor = vec3(0.05, 0.04, 0.06);
+        outColor.a = 1;
 
-	vec3 col = color.rgb * clamp(ambient * 0.5 + (diffuse * 0.5 + diffuse * ambient * 0.5), 0.0, 1.0);
-	//col = addFog(col, staFragUniData.ambientMultiplier[3].rgb, staFragUniData.ambientMultiplier[3].w);
-	outColor = vec4(col, color.w);
-	if( dynFragUniData.perMaterialFlags.w < 1.0)
-	{
-		vec2 screenspacePos01 = gl_FragCoord.xy / staFragUniData.screenSizePixels;
-		// [tdbe] this curl noise is not necessary, it's just to look cool :) 
-		// piyushslayer for flame
-		//const vec3 curlWorleyFbm = fbmCurlWorley(screenspacePos01, 8.0, staFragUniData.time);
-		//float curl = curlWorleyFbm.r * 0.625 + curlWorleyFbm.g * 0.25 + curlWorleyFbm.b * 0.125;//625
-		// magician0809
-		const vec3 curl3 = curl_noise_m0(screenspacePos01, 8.0, staFragUniData.time);
-		float curl = curl3.r * 0.5 + curl3.g * 0.25 + curl3.b * 0.125;//625
-		screenspacePos01 = mix(screenspacePos01, screenspacePos01 * curl, mix(curl * 0.225, curl * 0.0125, dynFragUniData.perMaterialFlags.y));
+        const float gx = mod(pos.x, 1.0);
+        const float gz = mod(pos.z, 1.0);
+        vec2 screenspacePos01 = gl_FragCoord.xy / staFragUniData.screenSizePixels;
+        // [tdbe] this curl noise is not necessary, it's just to look cool :) 
+	    // piyushslayer for flame
+	    //const vec3 curlWorleyFbm = fbmCurlWorley(screenspacePos01, 8.0, staFragUniData.time);
+        //float curl = curlWorleyFbm.r * 0.625 + curlWorleyFbm.g * 0.25 + curlWorleyFbm.b * 0.125;//625
+	    // magician0809
+	    const vec3 curl3 = curl_noise_m0(screenspacePos01, 8.0, staFragUniData.time);
+	    float curl = curl3.r * 0.5 + curl3.g * 0.25 + curl3.b * 0.125;//625
+	    screenspacePos01 = mix(screenspacePos01, screenspacePos01 * curl, mix(curl * 0.225, curl * 0.0125, dynFragUniData.perMaterialFlags.y));
+        const float tunnelDF = getChaperoneTunnelDist(screenspacePos01);
 
-		const float tunnelDF = getChaperoneTunnelDist(screenspacePos01);
-		const float animationRing = abs(sin(staFragUniData.time));
-		const float thicknessRing = 0.9875 + animationRing * 0.0125;
-		const float ringDF = pow(getRingDF(tunnelDF) * thicknessRing, 14);//12
-		const float ringDF_innerHalf = clamp(remapInterval(ringDF, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0);
-		const float ringDf_outerHalf = clamp(remapInterval(ringDF, 0.0, 0.5, 0.0, 1.0), 0.0, 1.0);
-		const vec3 ringCentreColor1 = vec3(0.0, 1.0, 0.0);
+        const float animationRing = abs(sin(staFragUniData.time));
+        const float thicknessRing = 0.9875 + animationRing * 0.0125;
+	    const float ringDF = pow(getRingDF(tunnelDF) * thicknessRing, 14);//12
+        const float ringDF_innerHalf = clamp(remapInterval(ringDF, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0);
+	    const float ringDf_outerHalf = clamp(remapInterval(ringDF, 0.0, 0.5, 0.0, 1.0), 0.0, 1.0);
+        const vec3 ringCentreColor1 = vec3(0.0, 1.0, 0.0);
 		const vec3 ringOuterColor1 = vec3(1.0, 0.0, 1.0);
 		const vec3 ringColor1 = mix(ringOuterColor1, ringCentreColor1, clamp(ringDF_innerHalf + 0.33, 0.0, 1.0));
 		const vec3 ringCentreColor2 = vec3(0.0, 1.0, 0.5);
 		const vec3 ringOuterColor2 = vec3(0.5, 0.0, 1.0);
 		const vec3 ringColor2 = mix(ringOuterColor2, ringCentreColor2, clamp(ringDF_innerHalf + 0.33, 0.0, 1.0));
-		// [tdbe] now we're thinking with portals! Note: / todo: I had to copy this to GridGround.frag as well because of the current layering setup.
-		//outColor.rgb = mix(outColor.rgb, ringColor, ringDf_outerHalf);
-		//outColor.rgb = mix(outColor.rgb, ringColor, mix(ringDf_outerHalf, ringDf_outerHalf * curl, curl * 1.3));
-		outColor.rgb = mix(outColor.rgb, mix(ringColor1, ringColor2, curl * 1.25), ringDf_outerHalf);
 
-		if(tunnelDF > dynFragUniData.perMaterialFlags.x)
-		{
-			gl_FragDepth = dynFragUniData.perMaterialFlags.w;
-		}
-		else
-		{
-			if(dynFragUniData.perMaterialFlags.w < fragdepth)
+        const float fadeLength = 15.0;
+        const float len = length(pos.xz);
+        const float fade = clamp(1.0 - len / fadeLength, 0.0, 1.0);
+
+        const vec3 floorCharacterAuraColor = vec3(0.2, 0.18, 0.22);
+        outColor.rgb = mix(backgroundColor, floorCharacterAuraColor, fade);
+        //outColor.rgb = mix(outColor.rgb, ringColor, ringDF);
+        //outColor.rgb = mix(outColor.rgb, ringColor, mix(ringDF, ringDF * curl, curl * 1.3));
+        outColor.rgb = mix(outColor.rgb, mix(ringColor1, ringColor2, curl * 1.25), ringDF);
+
+        outColor.a = max(outColor.a * color.a, ringDF);
+
+        if(tunnelDF > dynFragUniData.perMaterialFlags.x)
+        {
+            gl_FragDepth = dynFragUniData.perMaterialFlags.w;
+        }
+        else // [tdbe] inside tunnel
+        {
+            outColor.a *= max(fade, ringDF);
+            
+            if(dynFragUniData.perMaterialFlags.w < fragdepth)
             {
-				// [tdbe] Note: this is not necessary, it's just cool. Also, we could just add a fullscreen quad under the sky to avoid the "need" for this.
+                // [tdbe] Note: this is not necessary, it's just cool. Also, we could just add a fullscreen quad under the sky to avoid the "need" for this.
 			    const float stronk = pow(ringDF, 6);
                 gl_FragDepth = mix(fragdepth, dynFragUniData.perMaterialFlags.w, stronk);
                 outColor.rgb = mix(outColor.rgb, ringCentreColor1, gl_FragDepth * stronk);
@@ -345,12 +391,27 @@ void main()
             {
                 gl_FragDepth = fragdepth;
             }
-		}
+        }
 
-		outColor.rgb = mix(outColor.rgb, vec3(0.025, 0.025, 0.025), dynFragUniData.perMaterialFlags.z * ringDF);
-	}
+        // [tdbe] draw the grid on top
+        if ((isOnGrid(gx, crossThickness) && isOnGrid(gz, crossLength)) || (isOnGrid(gz, crossThickness) && isOnGrid(gx, crossLength)))
+        {
+            const float fadeLengthCross = 10.0 * min(1.5, scale);
+            const float fadeCrosses = clamp(1.0 - len / fadeLengthCross, 0.0, 1.0);
+        
+            outColor.rgb = mix(outColor.rgb, color.xyz, fadeCrosses);
+
+            gl_FragDepth = dynFragUniData.perMaterialFlags.w;
+        }
+
+        outColor.rgb = mix(outColor.rgb, vec3(0.025, 0.025, 0.025), dynFragUniData.perMaterialFlags.z * ringDF);
+        outColor.rgb = mix(addFog(outColor.rgb, vec3(0.5, 0.46, 0.54), 0.02), outColor.rgb, ringDF * 1.05);  
+
+        gl_FragDepth -= 0.00005;// [tdbe] don't z-fight with any flat ground
+    }
     else
-	{
-		gl_FragDepth = fragdepth;
-	}
+    {
+        gl_FragDepth = fragdepth;
+        discard;
+    }
 }

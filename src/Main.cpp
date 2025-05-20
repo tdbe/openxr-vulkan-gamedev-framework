@@ -53,66 +53,150 @@ int main()
     return EXIT_FAILURE;
   }
 
-  Model gridModel, ruinsModel, carModelLeft, carModelRight, beetleModel, bikeModel, handModelLeft, handModelRight,
-    cubeModel, logoModel, holePlaneTempChaperoneModel = {};
-  std::vector<Model*> models = { &gridModel, &ruinsModel,    &carModelLeft,   &carModelRight, &beetleModel,
-    &bikeModel, &handModelLeft, &handModelRight, &cubeModel, &logoModel, &holePlaneTempChaperoneModel };
+  Model quadModel, ruinsModel, carModelLeft, carModelRight, beetleModel, bikeModel, handModelLeft, handModelRight,
+    cubeModel, logoModel1, logoModel2, textLocomotionModel, icosphereModel, icosphereSmoothModel = {};
+  std::vector<Model*> models = { &quadModel, &ruinsModel, &carModelLeft, &carModelRight, &beetleModel,
+    &bikeModel, &handModelLeft, &handModelRight, &cubeModel, &logoModel1, &logoModel2, &textLocomotionModel, &icosphereModel, &icosphereSmoothModel };
   
   // [tdbe] Just having different materials won't really affect rendering performance; rederer queues per-mesh right now, sampling materials which are identical by default.
   // Materials are a collection of kinds of data that modify the vulkan descriptor or pipeline used, only if you change a corresponding property.
-  Material gridMaterial, diffuseMaterial, bikeMaterial, logoMaterial, locomotionMaterial, skyMaterial = {};
-  // [tdbe] init any non-default material props here.
-  gridMaterial.vertShaderName = "shaders/Grid.vert.spv";
-  gridMaterial.fragShaderName = "shaders/Grid.frag.spv";
-  gridMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f);
+  Material floorGridMaterial, ceilingGridMaterial, groundMaterial, diffuseMaterial, bikeMaterial, skyMaterial,
+    logoMaterial,
+    handsMaterial = {};
+  // [tdbe] init any non-default material props here.  
   diffuseMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
   diffuseMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
-  diffuseMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  locomotionMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-  locomotionMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_FRONT_BIT;
-  locomotionMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
-  locomotionMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
-  bikeMaterial.vertShaderName = "shaders/DiffuseTransparent.vert.spv";
-  bikeMaterial.fragShaderName = "shaders/DiffuseTransparent.frag.spv";
-  //bikeMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
-  //bikeMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
-  bikeMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
-  bikeMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 0.0f, 0.1f, 0.66f);
+  diffuseMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f);
+
+  groundMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
+  groundMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
+  groundMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.05f, 0.04f, 0.06f, 1.0f);
+ 
   logoMaterial.vertShaderName = "shaders/Diffuse.vert.spv";
   logoMaterial.fragShaderName = "shaders/Diffuse.frag.spv";
-  logoMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  logoMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
-  std::vector<Material*> materials = { &gridMaterial, &diffuseMaterial, &bikeMaterial, &logoMaterial, &locomotionMaterial, &skyMaterial};
+  logoMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_BACK_BIT;
+  logoMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f);
+
+  handsMaterial.vertShaderName = "shaders/Hands.vert.spv";
+  handsMaterial.fragShaderName = "shaders/Hands.frag.spv";
+  handsMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
+  handsMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f);
+  
+  // [tdbe] NOTE: For new/transparent materials, blendEnable and blend ops below matter,
+  // but also the (depth) order of the gameObjects you send the renderer also matters. (e.g. render your transparents in order at the end)
+  // TODO: It's also generally a good idea to fully define material properties, so these material creation blocks should be moved into some functions/templates.
+  bikeMaterial.vertShaderName = "shaders/DiffuseTransparent.vert.spv";
+  bikeMaterial.fragShaderName = "shaders/DiffuseTransparent.frag.spv";
+  bikeMaterial.pipelineData.blendEnable = VK_TRUE;
+  bikeMaterial.pipelineData.depthTestEnable = VK_TRUE;
+  bikeMaterial.pipelineData.depthWriteEnable = VK_TRUE;
+  bikeMaterial.pipelineData.depthCompareOp = VK_COMPARE_OP_LESS;
+  bikeMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_SRC_ALPHA;
+  bikeMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+  // bikeMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
+  // bikeMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE;
+  bikeMaterial.pipelineData.colorBlendOp = VK_BLEND_OP_ADD;
+  bikeMaterial.pipelineData.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+  bikeMaterial.pipelineData.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+  bikeMaterial.pipelineData.alphaBlendOp = VK_BLEND_OP_ADD;
+  bikeMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_NONE;
+  bikeMaterial.dynamicUniformData.colorMultiplier = glm::vec4(1.0f, 0.0f, 0.1f, 0.76f);
+
+  skyMaterial.vertShaderName = "shaders/Sky.vert.spv";
+  skyMaterial.fragShaderName = "shaders/Sky.frag.spv";
+  skyMaterial.pipelineData.blendEnable = VK_TRUE;
+  skyMaterial.pipelineData.depthTestEnable = VK_TRUE;
+  skyMaterial.pipelineData.depthWriteEnable = VK_TRUE;
+  skyMaterial.pipelineData.depthCompareOp = VK_COMPARE_OP_LESS;
+  skyMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_SRC_ALPHA;
+  skyMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+  skyMaterial.pipelineData.colorBlendOp = VK_BLEND_OP_ADD;
+  skyMaterial.pipelineData.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+  skyMaterial.pipelineData.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+  skyMaterial.pipelineData.alphaBlendOp = VK_BLEND_OP_ADD;
+  skyMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_FRONT_BIT;
+  skyMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.7f, 0.9f, 1.0f, 1.0f);
+
+  floorGridMaterial.vertShaderName = "shaders/GridGround.vert.spv";
+  floorGridMaterial.fragShaderName = "shaders/GridGround.frag.spv";
+  floorGridMaterial.pipelineData.blendEnable = VK_TRUE;
+  floorGridMaterial.pipelineData.depthTestEnable = VK_TRUE;
+  floorGridMaterial.pipelineData.depthWriteEnable = VK_FALSE;
+  floorGridMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_SRC_ALPHA;
+  floorGridMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+  floorGridMaterial.pipelineData.colorBlendOp = VK_BLEND_OP_ADD;
+  floorGridMaterial.pipelineData.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+  floorGridMaterial.pipelineData.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+  floorGridMaterial.pipelineData.alphaBlendOp = VK_BLEND_OP_ADD;
+  floorGridMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_BACK_BIT;
+  floorGridMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+
+  ceilingGridMaterial.vertShaderName = "shaders/GridSimple.vert.spv";
+  ceilingGridMaterial.fragShaderName = "shaders/GridSimple.frag.spv";
+  ceilingGridMaterial.pipelineData.blendEnable = VK_TRUE;
+  ceilingGridMaterial.pipelineData.depthTestEnable = VK_TRUE;
+  ceilingGridMaterial.pipelineData.depthWriteEnable = VK_FALSE;
+  ceilingGridMaterial.pipelineData.srcColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_SRC_ALPHA;
+  ceilingGridMaterial.pipelineData.dstColorBlendFactor = VkBlendFactor::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+  ceilingGridMaterial.pipelineData.colorBlendOp = VK_BLEND_OP_ADD;
+  ceilingGridMaterial.pipelineData.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+  ceilingGridMaterial.pipelineData.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+  ceilingGridMaterial.pipelineData.alphaBlendOp = VK_BLEND_OP_ADD;
+  ceilingGridMaterial.pipelineData.cullMode = VkCullModeFlagBits::VK_CULL_MODE_FRONT_BIT;
+  ceilingGridMaterial.dynamicUniformData.colorMultiplier = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+  ceilingGridMaterial.dynamicUniformData.perMaterialFragmentFlags.x = 0.15f; // [tdbe] the tunnelvision radius
+
+  std::vector<Material*> materials = { 
+      &diffuseMaterial, &groundMaterial, &logoMaterial, &handsMaterial, &skyMaterial, 
+      &bikeMaterial, &floorGridMaterial, &ceilingGridMaterial
+  };
   
   GameObject worldRoot = GameObject();
   worldRoot.worldMatrix = glm::mat4(1.0f);
-  GameObject handLeft = GameObject(&handModelLeft, &logoMaterial, true, "handLeft");
-  GameObject handRight = GameObject(&handModelRight, &logoMaterial, true, "handRight");
-  GameObject grid = GameObject(&gridModel, &gridMaterial, true, "grid");
+  GameObject handLeft = GameObject(&handModelLeft, &handsMaterial, true, "handLeft");
+  GameObject handRight = GameObject(&icosphereSmoothModel, &handsMaterial, true, "handRight");
+  GameObject ground = GameObject(&quadModel, &groundMaterial, true, "ground");
+  GameObject floorGrid = GameObject(&quadModel, &floorGridMaterial, true, "floorGrid");
+  GameObject ceilingGrid = GameObject(&quadModel, &ceilingGridMaterial, true, "ceilingGrid");
   GameObject ruins = GameObject(&ruinsModel, &diffuseMaterial, true, "ruins");
   GameObject carLeft = GameObject(&carModelLeft, &diffuseMaterial, true, "carLeft");
-  GameObject carRight = GameObject(&carModelRight, &diffuseMaterial, true, "handRight");
+  GameObject carRight = GameObject(&carModelRight, &diffuseMaterial, true, "carRight");
   GameObject beetle = GameObject(&beetleModel, &diffuseMaterial, true, "beetle");
   GameObject bike = GameObject(&bikeModel, &bikeMaterial, true, "bike");
-  GameObject logo = GameObject(&logoModel, &logoMaterial, true, "logo");
+  GameObject logo1 = GameObject(&logoModel1, &logoMaterial, true, "logo1");
+  GameObject logo2 = GameObject(&logoModel2, &logoMaterial, true, "logo2");
+  GameObject textLocomotion = GameObject(&textLocomotionModel, &logoMaterial, true, "textLocomotion");
   GameObject cube = GameObject(&cubeModel, &diffuseMaterial, true, "cube");
-  GameObject holePlaneTempChaperone = GameObject(&holePlaneTempChaperoneModel, &locomotionMaterial, true, "holePlaneTempChaperone");
-  std::vector<GameObject*> gameObjects = { &grid, &ruins, &carLeft, &carRight, &beetle, &bike, &handLeft, &handRight, &cube, &logo, &holePlaneTempChaperone};
+  GameObject icosphereSmooth = GameObject(&icosphereSmoothModel, &diffuseMaterial, true, "icosphereSmooth");
+  GameObject icosphereSkybox = GameObject(&icosphereModel, &skyMaterial, true, "skybox");
+  std::vector<GameObject*> gameObjects = {
+      &ground, &ruins, &carLeft, &carRight, &beetle, &handLeft, &handRight, &cube, &icosphereSmooth,
+      &logo1, &logo2, &textLocomotion, &bike, &icosphereSkybox, &floorGrid, &ceilingGrid
+  };
   PlayerObject playerObject = PlayerObject("XR Player 1", &worldRoot, &handLeft, &handRight);
   
-  grid.worldMatrix = glm::scale(worldRoot.worldMatrix, { 15, 15, 15 });
+  ground.worldMatrix = glm::translate(glm::scale(worldRoot.worldMatrix, { 256, 256, 256 }), { 0.0f, 0.0f, 0.0f });
+  floorGrid.worldMatrix = glm::scale(worldRoot.worldMatrix, { 128, 128, 128 });
+  ceilingGrid.worldMatrix = glm::scale(worldRoot.worldMatrix, { 128, 128, 128 });
+  ceilingGrid.isVisible = false;
   carLeft.worldMatrix =
     glm::rotate(glm::translate(worldRoot.worldMatrix, { -3.5f, 0.0f, -7.0f }), glm::radians(75.0f), { 0.0f, 1.0f, 0.0f });
   carRight.worldMatrix =
     glm::rotate(glm::translate(worldRoot.worldMatrix, { 8.0f, 0.0f, -15.0f }), glm::radians(-15.0f), { 0.0f, 1.0f, 0.0f });
   beetle.worldMatrix =
     glm::rotate(glm::translate(worldRoot.worldMatrix, { -3.5f, 0.0f, -0.5f }), glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f });
-  logo.worldMatrix = glm::translate(worldRoot.worldMatrix, { 0.0f, 3.0f, -10.0f });
+  logo1.worldMatrix = glm::translate(worldRoot.worldMatrix, { 0.0f, 3.0f, -10.0f });
+  logo2.worldMatrix = glm::translate(worldRoot.worldMatrix, { 0.0f, 3.0f, -10.0f });
   bike.worldMatrix = glm::rotate(glm::translate(worldRoot.worldMatrix, { 0.5f, 0.0f, -4.5f }), 0.2f, { 0.0f, 1.0f, 0.0f });
-  cube.worldMatrix = glm::scale(glm::translate(worldRoot.worldMatrix, { 2.0f, 2.0f, -2.0f }), { 0.5f, 0.5f, 0.5f });
-  
+  //cube.worldMatrix = glm::scale(glm::translate(worldRoot.worldMatrix, { 4.0f, 2.0f, -2.5f }), { 0.5f, 0.5f, 0.5f });
+  cube.worldMatrix = glm::scale(glm::translate(worldRoot.worldMatrix, { 0.5f, -0.35f, -4.5f }), { 0.5f, 0.5f, 0.5f });
+  icosphereSmooth.worldMatrix = glm::scale(glm::translate(worldRoot.worldMatrix, { 2.0f, 2.0f, -2.5f }), { 0.5f, 0.5f, 0.5f });
+  icosphereSkybox.worldMatrix = glm::scale(glm::rotate(glm::translate(worldRoot.worldMatrix, { 0.0f, 0.0f, 0.0f }), 0.71f, { 0.0f, 1.0f, 0.0f }), { 192.0f, 192.0f, 192.0f });
+  textLocomotion.worldMatrix = glm::scale(glm::rotate(glm::translate(worldRoot.worldMatrix, { 2.825f, 0.835f, -1.7f }), -1.5708f, { 0.0f, 1.0f, 0.0f }), { 0.25f, 0.25f, 0.25f });
+
   MeshData* meshData = new MeshData;
-  if (!meshData->loadModel("models/quad.obj", MeshData::Color::FromNormals, models, 0u, 1u)) {
+  if (!meshData->loadModel("models/quad.obj", MeshData::Color::White, models, 0u, 1u))
+  {
     return EXIT_FAILURE;
   }
 
@@ -140,11 +224,27 @@ int main()
     return EXIT_FAILURE;
   }
 
-  if (!meshData->loadModel("models/Logo.obj", MeshData::Color::White, models, 9u, 1u)) {
+  if (!meshData->loadModel("models/Logo_OpenXR_Vulkan.obj", MeshData::Color::White, models, 9u, 1u)) {
     return EXIT_FAILURE;
   }
 
-  if (!meshData->loadModel("models/holePlaneTempChaperone.obj", MeshData::Color::White, models, 10u, 1u)) {
+  if (!meshData->loadModel("models/Logo_Examples.obj", MeshData::Color::White, models, 10u, 1u))
+  {
+      return EXIT_FAILURE;
+  }
+
+  if (!meshData->loadModel("models/Text_Locomotion_Flat.obj", MeshData::Color::White, models, 11u, 1u))
+  {
+      return EXIT_FAILURE;
+  }
+
+  if (!meshData->loadModel("models/icosphere_subdiv4.obj", MeshData::Color::White, models, 12u, 1u))
+  {
+    return EXIT_FAILURE;
+  }
+
+  if (!meshData->loadModel("models/icosphere_subdiv4_smooth.obj", MeshData::Color::White, models, 13u, 1u))
+  {
     return EXIT_FAILURE;
   }
 
@@ -164,10 +264,10 @@ int main()
   // [tdbe] all game mechanics, initial resource allocation here, 
   // and then update tick later in game loop
   std::vector<GameBehaviour*> gameBehaviours = {
-    new LocomotionBehaviour(playerObject, holePlaneTempChaperone, 1, 3, 1),
+    new LocomotionBehaviour(playerObject, floorGrid, ceilingGrid, icosphereSkybox, handsMaterial, 1, 3, 1),
     new HandsBehaviour(playerObject),
     //new InputTesterBehaviour(),
-    new WorldObjectsMiscBehaviour(bike, logoMaterial)
+    new WorldObjectsMiscBehaviour(bike, logoMaterial, handsMaterial)
   };
     
   static float gameTime = 0.0f;
