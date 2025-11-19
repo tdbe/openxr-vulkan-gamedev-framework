@@ -1,10 +1,5 @@
 #include "DataBuffer.h"
 
-#include "Context.h"
-#include "Util.h"
-
-#include <sstream>
-
 DataBuffer::DataBuffer(const Context* context,
                        const VkBufferUsageFlags bufferUsageFlags,
                        const VkMemoryPropertyFlags memoryProperties,
@@ -19,7 +14,7 @@ DataBuffer::DataBuffer(const Context* context,
   bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
   if (vkCreateBuffer(device, &bufferCreateInfo, nullptr, &buffer) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -31,7 +26,7 @@ DataBuffer::DataBuffer(const Context* context,
   if (!util::findSuitableMemoryTypeIndex(context->getVkPhysicalDevice(), memoryRequirements, memoryProperties,
                                          suitableMemoryTypeIndex))
   {
-    util::error(Error::FeatureNotSupported, "Suitable data buffer memory type");
+    util::LogError(Error::FeatureNotSupported, "Suitable data buffer memory type");
     valid = false;
   }
 
@@ -42,14 +37,14 @@ DataBuffer::DataBuffer(const Context* context,
   {
     std::stringstream s;
     s << memoryRequirements.size << " bytes for buffer";
-    util::error(Error::OutOfMemory, s.str());
+    util::LogError(Error::OutOfMemory, s.str());
     valid = false;
     return;
   }
 
   if (vkBindBufferMemory(device, buffer, deviceMemory, 0u) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -78,7 +73,7 @@ bool DataBuffer::copyTo(const DataBuffer& target, VkCommandBuffer commandBuffer,
   beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
   if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
@@ -88,7 +83,7 @@ bool DataBuffer::copyTo(const DataBuffer& target, VkCommandBuffer commandBuffer,
 
   if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
@@ -97,13 +92,13 @@ bool DataBuffer::copyTo(const DataBuffer& target, VkCommandBuffer commandBuffer,
   submitInfo.pCommandBuffers = &commandBuffer;
   if (vkQueueSubmit(queue, 1u, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
   if (vkQueueWaitIdle(queue) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
@@ -116,7 +111,7 @@ void* DataBuffer::map() const
   const VkResult result = vkMapMemory(context->getVkDevice(), deviceMemory, 0u, size, 0, &data);
   if (result != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return nullptr;
   }
 
@@ -128,7 +123,7 @@ void DataBuffer::unmap() const
   vkUnmapMemory(context->getVkDevice(), deviceMemory);
 }
 
-bool DataBuffer::isValid() const
+bool DataBuffer::IsValid() const
 {
   return valid;
 }

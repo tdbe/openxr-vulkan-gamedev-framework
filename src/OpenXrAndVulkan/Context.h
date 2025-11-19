@@ -1,11 +1,16 @@
 #pragma once
-
 #include <vulkan/vulkan.h>
 
 #define XR_USE_GRAPHICS_API_VULKAN
 #include <openxr/openxr_platform.h>
 
+#include <glfw/glfw3.h>
+#include <array>
 #include <string>
+#include <cstring>
+#include <sstream>
+
+#include "../Utils/Util.h"
 
 /*
  * The context class handles the initial loading of both OpenXR and Vulkan base functionality such as instances, OpenXR
@@ -22,7 +27,7 @@ public:
   bool createDevice(VkSurfaceKHR mirrorSurface);
   void sync() const;
 
-  bool isValid() const;
+  bool IsValid() const;
 
   XrViewConfigurationType getXrViewType() const;
   XrInstance getXrInstance() const;

@@ -18,7 +18,7 @@ public:
               size_t layerCount);
   ~ImageBuffer();
 
-  bool isValid() const;
+  bool IsValid() const;
 
   VkImageView getImageView() const;
 

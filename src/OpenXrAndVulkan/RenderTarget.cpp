@@ -1,6 +1,6 @@
 #include "RenderTarget.h"
 
-#include "Util.h"
+#include "../Utils/Util.h"
 
 #include <array>
 
@@ -28,7 +28,7 @@ RenderTarget::RenderTarget(VkDevice device,
   imageViewCreateInfo.subresourceRange.levelCount = 1u;
   if (vkCreateImageView(device, &imageViewCreateInfo, nullptr, &imageView) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -45,7 +45,7 @@ RenderTarget::RenderTarget(VkDevice device,
   framebufferCreateInfo.layers = 1u;
   if (vkCreateFramebuffer(device, &framebufferCreateInfo, nullptr, &framebuffer) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -67,7 +67,7 @@ RenderTarget::~RenderTarget()
   }
 }
 
-bool RenderTarget::isValid() const
+bool RenderTarget::IsValid() const
 {
   return valid;
 }

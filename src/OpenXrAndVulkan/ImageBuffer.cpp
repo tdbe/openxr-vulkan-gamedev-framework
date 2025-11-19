@@ -1,6 +1,6 @@
 #include "ImageBuffer.h"
 
-#include "Util.h"
+#include "../Utils/Util.h"
 
 #include <sstream>
 
@@ -31,7 +31,7 @@ ImageBuffer::ImageBuffer(const Context* context,
   imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
   if (vkCreateImage(device, &imageCreateInfo, nullptr, &image) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -44,7 +44,7 @@ ImageBuffer::ImageBuffer(const Context* context,
   if (!util::findSuitableMemoryTypeIndex(context->getVkPhysicalDevice(), memoryRequirements,
                                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, suitableMemoryTypeIndex))
   {
-    util::error(Error::FeatureNotSupported, "Suitable image buffer memory type");
+    util::LogError(Error::FeatureNotSupported, "Suitable image buffer memory type");
     valid = false;
     return;
   }
@@ -57,7 +57,7 @@ ImageBuffer::ImageBuffer(const Context* context,
   {
     std::stringstream s;
     s << memoryRequirements.size << " bytes for image buffer";
-    util::error(Error::OutOfMemory, s.str());
+    util::LogError(Error::OutOfMemory, s.str());
     valid = false;
     return;
   }
@@ -65,7 +65,7 @@ ImageBuffer::ImageBuffer(const Context* context,
   // Bind the image to the allocated device memory
   if (vkBindImageMemory(device, image, deviceMemory, 0u) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -84,7 +84,7 @@ ImageBuffer::ImageBuffer(const Context* context,
   imageViewCreateInfo.subresourceRange.levelCount = 1u;
   if (vkCreateImageView(device, &imageViewCreateInfo, nullptr, &imageView) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -112,7 +112,7 @@ ImageBuffer::~ImageBuffer()
   }
 }
 
-bool ImageBuffer::isValid() const
+bool ImageBuffer::IsValid() const
 {
   return valid;
 }

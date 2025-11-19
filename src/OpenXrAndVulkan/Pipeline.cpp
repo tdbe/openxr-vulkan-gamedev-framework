@@ -1,12 +1,6 @@
 #pragma once
 #include "Pipeline.h"
 
-#include "Context.h"
-#include "Util.h"
-
-#include <array>
-#include <sstream>
-
 Pipeline::Pipeline(const Context* context,
                    VkPipelineLayout pipelineLayout,
                    VkRenderPass renderPass,
@@ -30,7 +24,7 @@ Pipeline::Pipeline(const Context* context,
   {
     std::stringstream s;
     s << "Vertex shader \"" << vertexFilename << "\"";
-    util::error(Error::FileMissing, s.str());
+    util::LogError(Error::FileMissing, s.str());
     valid = false;
     return;
   }
@@ -41,7 +35,7 @@ Pipeline::Pipeline(const Context* context,
   {
     std::stringstream s;
     s << "Fragment shader \"" << fragmentFilename << "\"";
-    util::error(Error::FileMissing, s.str());
+    util::LogError(Error::FileMissing, s.str());
     valid = false;
     return;
   }
@@ -141,9 +135,9 @@ Pipeline::Pipeline(const Context* context,
   graphicsPipelineCreateInfo.pDynamicState = &pipelineDynamicStateCreateInfo;
   graphicsPipelineCreateInfo.pDepthStencilState = &pipelineDepthStencilStateCreateInfo;
   graphicsPipelineCreateInfo.renderPass = renderPass;
-  if (vkCreateGraphicsPipelines(device, nullptr, 1u, &graphicsPipelineCreateInfo, nullptr, &pipeline) != VK_SUCCESS)
+  if (vkCreateGraphicsPipelines(device, nullptr, 1u, &graphicsPipelineCreateInfo, nullptr, &vkPipeline) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     valid = false;
     return;
   }
@@ -157,18 +151,19 @@ Pipeline::Pipeline(const Context* context,
 Pipeline::~Pipeline()
 {
   const VkDevice device = context->getVkDevice();
-  if (device && pipeline)
+  if (device && vkPipeline)
   {
-    vkDestroyPipeline(device, pipeline, nullptr);
+    vkDestroyPipeline(device, vkPipeline, nullptr);
   }
 }
 
+/// [tdbe] khronos: Once bound, a pipeline binding affects subsequent commands that interact with the given pipeline type in the command buffer until a different pipeline of the same type is bound to the bind point, or until the pipeline bind point is disturbed by binding a shader object
 void Pipeline::bindPipeline(VkCommandBuffer commandBuffer) const
 {
-  vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+  vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline);
 }
 
-bool Pipeline::isValid() const
+bool Pipeline::IsValid() const
 {
   return valid;
 }

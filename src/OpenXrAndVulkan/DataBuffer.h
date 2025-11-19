@@ -1,6 +1,10 @@
 #pragma once
-
 #include <vulkan/vulkan.h>
+
+#include <sstream>
+
+#include "Context.h"
+#include "../Utils/Util.h"
 
 class Context;
 
@@ -22,7 +26,7 @@ public:
   void* map() const;
   void unmap() const;
 
-  bool isValid() const;
+  bool IsValid() const;
   VkBuffer getBuffer() const;
 
 private:

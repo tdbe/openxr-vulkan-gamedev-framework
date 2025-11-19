@@ -1,23 +1,32 @@
 #pragma once
-
 #include <vulkan/vulkan.h>
 
 #include <string>
 #include <vector>
+#include <array>
+#include <sstream>
 
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 
+#include "../Utils/Util.h"
+
+#include "Context.h"
+
 class Context;
 
 /// [tdbe] vertex and fragment shader dynamic uniform properties to bind to per model or per-material.
-/// properties need to be copied to <see cerf="DynamicVertexUniformData"/>
+/// properties need to be copied to <see cerf="DynamicVertexUniformData"/> or <see cerf="dynamicFragmentUniformData"/>
 struct DynamicMaterialUniformData
 {
     /// [tdbe] per material color
 	glm::vec4 colorMultiplier = glm::vec4(1.0f);
     /// [tdbe] allocation for various flags for hacks and triggers sent to the shaders
 	glm::vec4 perMaterialVertexFlags = glm::vec4(1.0f);
+    /// [tdbe] x: metallic, y: roughness, z: todo: clearcoat, w: procedural color flag & intensity
+    glm::vec4 brdfData = glm::vec4(0.5f);
+    glm::vec4 ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
+    /// [tdbe] hax
 	glm::vec4 perMaterialFragmentFlags = glm::vec4(1.0f);
 };
 
@@ -83,7 +92,7 @@ public:
 
   void bindPipeline(VkCommandBuffer commandBuffer) const;
 
-  bool isValid() const;
+  bool IsValid() const;
 
   const std::string getVertShaderName() const;
   const std::string getFragShaderName() const;
@@ -95,7 +104,7 @@ private:
   bool valid = false;
 
   const Context* context = nullptr;
-  VkPipeline pipeline = nullptr;
+  VkPipeline vkPipeline = nullptr;
 
   PipelineMaterialPayload pipelineData;
 };

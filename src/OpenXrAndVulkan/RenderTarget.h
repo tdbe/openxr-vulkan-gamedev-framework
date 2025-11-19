@@ -19,7 +19,7 @@ public:
                uint32_t layerCount);
   ~RenderTarget();
 
-  bool isValid() const;
+  bool IsValid() const;
   VkImage getImage() const;
   VkFramebuffer getFramebuffer() const;
 
