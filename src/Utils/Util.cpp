@@ -1,10 +1,197 @@
-#include "Util.h"
+#pragma once
 #include <boxer/boxer.h>
 #include <cstring>
 #include <fstream>
 #include <sstream>
+#include "Util.h"
+#include <vulkan/vulkan.h>
+#include <openxr/openxr.h>
 
-void util::error(Error error, const std::string& details)
+std::string util::ToString(const bool& boolean, bool clean)
+{
+    if (clean)
+    {
+        if (boolean)
+            return "true";
+        else
+            return "false";
+    }
+    else
+    {
+        if (boolean)
+            return "true";
+        else
+            return "false";
+    }
+}
+
+std::string util::ToString(const glm::mat4& mat)
+{
+    // [tdbe] ostringstream should be slower
+    // (at least when it comes to creating it and simple string appending;
+    // I'm not sure about conversion vs to_string()).
+    const int rows = 4;
+    const int cols = 4;
+    std::string str = "{ ";
+    for (int i = 0; i < rows; ++i)
+    {
+        str += "\n[ ";
+        for (int j = 0; j < cols; ++j)
+        {
+            str += std::to_string(mat[i][j]);
+            if (j < cols - 1)
+                str += ", ";
+        }
+        str += " ]";
+    }
+    str += "\n}";
+    return str;
+}
+
+// [tdbe] todo: linker issue on generics. 
+// error LNK2019: unresolved external symbol "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl util::ToString<float,4,4>(struct glm::mat<4,4,float,0> const &)"
+/*
+template <typename T, int rows, int cols> std::string util::ToString(const glm::mat<rows, cols, T>& mat)
+{
+    std::string str = "{ ";
+    for (int i = 0; i < rows; ++i)
+    {
+        str += "\n[ ";
+        for (int j = 0; j < cols; ++j)
+        {
+            str += std::to_string(mat[i][j]);
+            if (j < cols - 1)
+                str += ", ";
+        }
+        str += " ]";
+    }
+    str += "\n}";
+    return str;
+}
+template <typename T, int size> std::string util::ToString(const glm::vec<size, T>& vec)
+{
+    std::string str = "{ ";
+    for (int i = 0; i < size; i++)
+    {
+        str += std::to_string(vec[i]);
+        if (i != size - 1)
+            str += ", ";
+    }
+    str += " }";
+    return str;
+}
+*/
+
+std::string util::ToString(const glm::vec4& vec)
+{
+    const int size = 4;
+    std::string str = "{ ";
+    for (int i = 0; i < size; i++)
+    {
+        str += std::to_string(vec[i]);
+        if (i != size - 1)
+            str += ", ";
+    }
+    str += " }";
+    return str;
+}
+
+std::string util::ToString(const glm::vec3& vec)
+{
+    const int size = 3;
+    std::string str = "{ ";
+    for (int i = 0; i < size; i++)
+    {
+        str += std::to_string(vec[i]);
+        if (i != size - 1)
+            str += ", ";
+    }
+    str += " }";
+    return str;
+}
+
+std::string util::ToString(const glm::vec2& vec)
+{
+    const int size = 2;
+    std::string str = "{ ";
+    for (int i = 0; i < size; i++)
+    {
+        str += std::to_string(vec[i]);
+        if (i != size - 1)
+            str += ", ";
+    }
+    str += " }";
+    return str;
+}
+
+std::string util::ToString(const int16_t& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const int& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const size_t& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const uint16_t& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const uint32_t& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const float& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+std::string util::ToString(const double& number, bool clean)
+{
+    if (clean)
+        return std::to_string(number);
+    else
+        return "{ " + std::to_string(number) + " }";
+}
+
+void util::DebugError(const std::string& details)
+{
+    printf((details + "\n").c_str());
+    std::throw_with_nested(std::exception((details + "\n").c_str()));
+}
+
+void util::DebugLog(const std::string& details)
+{
+    printf((details + "\n").c_str());
+}
+
+void util::LogError(Error error, const std::string& details)
 {
   std::stringstream s;
 
@@ -254,7 +441,7 @@ glm::mat4 util::createProjectionMatrix(XrFovf fov, float nearClip, float farClip
 }
 
 glm::quat util::xrQuaternionfToGlmQuat(const XrQuaternionf& src){
-  return glm::quat(src.x, src.y, src.z, src.w);
+    return glm::quat(src.w, src.x, src.y, src.z);
 }
 
 XrQuaternionf util::glmQuatToXrQuaternionf(const glm::quat& src){

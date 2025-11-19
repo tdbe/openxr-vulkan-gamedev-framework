@@ -29,12 +29,11 @@ enum class Error
   WindowFailure
 };
 
-/*
- * The util namespaces offers a wide variety of useful utility functions.
- * [tdbe] Data structure utils for XR, input, and gamedev. 
- *        Plus some common gamedev math functions you can easily see & use.
- *        (on top of glm)
- */
+
+/// [tdbe] Data structure utils for XR, input, gamedev, logging. 
+/// Also some common gamedev math functions you can easily see & use. (on top of glm)
+/// Todo: a bit of a mess, maybe have a separate proper glm extension util and a xr util etc.
+  
 namespace util
 {
     typedef struct posef {
@@ -42,8 +41,28 @@ namespace util
         glm::vec3 position;
     } posef;
 
+
+    std::string ToString(const bool& boolean, bool clean = false);
+    //template <typename T, int size> std::string ToString(const glm::vec<size, T>& vec);
+    // template <typename T, int rows, int cols> std::string ToString(const glm::mat<rows, cols, T>& mat);
+    std::string ToString(const glm::mat4& mat);
+    std::string ToString(const glm::vec4& vec);
+    std::string ToString(const glm::vec3& vec);
+    std::string ToString(const glm::vec2& vec);
+    std::string ToString(const int16_t& number, bool clean = false);
+    std::string ToString(const int& number, bool clean = false);
+    std::string ToString(const size_t& number, bool clean = false);
+    std::string ToString(const uint16_t& number, bool clean = false);
+    std::string ToString(const uint32_t& number, bool clean = false);
+    std::string ToString(const float& number, bool clean = false);
+    std::string ToString(const double& number, bool clean = false);
+
+    void DebugError(const std::string& details = "");
+
+    void DebugLog(const std::string& details = "");
+
     // Reports an error with optional details through a system-native message box
-    void error(Error error, const std::string& details = "");
+    void LogError(Error error, const std::string& details = "");
 
     // Loads an OpenXR extension function by 'name' into 'function', returns false on error
     bool loadXrExtensionFunction(XrInstance instance, const std::string& name, PFN_xrVoidFunction* function);
@@ -139,5 +158,4 @@ namespace util
     glm::quat quaternionFromAngleAxis(const float& angle, const glm::vec3& axis);
 
     float remapInterval(float val, const float vmin, const float vmax, const float newmin, const float newmax);
-
-} // namespace util
+    } // namespace util
