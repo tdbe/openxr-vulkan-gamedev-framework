@@ -1,10 +1,10 @@
+#pragma once
 #include "Input.h"
-
 
 namespace
 {
-const std::string actionSetName = "actionset";
-const std::string localizedActionSetName = "Actions";
+    const std::string actionSetName = "actionset";
+    const std::string localizedActionSetName = "Actions";
 } // namespace
 
 namespace Inputspace
@@ -24,7 +24,7 @@ Input::Input(XrInstance instance, XrSession session)
         result = xrCreateActionSet(instance, &actionSetCreateInfo, &actionSetData.actionSet);
         if (XR_FAILED(result))
         {
-            util::error(Error::GenericOpenXR, "100; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "100(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -43,7 +43,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "handpose", "Hand Pose", XR_ACTION_TYPE_POSE_INPUT, actionSetData.aimPoseAction))
         {
-            util::error(Error::GenericOpenXR, "110; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "110(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -51,7 +51,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "grippose", "Grip Pose", XR_ACTION_TYPE_POSE_INPUT, actionSetData.gripPoseAction))
         {
-            util::error(Error::GenericOpenXR, "120; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "120(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -60,7 +60,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "trigger_v_action", "Trigger", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.triggerValueAction))
         {
-            util::error(Error::GenericOpenXR, "200; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "200(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -68,7 +68,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "squeeze_v_action", "Squeeze", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.squeezeValueAction))
         {
-            util::error(Error::GenericOpenXR, "300; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "300(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -77,7 +77,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "grab_action", "Grab Action", XR_ACTION_TYPE_FLOAT_INPUT, actionSetData.grabAction))
         {
-            util::error(Error::GenericOpenXR, "400; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "400(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -86,7 +86,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "thumbstick_action", "Thumbstick Action", XR_ACTION_TYPE_VECTOR2F_INPUT, actionSetData.thumbstickAction))
         {
-            util::error(Error::GenericOpenXR, "500; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "500(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -95,7 +95,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "menu_action", "Menu Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.menuClickAction))
         {
-            util::error(Error::GenericOpenXR, "600; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "600(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -104,7 +104,52 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "select_action", "Select Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.selectClickAction))
         {
-            util::error(Error::GenericOpenXR, "610; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "610(<- ctrl+f this); XrResult: " + util::ToString((int)result));
+            valid = false;
+            return;
+        }
+
+        // bool triggerClickAction 
+        if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
+                                "trigger_click_action", "Trigger Click Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.triggerClickAction))
+        {
+            util::LogError(Error::GenericOpenXR, "620(<- ctrl+f this); XrResult: " + util::ToString((int)result));
+            valid = false;
+            return;
+        }
+
+        // bool aClickAction
+        if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
+                                "a_click_action", "A Click Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.aClickAction))
+        {
+            util::LogError(Error::GenericOpenXR, "630(<- ctrl+f this); XrResult: " + util::ToString((int)result));
+            valid = false;
+            return;
+        }
+
+        // bool bClickAction
+        if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
+                                "b_click_action", "B Click Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.bClickAction))
+        {
+            util::LogError(Error::GenericOpenXR, "640(<- ctrl+f this); XrResult: " + util::ToString((int)result));
+            valid = false;
+            return;
+        }
+
+        // bool xClickAction
+        if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
+                                "x_click_action", "X Click Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.xClickAction))
+        {
+            util::LogError(Error::GenericOpenXR, "650(<- ctrl+f this); XrResult: " + util::ToString((int)result));
+            valid = false;
+            return;
+        }
+
+        // bool yClickAction
+        if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
+                                "y_click_action", "Y Click Action", XR_ACTION_TYPE_BOOLEAN_INPUT, actionSetData.yClickAction))
+        {
+            util::LogError(Error::GenericOpenXR, "660(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -113,7 +158,7 @@ Input::Input(XrInstance instance, XrSession session)
         if (!util::createAction(actionSetData.actionSet, actionSetData.controllerPaths, 
                                 "vibrate_action", "Vibration Action", XR_ACTION_TYPE_VIBRATION_OUTPUT, actionSetData.vibrateAction))
         {
-            util::error(Error::GenericOpenXR, "700; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "700(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -138,7 +183,7 @@ Input::Input(XrInstance instance, XrSession session)
         result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_aim[ci]);
         if (XR_FAILED(result))
         {
-            util::error(Error::GenericOpenXR, "800; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "800(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -147,7 +192,7 @@ Input::Input(XrInstance instance, XrSession session)
         result = xrCreateActionSpace(session, &actionSpaceInfo, &actionSetData.controllerReferenceSpaces_grip[ci]);
         if (XR_FAILED(result))
         {
-            util::error(Error::GenericOpenXR, "810; XrResult: " + std::to_string((int)result));
+            util::LogError(Error::GenericOpenXR, "810(<- ctrl+f this); XrResult: " + util::ToString((int)result));
             valid = false;
             return;
         }
@@ -233,7 +278,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrStringToPath(instance, "/interaction_profiles/khr/simple_controller", &khrSimpleInteractionProfilePath);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "900; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "900(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -272,7 +317,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1000; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1000(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -285,7 +330,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &oculusTouchInteractionProfilePath);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1100; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1100(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -303,7 +348,7 @@ Input::Input(XrInstance instance, XrSession session)
                 // [tdbe] TODO: unavailable for this controller
                 // {actionSetData.selectClickAction, selectClickPath[(int)ControllerEnum::RIGHT]},
                 // alt:
-                {actionSetData.selectClickAction, aClickPath[(int)ControllerEnum::RIGHT]},
+                {actionSetData.selectClickAction, bClickPath[(int)ControllerEnum::RIGHT]},
                 // [tdbe] note: only on left side!
                 {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
                  
@@ -312,6 +357,14 @@ Input::Input(XrInstance instance, XrSession session)
                 // Uncomment if you're not supporting old devices.
                 //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
                 //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
+                //{actionSetData.squeezeClickAction, triggerClickPath[(int)ControllerEnum::LEFT]},
+                //{actionSetData.squeezeClickAction, triggerClickPath[(int)ControllerEnum::RIGHT]},
+
+                {actionSetData.aClickAction, aClickPath[(int)ControllerEnum::RIGHT]},
+                {actionSetData.bClickAction, bClickPath[(int)ControllerEnum::RIGHT]},
+
+                {actionSetData.xClickAction, xClickPath[(int)ControllerEnum::LEFT]},
+                {actionSetData.yClickAction, yClickPath[(int)ControllerEnum::LEFT]},
 
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.vibrateAction, hapticPath[(int)ControllerEnum::RIGHT]}
@@ -328,7 +381,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1200; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1200(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -340,7 +393,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrStringToPath(instance, "/interaction_profiles/htc/vive_controller", &viveControllerInteractionProfilePath);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1300; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1300(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -382,7 +435,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1400; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1400(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -394,7 +447,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrStringToPath(instance, "/interaction_profiles/valve/index_controller",
                                     &valveIndexControllerInteractionProfilePath);
             if (XR_FAILED(result)){
-                util::error(Error::GenericOpenXR, "14");
+                util::LogError(Error::GenericOpenXR, "14");
                 valid = false;
                 return;
             }
@@ -409,14 +462,21 @@ Input::Input(XrInstance instance, XrSession session)
                 {actionSetData.aimPoseAction, aimPosePath[(int)ControllerEnum::RIGHT]},// hand pose
                 {actionSetData.thumbstickAction, thumbstickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.thumbstickAction, thumbstickPath[(int)ControllerEnum::RIGHT]},
-                {actionSetData.selectClickAction, aClickPath[(int)ControllerEnum::LEFT]},
+                // [tdbe] TODO: unavailable for this controller
+                // {actionSetData.selectClickAction, selectClickPath[(int)ControllerEnum::RIGHT]},
+                // [tdbe] alt:
                 {actionSetData.selectClickAction, aClickPath[(int)ControllerEnum::RIGHT]},
+                {actionSetData.selectClickAction, aClickPath[(int)ControllerEnum::LEFT]},
                 // [tdbe] TODO: unavailable for this controller
                 // {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::LEFT]},
-                // {actionSetData.menuClickAction, menuClickPath[(int)ControllerEnum::RIGHT]},
                 // [tdbe] alt:
                 {actionSetData.menuClickAction, bClickPath[(int)ControllerEnum::LEFT]},
                 {actionSetData.menuClickAction, bClickPath[(int)ControllerEnum::RIGHT]},
+
+                {actionSetData.aClickAction, aClickPath[(int)ControllerEnum::LEFT]},
+                {actionSetData.bClickAction, bClickPath[(int)ControllerEnum::LEFT]},
+                {actionSetData.aClickAction, aClickPath[(int)ControllerEnum::RIGHT]},
+                {actionSetData.bClickAction, bClickPath[(int)ControllerEnum::RIGHT]},
                 
                 //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::LEFT]},
                 //{actionSetData.triggerAction, triggerValuePath[(int)ControllerEnum::RIGHT]},
@@ -436,7 +496,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1500; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1500(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -449,7 +509,7 @@ Input::Input(XrInstance instance, XrSession session)
                                         &microsoftMixedRealityInteractionProfilePath);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1600; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1600(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -491,7 +551,7 @@ Input::Input(XrInstance instance, XrSession session)
             result = xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
             if (XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "1700; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "1700(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return;
             }
@@ -508,7 +568,7 @@ Input::Input(XrInstance instance, XrSession session)
     result = xrAttachSessionActionSets(session, &xrSessionAattachInfo);
     if (XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "1800; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "1800(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return;
     }
@@ -527,12 +587,12 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
     XrResult result = xrSyncActions(session, &actionsSyncInfo);
     if(XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "1900; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "1900(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return valid;
     }
     
-    // Update the actions
+    // [tdbe] Update to the amount of controllers and eyes poses we're about to fill 
     inputData.SizeVectors(ControllerEnum::COUNT, SideEnum::COUNT);
 
     // [tdbe] Head poses
@@ -541,7 +601,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
     result = xrLocateSpace(xrHeadReferenceSpace, xrReferenceSpace, predictedDisplayTime, &player_space_in_game_space);
     if (XR_FAILED(result))
     {
-      util::error(Error::GenericOpenXR, "2200; XrResult: " + std::to_string((int)result));
+      util::LogError(Error::GenericOpenXR, "2200(<- ctrl+f this); XrResult: " + util::ToString((int)result));
       valid = false;
       return valid;
     }
@@ -556,16 +616,14 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
     }*/
     // [tdbe] TODO: figure out what/how head poses/joints work in openxr
     // https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html
-    inputData.headPose = {
-        .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,
-        .position = 0.5f * (inputData.eyePoses[(int)SideEnum::LEFT].position + inputData.eyePoses[(int)SideEnum::RIGHT].position)
-    };
-    inputData.headPoseMatrix = util::poseToMatrix(inputData.headPose);
     inputData.eyePoseMatrixes[(int)SideEnum::LEFT] = util::poseToMatrix(eyePoses[(int)SideEnum::LEFT].pose);
     inputData.eyePoses[(int)SideEnum::LEFT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::LEFT].pose);
     inputData.eyePoseMatrixes[(int)SideEnum::RIGHT] = util::poseToMatrix(eyePoses[(int)SideEnum::RIGHT].pose);
     inputData.eyePoses[(int)SideEnum::RIGHT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::RIGHT].pose);
-    
+    inputData.headPose = { .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,
+                           .position = 0.5f * (inputData.eyePoses[(int)SideEnum::LEFT].position +
+                                               inputData.eyePoses[(int)SideEnum::RIGHT].position) };
+    inputData.headPoseMatrix = util::poseToMatrix(inputData.headPose);
 
     // [tdbe] Headset State. Use to detect status / user proximity / user presence / user engagement https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#session-lifecycle
     inputData.headsetActivityState = sessionState;
@@ -582,7 +640,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
                                     &spaceLocation);
             if(XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "2000; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "2000(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return valid;
             }
@@ -607,7 +665,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
                                     &spaceLocation);
             if(XR_FAILED(result))
             {
-                util::error(Error::GenericOpenXR, "2100; XrResult: " + std::to_string((int)result));
+                util::LogError(Error::GenericOpenXR, "2100(<- ctrl+f this); XrResult: " + util::ToString((int)result));
                 valid = false;
                 return valid;
             }
@@ -633,20 +691,38 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
 
         // [tdbe] State
         XrActionStateBoolean menuClickState = Input::GetActionBooleanState(actionSetData.menuClickAction, ci);
-        inputData.menuClickState.at(i) = menuClickState;      
+        inputData.menuClickState.at(i) = menuClickState;
 
         // [tdbe] State
         XrActionStateBoolean selectClickState = Input::GetActionBooleanState(actionSetData.selectClickAction, ci);
-        inputData.selectClickState.at(i) = selectClickState;  
+        inputData.selectClickState.at(i) = selectClickState;
+        /*
+        // [tdbe] State
+        XrActionStateFloat triggerState = Input::GetActionFloatState(actionSetData.triggerAction, ci);
+        inputData.triggerState.at(i) = triggerState;
 
         // [tdbe] State
-        //XrActionStateFloat triggerState = Input::GetActionFloatState(actionSetData.triggerAction, ci);
-        //inputData.triggerState.at(i) = triggerState;  
-
+        XrActionStateBoolean squeezeClickState = Input::GetActionBooleanState(actionSetData.squeezeClickAction, ci);
+        inputData.triggerClickState.at(i) = squeezeClickState;
+        */
+        // [tdbe] State
+        XrActionStateBoolean aClickState = Input::GetActionBooleanState(actionSetData.aClickAction, ci);
+        inputData.aClickState.at(i) = aClickState;
         
+        // [tdbe] State
+        XrActionStateBoolean bClickState = Input::GetActionBooleanState(actionSetData.bClickAction, ci);
+        inputData.bClickState.at(i) = bClickState;
+
+        // [tdbe] State
+        XrActionStateBoolean xClickState = Input::GetActionBooleanState(actionSetData.xClickAction, ci);
+        inputData.xClickState.at(i) = xClickState;
+
+        // [tdbe] State
+        XrActionStateBoolean yClickState = Input::GetActionBooleanState(actionSetData.yClickAction, ci);
+        inputData.yClickState.at(i) = yClickState;
 
         // [tdbe] Etc. add new actions as needed, from the existing bindings / paths / actions following these examples above ^
-        
+        // [tdbe] TODO: would be very nice to have a GetActionXStateFinished() that will be true on the frame that e.g. the button was let go.
     }
     return true;
 }
@@ -696,7 +772,7 @@ XrActionStatePose Input::GetActionPoseState(XrAction targetAction, ControllerEnu
 
     if(XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "2200; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "2200(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return poseState;
     }
@@ -719,7 +795,7 @@ XrActionStateBoolean Input::GetActionBooleanState(XrAction targetAction, Control
 
     if(XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "2300; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "2300(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return poseState;
     }
@@ -742,7 +818,7 @@ XrActionStateFloat Input::GetActionFloatState(XrAction targetAction, ControllerE
 
     if(XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "2400; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "2400(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return poseState;
     }
@@ -765,7 +841,7 @@ XrActionStateVector2f Input::GetActionVector2fState(XrAction targetAction, Contr
 
     if(XR_FAILED(result))
     {
-        util::error(Error::GenericOpenXR, "2500; XrResult: " + std::to_string((int)result));
+        util::LogError(Error::GenericOpenXR, "2500(<- ctrl+f this); XrResult: " + util::ToString((int)result));
         valid = false;
         return poseState;
     }
@@ -773,7 +849,7 @@ XrActionStateVector2f Input::GetActionVector2fState(XrAction targetAction, Contr
 }
 
 
-bool Input::isValid() const
+bool Input::IsValid() const
 {
   return valid;
 }

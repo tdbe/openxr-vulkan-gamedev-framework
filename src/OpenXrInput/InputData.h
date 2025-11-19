@@ -1,5 +1,6 @@
-#pragma once
-#include "Util.h"
+﻿#pragma once
+#include "../Utils/Util.h"
+#include <vector>
 
 namespace Inputspace{
 
@@ -12,40 +13,47 @@ namespace Inputspace{
         COUNT = 2,
         NONE = -1
     };
-    enum class SideEnum
+    enum class SideEnum 
     {
-        LEFT = 0,
+        LEFT = 0,  
         RIGHT = 1,
         COUNT = 2
     };
 
     // [tdbe] Owned by Input. Updated every Sync tick. 
     // It should contain all the input your game uses.
-    struct InputData {
+    struct InputData 
+    {
+      public: 
         // [tdbe] Poses
-        std::vector<glm::mat4> eyePoseMatrixes;//(int)SideEnum::COUNT
-        std::vector<util::posef> eyePoses;//(int)SideEnum::COUNT
+        std::vector<glm::mat4> eyePoseMatrixes; //(int)SideEnum::COUNT
+        std::vector<util::posef> eyePoses;      //(int)SideEnum::COUNT
         glm::mat4 headPoseMatrix;
         util::posef headPose;
-        std::vector<glm::mat4> controllerAimPoseMatrixes;//(int)ControllerEnum::COUNT
+        std::vector<glm::mat4> controllerAimPoseMatrixes; //(int)ControllerEnum::COUNT
         std::vector<util::posef> controllerAimPoses;
         std::vector<glm::mat4> controllerGripPoseMatrixes;
         std::vector<util::posef> controllerGripPoses;
 
         // [tdbe] Input States. Also includes lastChangeTime, isActive, changedSinceLastSync properties.
-        std::vector<XrActionStateFloat> grabState{XR_TYPE_ACTION_STATE_FLOAT};
-        std::vector<XrActionStateVector2f> thumbStickState{XR_TYPE_ACTION_STATE_VECTOR2F};
-        std::vector<XrActionStateBoolean> menuClickState{XR_TYPE_ACTION_STATE_BOOLEAN};
-        std::vector<XrActionStateBoolean> selectClickState{XR_TYPE_ACTION_STATE_BOOLEAN};
-        std::vector<XrActionStateFloat> triggerState{XR_TYPE_ACTION_STATE_BOOLEAN};
+        std::vector<XrActionStateFloat> grabState{ XR_TYPE_ACTION_STATE_FLOAT };
+        std::vector<XrActionStateVector2f> thumbStickState{ XR_TYPE_ACTION_STATE_VECTOR2F };
+        std::vector<XrActionStateBoolean> menuClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };// [tdbe] could be the ≡ button on your left hand
+        std::vector<XrActionStateBoolean> selectClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };// [tdbe] could be the select button on your right hand
+        std::vector<XrActionStateFloat> triggerState{ XR_TYPE_ACTION_STATE_BOOLEAN };
+        std::vector<XrActionStateBoolean> aClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };
+        std::vector<XrActionStateBoolean> bClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };
+        std::vector<XrActionStateBoolean> xClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };
+        std::vector<XrActionStateBoolean> yClickState{ XR_TYPE_ACTION_STATE_BOOLEAN };
         
-
         // [tdbe] Headset State. Use to detect status / user proximity / user presence / user engagement https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#session-lifecycle
         XrSessionState headsetActivityState = XR_SESSION_STATE_UNKNOWN;
 
-        void SizeVectors(ControllerEnum controllers, SideEnum sides){
-            eyePoseMatrixes.resize((int)sides);
-            eyePoses.resize((int)sides);
+        /// [tdbe] size them to the amount of controllers we're using
+        void SizeVectors(ControllerEnum controllers, SideEnum eyes)
+        {
+            eyePoseMatrixes.resize((int)eyes);
+            eyePoses.resize((int)eyes);
 
             controllerAimPoseMatrixes.resize((int)controllers);
             controllerAimPoses.resize((int)controllers);
@@ -56,7 +64,11 @@ namespace Inputspace{
             menuClickState.resize((int)controllers);
             selectClickState.resize((int)controllers);
             triggerState.resize((int)controllers);
-        }
+            aClickState.resize((int)controllers);
+            bClickState.resize((int)controllers);
+            xClickState.resize((int)controllers);
+            yClickState.resize((int)controllers);
+        };
     };
 
     // [tdbe] Owned by Input. Modifiable from gameplay.
@@ -91,16 +103,16 @@ namespace Inputspace{
                     hapticsDataVect.resize((int) index+1);
                 }
                 hapticsDataVect[(int)index] = hapticsData;
-            }
+            };
 
             ~InputHaptics(){}
 
         //"internal:" would be nice to have that here
             const std::vector<HapticsData>& GetHapticFeedbackRequests(){
                 return hapticsDataVect;
-            }
+            };
             void ClearHapticFeedbackRequests(){
                 hapticsDataVect.clear();
-            }
+            };
     };
 }

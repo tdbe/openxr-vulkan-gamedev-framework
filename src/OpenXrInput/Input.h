@@ -1,4 +1,4 @@
-#include "Util.h"
+#include "../Utils/Util.h"
 #include <array>
 #include "InputData.h"
 
@@ -25,7 +25,7 @@ namespace Inputspace{
         
         Input(XrInstance xrInstance, XrSession xrSession);
         ~Input();
-        bool isValid() const;
+        bool IsValid() const;
 
         bool Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses, 
             XrTime predictedDisplayTime, XrSessionState sessionState);
