@@ -36,11 +36,75 @@ enum class Error
   
 namespace util
 {
+    static constexpr float PI = 3.1415926f;
+
     typedef struct posef {
         glm::quat orientation;
         glm::vec3 position;
     } posef;
 
+    struct Plane
+    {
+        glm::vec3 normal;
+        /// [tdbe] distance to the plane (along the normal) from the world origin.
+        /// in other words, how far is the plane from (0,0,0), along this normal.
+        float distance;
+        
+        void normalize()
+        {
+            float length = glm::length(normal);
+            normal /= length;
+            distance /= length;
+        }
+
+        bool IsPointOnPlane(const glm::vec3 point) const
+        {
+            // [tdbe] Is point in front of plane means: pretend the AABB.point is a vector
+            // from world origin, and project it onto the plane's normal
+            // to see if it's in the right direction. Then subtract the plane's distance
+            // to see if it isn't under the plane.
+            float dot = glm::dot(normal, point) - distance;
+            if (dot == 0.0f)
+            {
+                return false;
+            }
+            return true;
+        };
+
+        bool IsPointBehindPlane(const glm::vec3 point) const
+        {
+            // [tdbe] Is point in front of plane means: pretend the AABB.point is a vector
+            // from world origin, and project it onto the plane's normal
+            // to see if it's in the right direction. Then subtract the plane's distance
+            // to see if it isn't under the plane.
+            float dot = glm::dot(normal, point) - distance;
+            if (dot < 0.0f)
+            {
+                return false;
+            }
+            return true;
+        };
+
+        bool IsPointInFrontOfPlane(const glm::vec3 point) const
+        {
+            // [tdbe] Is point in front of plane means: pretend the AABB.point is a vector
+            // from world origin, and project it onto the plane's normal
+            // to see if it's in the right direction. Then subtract the plane's distance
+            // to see if it isn't under the plane.
+            float dot = glm::dot(normal, point) - distance;
+            if (dot > 0.0f)
+            {
+                return false;
+            }
+            return true;
+        };
+
+        /// [tdbe] don't forget to call nomalize() if your normal and/or distance aren't normalized.
+        Plane(const glm::vec3 normal, float distance) : 
+            normal(normal), distance(distance)
+        {
+        }
+    };
 
     std::string ToString(const bool& boolean, bool clean = false);
     //template <typename T, int size> std::string ToString(const glm::vec<size, T>& vec);
