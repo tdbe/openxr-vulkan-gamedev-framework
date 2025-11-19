@@ -4,7 +4,7 @@
 #include "Headset.h"
 #include "RenderTarget.h"
 #include "Renderer.h"
-#include "Util.h"
+#include "../Utils/Util.h"
 
 #include <glfw/glfw3.h>
 
@@ -15,7 +15,7 @@
 
 namespace
 {
-constexpr const char* windowTitle = "OpenXR Vulkan Example";
+constexpr const char* windowTitle = "OpenXR Vulkan Framework";
 constexpr VkFormat COLOR_FORMAT = VK_FORMAT_B8G8R8A8_SRGB;
 constexpr VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
 constexpr size_t mirrorEyeIndex = 1u; // Eye index to mirror, 0 = left, 1 = right
@@ -35,9 +35,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 }
 } // namespace
 
-MirrorView::MirrorView(const Context* context) : context(context)
+MirrorView::MirrorView(const Context* context, bool fullscreen) : context(context)
 {
-  // Create a fullscreen window
+  
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 
   int width, height;
@@ -45,18 +45,22 @@ MirrorView::MirrorView(const Context* context) : context(context)
 
 #ifdef DEBUG
   // Create a quarter-sized window in debug mode instead
-  width /= 2;
-  height /= 2;
+  //width /= 2;
+  //height /= 2;
   monitor = nullptr;
 #endif
 
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
+  // [tdbe] if you provide a monitor to glfwCreateWindow, it will make the window fullscreen.
+  if (fullscreen)
+    window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
+  else
+    window = glfwCreateWindow(width, height, windowTitle, nullptr, nullptr);
   if (!window)
   {
     std::stringstream s;
     s << width << "x" << height << (monitor ? " fullscreen" : " windowed");
-    util::error(Error::WindowFailure, s.str());
+    util::LogError(Error::WindowFailure, s.str());
     valid = false;
     return;
   }
@@ -72,7 +76,7 @@ MirrorView::MirrorView(const Context* context) : context(context)
   VkResult result = glfwCreateWindowSurface(context->getVkInstance(), window, nullptr, &surface);
   if (result != VK_SUCCESS)
   {
-    util::error(Error::GenericGLFW);
+    util::LogError(Error::GenericGLFW);
     valid = false;
     return;
   }
@@ -105,10 +109,29 @@ void MirrorView::onWindowResize()
   resizeDetected = true;
 }
 
-bool MirrorView::connect(const Headset* headset, const Renderer* renderer)
+bool MirrorView::connect(const Headset* headset, const Renderer* renderer, bool highQualityMirrorView, bool forceNoScaleDown)
 {
   this->headset = headset;
   this->renderer = renderer;
+
+  // [tdbe] set the window to the headset eye's resolution, or the screen max resolution if it's smaller than the headset eye resolution
+  if (highQualityMirrorView)
+  {
+      auto eyeRes = headset->getEyeResolution(mirrorEyeIndex);
+      int monitorWidth, monitorHeight;
+      if (forceNoScaleDown)
+      {
+          monitorWidth = eyeRes.width * 2; 
+          monitorHeight = eyeRes.height * 2;
+      }
+      else
+      {
+          GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+          glfwGetMonitorWorkarea(monitor, nullptr, nullptr, &monitorWidth, &monitorHeight);
+      }
+      glfwSetWindowSizeLimits(window, 128, 128, monitorWidth, monitorHeight);
+      glfwSetWindowSize(window, eyeRes.width, eyeRes.height);
+  }
 
   if (!recreateSwapchain())
   {
@@ -123,7 +146,7 @@ void MirrorView::processWindowEvents() const
   glfwPollEvents();
 }
 
-MirrorView::RenderResult MirrorView::render(uint32_t swapchainImageIndex)
+MirrorView::RenderResult MirrorView::Render(uint32_t swapchainImageIndex)
 {
   if (swapchainResolution.width == 0u || swapchainResolution.height == 0u)
   {
@@ -307,7 +330,7 @@ void MirrorView::present()
   }
 }
 
-bool MirrorView::isValid() const
+bool MirrorView::IsValid() const
 {
   return valid;
 }
@@ -333,13 +356,13 @@ bool MirrorView::recreateSwapchain()
   {
     if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &surfaceCapabilities) != VK_SUCCESS)
     {
-      util::error(Error::GenericVulkan);
+      util::LogError(Error::GenericVulkan);
       return false;
     }
 
     if (!(surfaceCapabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
     {
-      util::error(Error::GenericVulkan);
+      util::LogError(Error::GenericVulkan);
       return false;
     }
 
@@ -374,7 +397,7 @@ bool MirrorView::recreateSwapchain()
     uint32_t surfaceFormatCount = 0u;
     if (vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &surfaceFormatCount, nullptr) != VK_SUCCESS)
     {
-      util::error(Error::GenericVulkan);
+      util::LogError(Error::GenericVulkan);
       return false;
     }
 
@@ -382,7 +405,7 @@ bool MirrorView::recreateSwapchain()
     if (vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &surfaceFormatCount, surfaceFormats.data()) !=
         VK_SUCCESS)
     {
-      util::error(Error::GenericVulkan);
+      util::LogError(Error::GenericVulkan);
       return false;
     }
 
@@ -400,7 +423,7 @@ bool MirrorView::recreateSwapchain()
 
     if (!surfaceFormatFound)
     {
-      util::error(Error::FeatureNotSupported, "Vulkan swapchain color format");
+      util::LogError(Error::FeatureNotSupported, "Vulkan swapchain color format");
       return false;
     }
   }
@@ -429,7 +452,7 @@ bool MirrorView::recreateSwapchain()
   swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
   if (vkCreateSwapchainKHR(vkDevice, &swapchainCreateInfo, nullptr, &swapchain) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
@@ -437,14 +460,14 @@ bool MirrorView::recreateSwapchain()
   uint32_t swapchainImageCount = 0u;
   if (vkGetSwapchainImagesKHR(vkDevice, swapchain, &swapchainImageCount, nullptr) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 
   swapchainImages.resize(swapchainImageCount);
   if (vkGetSwapchainImagesKHR(vkDevice, swapchain, &swapchainImageCount, swapchainImages.data()) != VK_SUCCESS)
   {
-    util::error(Error::GenericVulkan);
+    util::LogError(Error::GenericVulkan);
     return false;
   }
 

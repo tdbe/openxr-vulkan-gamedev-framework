@@ -1,12 +1,17 @@
 #pragma once
-
 #include <glm/fwd.hpp>
 
 #include <openxr/openxr.h>
-
 #include <vulkan/vulkan.h>
 
+#include <glm/mat4x4.hpp>
+#include <array>
 #include <vector>
+
+#include "Context.h"
+#include "ImageBuffer.h"
+#include "RenderTarget.h"
+#include "../Utils/Util.h"
 
 class Context;
 class ImageBuffer;
@@ -34,7 +39,7 @@ public:
   BeginFrameResult beginFrame(uint32_t& swapchainImageIndex);
   void endFrame() const;
 
-  bool isValid() const;
+  bool IsValid() const;
   bool isExitRequested() const;
 
   XrSession getXrSession() const;

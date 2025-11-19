@@ -17,12 +17,12 @@ class Renderer;
 class MirrorView final
 {
 public:
-  MirrorView(const Context* context);
+  MirrorView(const Context* context, bool fullscreen);
   ~MirrorView();
 
   void onWindowResize();
 
-  bool connect(const Headset* headset, const Renderer* renderer);
+  bool connect(const Headset* headset, const Renderer* renderer, bool highQualityMirrorView, bool forceNoScaleDown);
   void processWindowEvents() const;
 
   enum class RenderResult
@@ -31,10 +31,10 @@ public:
     Visible,  // Visible mirror view for normal rendering
     Invisible // Minimized window for example without rendering
   };
-  RenderResult render(uint32_t swapchainImageIndex);
+  RenderResult Render(uint32_t swapchainImageIndex);
   void present();
 
-  bool isValid() const;
+  bool IsValid() const;
   bool isExitRequested() const;
   VkSurfaceKHR getSurface() const;
 
