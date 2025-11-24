@@ -1,2 +1,6 @@
 ﻿/build
+/out
+/outDebug
 .vs
+/FileContentIndex
+vc140.pdb
