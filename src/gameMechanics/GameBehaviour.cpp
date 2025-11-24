@@ -1,5 +1,8 @@
+#pragma once
+#include "../Utils/Util.h"
+#include "../GameData/GameData.h"
 #include "GameBehaviour.h"
-
+using namespace Behaviours;
 
 GameBehaviour::GameBehaviour()
 {

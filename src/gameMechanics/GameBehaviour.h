@@ -1,21 +1,20 @@
 #pragma once
+#include "../OpenXrInput/InputData.h"
 
-#include "../Util.h"
-#include "../InputData.h"
-#include "../GameData.h"
-
-/* [tdbe] 
- *  Quick base class as a base for all game mechanics.
- */
-class GameBehaviour 
+namespace Behaviours
 {
-    public:
+    /// [tdbe] Quick base class as a base for all game mechanics.
+    class GameBehaviour
+    {
+      public:
         GameBehaviour();
         virtual ~GameBehaviour();
-        //Start();
-        virtual void Update(const float deltaTime, const float gameTime, const Inputspace::InputData &inputData, 
-            Inputspace::InputHaptics &inputHaptics);
+        // Start();
+        virtual void Update(const float deltaTime,
+                            const float gameTime,
+                            const Inputspace::InputData& inputData,
+                            Inputspace::InputHaptics& inputHaptics);
 
-    private:
-
-};
+      private:
+    };
+} // namespace Behaviours
