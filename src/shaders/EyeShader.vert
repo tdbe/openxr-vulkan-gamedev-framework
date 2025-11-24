@@ -28,43 +28,26 @@ layout(location = 3) in vec2 uv;
 layout(location = 0) out vec3 normal; // In world space
 layout(location = 1) out vec4 color;
 layout(location = 2) out vec2 uvCoords;
-layout(location = 3) out vec3 fragWorldPos;
-layout(location = 4) flat out vec3 cameraPos;
-layout(location = 5) flat out int glInstanceIndex;
-layout(location = 6) flat out int instanceCount;
+layout(location = 3) out vec3 cyclopsNoiseSeed;
+layout(location = 4) out vec3 fragWorldPos;
+layout(location = 5) flat out vec3 cameraPos;
+layout(location = 6) flat out int glInstanceIndex;
 
 void main()
 {
-    mat4 worldMatrix = dynVertBufData.worldMatrix;
-    glInstanceIndex = 0; 
-    // [tdbe] this is very basic optional instancing, so it just bakes-in a demo to cycle through metallic and roughness ranges in a 5x5 grid
-    instanceCount = dynVertBufData.instanceCount;
+    mat4 wmatr = dynVertBufData.worldMatrix;
+    glInstanceIndex = 0;
+    // [tdbe] this is very basic optional instancing for demo purposes
     if(dynVertBufData.instanceCount > 1)
     {
         glInstanceIndex = gl_InstanceIndex;
-        {
-            int index = gl_InstanceIndex;
-            int depth = int(floor(index / 25));
-            worldMatrix[3].z += depth * 1.75;
-
-            worldMatrix[0].xyz /= 1.0 + depth * 0.5;
-            worldMatrix[1].xyz /= 1.0 + depth * 0.5;
-            worldMatrix[2].xyz /= 1.0 + depth * 0.5;
-
-            index = index - (depth * 25);
-        
-            float row = floor(index / 5);
-            worldMatrix[3].x += index + index * 0.1 - row * 5.0 - row * 5.0 * 0.1;
-            worldMatrix[3].y += row + row * 0.1;
-            worldMatrix[3].y -= depth * 0.125;
-        }
     }
-    vec4 wpos = worldMatrix * vec4(inPosition, 1.0);
-    normal = (worldMatrix * vec4(inNormal, 0.0)).xyz;
+    vec4 wpos = wmatr * vec4(inPosition, 1.0);
+    normal = (dynVertBufData.worldMatrix * vec4(inNormal, 0.0)).xyz;
     uvCoords = uv;
 
     cameraPos = staVertBufData.cameraWorldMatrixes[gl_ViewIndex][3].xyz;
-    color.rgb = inColor * dynVertBufData.colorMultiplier.xyz;
+    color.rgb = inColor * dynVertBufData.colorMultiplier.rgb;
     color.a = dynVertBufData.colorMultiplier.a;
     dislocateForChaperone(  staVertBufData.inLocomotion,
                             1.0,
@@ -75,4 +58,9 @@ void main()
                             color.a);
     gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * wpos;
     fragWorldPos = wpos.xyz;
+
+    mat4 vpc = staVertBufData.viewProjectonMatrixes[0];
+    cyclopsNoiseSeed = (vpc * wpos).xyz;
+    //cyclopsNoiseSeed.x -= 0.4;
+    //cyclopsNoiseSeed.y += 0.2;
 }

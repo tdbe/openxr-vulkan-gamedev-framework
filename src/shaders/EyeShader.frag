@@ -21,9 +21,10 @@ layout(binding = 3) uniform DynFragUniData
 layout(location = 0) in vec3 worldspaceNormal;
 layout(location = 1) in vec4 color;
 layout(location = 2) in vec2 uv;
-layout(location = 3) in vec3 fragWorldPos;
-layout(location = 4) flat in vec3 cameraPos;
-layout(location = 5) flat in int glInstanceIndex;
+layout(location = 3) in vec3 cyclopsNoiseSeed;
+layout(location = 4) in vec3 fragWorldPos;
+layout(location = 5) flat in vec3 cameraPos;
+layout(location = 6) flat in int glInstanceIndex;
 
 layout(location = 0) out vec4 outColor;
 
@@ -37,42 +38,32 @@ void main()
 		if(mix(isDithered(gl_FragCoord.xy, inColor.a), isDithered(uv.xy*DITHER_UV_TEXELSCALE*0.5, inColor.a), 0.5) <= 0.0)
 			discard;// [tdbe] maybe still write to fragdepth if you need.
 	}
+
 	const vec3 normal = normalize(worldspaceNormal);
-	float roughnessSlider = dynFragUniData.brdfData.y;// [tdbe] clamped to FROSTBITE_MIN_ROUGHNESS
-	float metallicSlider = dynFragUniData.brdfData.x;
-
-	float randPerInstance = 0.0;
-	// [tdbe] this is very basic optional instancing, so it just bakes-in a demo to cycle through metallic and roughness ranges in a 5x5 grid
-	if(glInstanceIndex > 1)
     {
-		int index = glInstanceIndex - 1;
-        int depth = int(floor(index / 25));
-        index = index - (depth * 25);
-
-		float row = floor(index / 5);
-		float column = (index % 5);
-        metallicSlider = 1.0 - ((column) * 0.25);
-        roughnessSlider = clamp(row * 0.25, FROSTBITE_MIN_ROUGHNESS, 1.0);
-		//float tim = remapInterval(sin(staFragUniData.time*0.5) + 1.0, 0.0, 2.0, 0.5, 1.0);
-		//inColor.a *= tim;
-		inColor.a *= 1.0 - depth * 0.333;
-		inColor.rgb = mix(vec3(1.0, 0.64, 0.16), vec3(0.16, 0.64, 1.0), column * 0.25);
-		randPerInstance = random(glInstanceIndex);
-    }
-
-	// [tdbe] adding some rainbow irridescence waves
-	if(dynFragUniData.brdfData.w > 0.001)
-	{
+		//float distCamToFrag = max(1.0, distance(cameraPos, fragWorldPos));
+		//float mul = cyclopsNoiseSeed.x*cyclopsNoiseSeed.y*cyclopsNoiseSeed.z / distCamToFrag;
+		vec3 worldOffset = clamp((fragWorldPos)/256, 0.125, 1.0);
 		float stripScale = 45.35;
-
-		// [tdbe] irridescence
-		//vec3 worldOffset = clamp01((fragWorldPos)/128);
-		//const float mul = dot(normal, worldOffset);
-		const float mul = dot(normal, vec3(0.0, 0.1, 0.0)) / 3;
-		//const float mul = dot(rotateY(normal, randPerInstance*TWOPI), worldOffset);
+		const float randPerInstance = random(glInstanceIndex*TWOPI) * 0.25 + 0.75;
+		const float time = 0.025*(staFragUniData.time);//0.0185
+		float mul = 1.0;
+		if(glInstanceIndex == 0)
+		{
+			// [tdbe] trippy iris
+			//mul = normal.x + normal.y + normal.z;
+			vec3 fragToCam = normalize(cameraPos - fragWorldPos) * 0.75;
+			mul = dot(fragToCam, normal);
+		}
+		else
+		{
+			// [tdbe] other types of eyes??
+			//mul = normal.x + normal.y + normal.z;
+			vec3 fragToCam = normalize(cameraPos - fragWorldPos) * 0.75;
+			mul = dot(fragToCam, normal);
+		}
 
 		const float piOffset = 2.0*PI/3.0;
-		const float time = 0.025*(staFragUniData.time);//0.0185
 		vec3 magic = vec3((sin(			      stripScale*(time + mul))), 
 						  (sin(piOffset +	  stripScale*(time + mul))), 
 						  (sin(2.0*piOffset + stripScale*(time + mul))));
@@ -82,11 +73,21 @@ void main()
 		magic = rotateZ(magic.xyz, rotv);
 		magic = rotateZ(magic.zxy, rotv);
 		magic = rotateZ(magic.yzx, rotv);
-		magic = (1.0 + magic) * 0.5;
-
-		inColor.xyz = mix(inColor.rgb, magic, dynFragUniData.brdfData.w);
+		
+		if(glInstanceIndex == 0)
+		{
+			magic = (0.5 + magic) * 0.666;
+			inColor.xyz = mix(inColor.xyz, magic, dynFragUniData.brdfData.w);
+		}
+		else
+		{
+			magic = (0.5 + magic) * 0.666;
+			inColor.xyz = mix(inColor.xyz, magic, dynFragUniData.brdfData.w);
+		}
 	}
 
+	const float roughnessSlider = dynFragUniData.brdfData.y;// [tdbe] clamped to FROSTBITE_MIN_ROUGHNESS
+	const float metallicSlider = dynFragUniData.brdfData.x;
 	vec3 col = calculateLights( gl_FrontFacing, cameraPos,
 								fragWorldPos, staFragUniData.time,
 								normal, worldspaceNormal, 
@@ -97,6 +98,6 @@ void main()
 								dynFragUniData.ior,
 								roughnessSlider,
 								metallicSlider);
-	col = addFog(col, staFragUniData.ambientLight[3].rgb, staFragUniData.ambientLight[3].w);
+	col = addFog(col, staFragUniData.ambientLight[3].rgb, staFragUniData.ambientLight[3].w, staFragUniData.ambientLight[0].xyz, fragWorldPos.y, MAX_WORLD_HEIGHT);
 	outColor = vec4(col, 1.0);
 }
