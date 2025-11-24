@@ -5,6 +5,7 @@ layout(binding = 2) uniform DynVertBufData
     mat4 worldMatrix;
     vec4 colorMultiplier;
     vec4 perMaterialFlags;
+    int instanceCount;
 } dynVertBufData;
 
 layout(binding = 0) uniform StaVertBufData
@@ -13,28 +14,38 @@ layout(binding = 0) uniform StaVertBufData
     mat4 cameraWorldMatrixes[2];
     mat4 viewMatrixes[2];
     mat4 viewProjectonMatrixes[2];
+    float ipd; 
+    float time;
+    int inLocomotion;
 } staVertBufData;
 
 layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
 layout(location = 2) in vec3 inColor;
-//layout(location = 3) in vec3 colorMultiplier;
+layout(location = 3) in vec2 uv;
 
-layout(location = 0) out vec3 position; // [tdbe] vertex position in world space
-layout(location = 1) out vec4 color;
-layout(location = 2) flat out vec4 objPosition; // [tdbe] mesh position
-layout(location = 3) flat out vec4 objRot; // [tdbe] mesh rotation
-layout(location = 4) flat out int glViewIndex;
+layout(location = 0) out vec3 fragWorldPos; // [tdbe] position in world space
+layout(location = 1) flat out vec4 color;
+layout(location = 2) out vec2 uvCoords;
+layout(location = 3) flat out vec4 objPosition; // [tdbe] mesh position
+layout(location = 4) flat out vec4 objRot; // [tdbe] mesh rotation
+layout(location = 5) flat out int glViewIndex;
+layout(location = 6) out vec3 cyclopsNoiseSeed;
 
 void main()
 {
-    const vec4 pos = dynVertBufData.worldMatrix * vec4(inPosition, 1.0);
-    gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * pos;
+    const vec4 wpos = dynVertBufData.worldMatrix * vec4(inPosition, 1.0);
+    gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * wpos;
+    mat4 vpc = staVertBufData.viewProjectonMatrixes[0];
+    cyclopsNoiseSeed = (vpc * wpos).xyz;
+    fragWorldPos = wpos.xyz;
+    uvCoords = uv;
     objPosition = vec4(dynVertBufData.worldMatrix[3].x, dynVertBufData.worldMatrix[3].y, dynVertBufData.worldMatrix[3].z, 1);
-    position = pos.xyz;
     glViewIndex = gl_ViewIndex;
-
+    
     // [tdbe] this will only work for 180 degrees (e.g. -90 to 90):
     //objRot.x = acos(( normalize(dynVertBufData.worldMatrix[0]).x + normalize(dynVertBufData.worldMatrix[1]).y + normalize(dynVertBufData.worldMatrix[2]).z - 1)/2);
+    
     mat4 rotMat = dynVertBufData.worldMatrix;
     rotMat[0] = normalize(rotMat[0]);// [tdbe] normalize to get rid of the object scale
     rotMat[1] = normalize(rotMat[1]);
@@ -48,8 +59,9 @@ void main()
     objRot = quatFromMat;
 
     objPosition.w = length(dynVertBufData.worldMatrix[0].xyz);// [tdbe] scale; we assume scale is the same on all axies
-    objPosition.w /= 128; // [tdbe] hack: the default scale is 128 in main.cpp
+    objPosition.w /= 256; // [tdbe] todo: hack: the default scale is 256 in main.cpp
 
+    // [tdbe] remove the "flat out" and "flat in" from color definitions if you're actually using vertex colors etc.
     color.rgb = inColor * dynVertBufData.colorMultiplier.xyz;
-    color.w = dynVertBufData.colorMultiplier.w;
+    color.a = dynVertBufData.colorMultiplier.a;
 }

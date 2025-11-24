@@ -29,13 +29,18 @@ layout(location = 1) flat out vec4 color;
 layout(location = 2) out vec2 uvCoords;
 layout(location = 3) out vec3 fragWorldPos;
 layout(location = 4) flat out vec3 cameraPos;
+layout(location = 5) flat out int glViewIndex;
+layout(location = 6) out vec3 cyclopsNoiseSeed;
 
 void main()
 {
     const vec4 wpos = dynVertBufData.worldMatrix * vec4(inPosition, 1.0);
     gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * wpos;
+    mat4 vpc = staVertBufData.viewProjectonMatrixes[0];
+    cyclopsNoiseSeed = (vpc * wpos).xyz;
     fragWorldPos = wpos.xyz;
     cameraPos = staVertBufData.cameraWorldMatrixes[gl_ViewIndex][3].xyz;
+    glViewIndex = gl_ViewIndex;
 
     normal = (dynVertBufData.worldMatrix * vec4(inNormal, 0.0)).xyz;
     uvCoords = uv;

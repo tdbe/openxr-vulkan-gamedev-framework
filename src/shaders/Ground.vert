@@ -1,4 +1,5 @@
 #extension GL_EXT_multiview : enable
+#include "_VertexProcessing.glsl"
 
 layout(binding = 2) uniform DynVertBufData
 {
@@ -25,22 +26,31 @@ layout(location = 2) in vec3 inColor;
 layout(location = 3) in vec2 uv;
 
 layout(location = 0) out vec3 normal; // In world space
-layout(location = 1) flat out vec4 color;
+layout(location = 1) out vec4 color;
 layout(location = 2) out vec2 uvCoords;
 layout(location = 3) out vec3 fragWorldPos;
 layout(location = 4) flat out vec3 cameraPos;
+layout(location = 5) flat out float time;
 
 void main()
 {
-    const vec4 wpos = dynVertBufData.worldMatrix * vec4(inPosition, 1.0);
-    gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * wpos;
-    fragWorldPos = wpos.xyz;
-    cameraPos = staVertBufData.cameraWorldMatrixes[gl_ViewIndex][3].xyz;
-
+    vec4 wpos = dynVertBufData.worldMatrix * vec4(inPosition, 1.0);
     normal = (dynVertBufData.worldMatrix * vec4(inNormal, 0.0)).xyz;
     uvCoords = uv;
-    // [tdbe] remove the "flat out" and "flat in" from color definitions if you're actually using vertex colors etc.
-    color.rgb = inColor.rgb * dynVertBufData.colorMultiplier.rgb;
-    color.a = dynVertBufData.colorMultiplier.a;
-}
+    cameraPos = staVertBufData.cameraWorldMatrixes[gl_ViewIndex][3].xyz;
 
+    gl_Position = staVertBufData.viewProjectonMatrixes[gl_ViewIndex] * wpos;
+    fragWorldPos = wpos.xyz;
+
+    color.rgb = inColor * dynVertBufData.colorMultiplier.xyz;
+    color.a = dynVertBufData.colorMultiplier.a;
+    dislocateForChaperone(  staVertBufData.inLocomotion,
+                            0.33,
+                            staVertBufData.cameraWorldMatrixes[gl_ViewIndex],
+                            wpos.xyz, 
+                            normal,
+                            color.rgb,
+                            color.a
+                            );
+    time = staVertBufData.time;
+}
