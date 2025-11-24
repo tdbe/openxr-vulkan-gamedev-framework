@@ -1,4 +1,4 @@
-set(PROJECT_NAME openxr-vulkan-example)
+set(PROJECT_NAME openxr-vulkan-framework)
 
 cmake_minimum_required(VERSION 3.5)
 project(${PROJECT_NAME})
