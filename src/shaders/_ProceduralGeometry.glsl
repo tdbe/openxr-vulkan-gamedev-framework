@@ -103,3 +103,28 @@ float getRingDF(float tunnelDF, float thresh)
 	return clamp(clampedDist, 0, 1);
 }
 
+vec3 tentacleMovement(float index, vec3 point, vec3 origin, float distToBase, float lightLengthWs, float time, vec3 directionNormalized, float speed /*= 0.5*/)
+{
+	point -= origin;
+	// [tdbe] the problem is not how much I bend here, but how much I bend here + the angle the flimsy mrp distribution light was already at before making it a tentacle.
+	// needs more research, but I'd rather use a different area light approach altogether. Or just give up for non-raytraced lights.
+	float how_much_I_can_get_away_with_it = 0.025 * min(4.0, lightLengthWs);
+    float amplitude = how_much_I_can_get_away_with_it * distToBase;
+    time = time * speed + index * 15;
+
+	vec3 dirUp = vec3(-0.15, 1.0, 0.15);
+	vec3 dirH = -cross(directionNormalized, dirUp);
+	
+	// [tdbe] up-down
+	float highFreqOctave = sin(time * 2.5);
+	float lowFreqOctave = sin(distToBase * 3.0 + time * 1.5);
+	point *= matrAxisAngleClockwiseX3(dirH, lowFreqOctave * highFreqOctave * amplitude);
+    
+	// [tdbe] left-right. This one needs to be the mirror of the vertex version of `tentacleMovement`
+    float highFreqOctave2 = cos(time * 2.25);
+    float lowFreqOctave2 = cos(distToBase * 3.0 + time * 1.25);
+    point *= matrAxisAngleClockwiseX3(dirUp, -lowFreqOctave2 * highFreqOctave2 * amplitude);
+
+	point += origin;
+    return point;
+}
