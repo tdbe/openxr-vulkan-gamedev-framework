@@ -1,54 +1,130 @@
 # TL;DR: 
-Ready to play performant open source XR with OpenXR / Vulkan / C++.
+Performant open-source OpenXR, Vulkan, C++. 
+A boilerplate / engine to quickly make an actual playable modern royalty-free XR game.
 
-\[[my github blog where you can also comment](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
+Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving khronos setup [openxr-vulkan-example](https://github.com/janhsimon/openxr-vulkan-example). 
 
-Demystifying Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving openxr-vulkan-example. 
+\[Note: [you can leave github comments over on my blog post version 😉](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
 
-A boilerplate / engine starter set. Actually just make an XR game quickly.
+<figure class="half">
+	<video playsinline="" muted="" controls="" autoplay="" loop="" class="" style="">
+		<source src="https://www.deferredreality.com/images/snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm" type="video/webm">
+		Your browser does not support the video tag.
+	</video>
+	<figcaption>Demo video, summer 2025.</figcaption>
+</figure>
 
-![Teaser2](teaser2.gif)
+There's also a [1600x1600 youtube version](https://www.youtube.com/user/thistudor/featured).
 
 # Abstract: 
-\*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but their impaired emotion and empathy makes them hard to understand by hu-mans. I've managed to translate their stack, for hu-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
+\*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but lack hoo-man compatibility. I've managed to translate their stack, for hoo-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
 
-(PS: it didn't help that OpenXR Single-Pass rendering (the performant & industry-standard linchpin of rendering) was like the only thing they [didn't want to cover](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9).)
+It didn't help that [they don't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of rendering).
+
+You can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
 
 ## To set up and build:
 - See [Build-ProjectSetup.Readme.md](blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/`
 
+## Controls:
+
+- [Controls.md](blob/main/Controls.md)
+
 # My feature stack so far:
 
+(sections ordered from high-level to low-level)
+
 ## XR Locomotion
-  - Mode: Rotating and accelerated Panning the scene by grabbing with both hands, and seeing a "tunnelvision style chaperone".
-  - Use state machines for movment and for visuals.
+  - Rotating and (accelerated) Panning of the scene by grabbing with both hands, retreating into a non-euclideanly warped pocket dimension (pushing the world away from you non-linearly) and seeing a "tunnelvision" portal-style chaperone. Highest effectiveness and lowest sickness (carefully tweaked and tested across dozens of different people).
+  - Uses state machines for movment and for visuals. Supports animated teleportation with targets.
 
 ## Base XR gameplay mechanics
-  - Mechanics system based on a list of `GameBehaviour`'s set up as FSMs.
+  - Mechanics system based on a list of `GameBehaviour`s set up as FSMs.
   - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and Destroyed.
-  - Sample mechanics for locomotion, hands, XR Input testing, world objects.
+  - Mechanics for locomotion, hands, XR Input testing, world objects.
+  - Any `GameComponent` has one or more `GameEntity` parents and manual or automatic cleanup (and preventing dangling components when all owners are freed). But there's no parenting between different game entities / objects, so manipulate groups of matrixes yourself. `TODO:` add a parenting system that processes the chain of Transform matrixes.
+
+## Physics
+  - There's support for running jobs on `Bounds` components (generated at model load time), with proper functions for AABB intersection or enclosure tests, plane tests, rectangular selection (even at non-Axis-Aligned angles) / frustum casting, raycasting.
+  - There's a concept of ground in the locomotion system.
+  - But `TODO:` no actual Physics library added.
+  
+## Animation
+  - \*crickets\* `TODO:` just add it via full/extended gltf support.
+  - `TODO:` find something open-source for: IK, gpu-skinning, and LoDs.
+  
+## Audio
+  - \*crickets\* `TODO:` add Audio component, and threaded spatial sound library with audio queueing.
+  
+## GUI
+  - \*crickets\* `TODO:` vector or sdf text, and just textures. Then use previously made ui code.
+  - `TODO:` main menu, in-game hands inventory
+  - (I'm certainly not implementing a scene-graph management system (game editor))
+  
+## Jobs / Threading
+  - The objects and memory is set up in a spanned ECS manner but `TODO:` no job system / threading example (there's only sequentially updated `GameBehaviour`s / state machines on the main thread).
+  - `TODO:` add a simple chunking concept, run jobs in parallel on chunks.
 
 ## GameData
-  - `GameObject`'s{`Material`, `Model`, Properties (e.g. `worldMatrix`, `isVisible`)}.
-  - `PlayerObject`'s{`GameObject`'s, `PlayerActiveStates`}.
-  - `Material`'s{`Shader`, Descriptor-set `UniformData`, optional/shared `Pipeline` (for e.g blend ops)}
+  - Everything is set in generic memory-span pools, by type. You set up a game world with maximum allocated memory for each pool, then during gameplay you can request to use a free object, or mark a used one as free and reusable. There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`).
+  - Enities and components are based on `GameDataId` (serving as a weak reference): `[globalUIDSeed][index][version]` and a top-level `[typeIndex]` for convenience.
+  - Everything is easy to request and keep track of through various means, even by name in hash maps for light scripting purposes. 
+  - Cleanup is either manual (and cache coherent) or automated via (cache-missing) awareness of component dependencies.
+  - `GameEntity` and `GameEntityObject` 
+  - `GameComponent`: `Material`, `Model`, `Transform`, `Bounds`, `Light`.
+  - Properties: `isVisible`, `isEnabled`, `name`, some events etc.
+  - `PlayerObject`s {`GameEntityObject`s, `PlayerActiveStates`}.
+  - `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
-  - Eplained and expanded Khronos' & Janhsimon's Headset & Context classes, and the Renderer/pipeline, the easily confusing & hard to customize khronos vulkan + openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
-  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add uniforms / new `shaders` etc.
-  - Render pipeline knows if you modified any default properties in materials and in that case creates unique mats/pipelines.
+  - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. 
+  - `TODO:` does not include clearcoat.
+  - `TODO:` does not include subsurface scattering,
+  - `TODO:` does not include shadows, 
+  - `TODO:` no per-pixel transparent object sorting,
+  - ^, ^^, ^^^: but, I'll someday add in raytracing into some form of nanite clumps or other semi-volumetric discrete mesh data, instead of going through the legacy shading/sorting timesinks again.
+  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add new `shaders` with all the static and dynamic uniform data you need, instance geometry etc.
+  - Render pipeline knows if you modified any default properties and creates pipelines from unique materials. Tries its best to batch per unique material and per model to minimise GPU-CPU communication, and has instancing, but it's not Indirect Rendering.
+  - Expanded, added to, and explained Khronos' & JanhSimon's `Headset`, `Context`, `Renderer`/`Pipeline` etc, and the easily misleading & hard to customize khronos vulkan <-> openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
 
-## `Input` class and `InputData`'s in `Inputspace`.
-  - A 'proper' universal xr input class, supporting (probably) all controllers/headsetss, with customizable binding paths and action sets.
-  - nicely accessible data through `InputData` and `InputHaptics`, including matrixes and other tracked XR positional data.
-  - poses for controllers and for head.
-  - actions (buttons, sticks, triggers, pressure, proximity etc).
-  - user presence / headset activity state.
-  - haptic feedback output.
-  - exposes action state data (e.g. lastChangeTime, isActive, changedSinceLastSync)
+## `Input` class and `InputData`.
+  - A 'proper' universal xr input class, supporting (probably) all controllers/headsets, with customizable binding paths and action sets.
+  - Nicely accessible data through `InputData` and `InputHaptics`, including matrixes and other tracked XR positional data.
+  - Poses for controllers and for head.
+  - Actions (buttons, sticks, triggers, pressure, proximity etc).
+  - User presence / headset activity state.
+  - Haptic feedback output.
+  - Exposes action state data (e.g. `lastChangeTime`, `isActive`, c`hangedSinceLastSync`)
 
 ## Utils
-  - Some Utils and math for XR, input, and extra gamedev stuff.
+  - Utils and math for XR, input, general gamedev.
+  - Debugging.
+  - `TODO:` Bring in gizmos, e.g. debug lines, wireframes for lights etc.
+
+
+## A typical run log:
+
+- Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](blob/main/TypicalRunLogSample.md) 
+
+# Additional Attributions
+
+| Asset | Title | Author | License |
+| --- | --- | --- | --- |
+| `models/SuzanneHighQuality20k.obj` | [Suzanne](https://github.com/alecjacobson/common-3d-test-models) | [Blender](https://en.wikipedia.org/wiki/List_of_common_3D_test_models) (but mesh smoothed and subdivided by [tdbe](https://github.com/tdbe/)) | [GNU GPL 2+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) |
+| `models/SudaBeam.obj` | [SudaBeam](https://duckduckgo.com/?q=beam+katana+suda+no+more+heroes&t=ffab&ia=images&iax=images) | [tdbe](https://github.com/tdbe/), a simplified version of Suda 51's parody of a light saber | [GNU GPL 3+](https://www.gnu.org/licenses/gpl-3.0.en.html) |
+| `models/Squid_Happy_Grumpy.obj` | Happy Grumpy Squid | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `models/ground_displaced_*.obj` | demo ground | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `models/icosphere_*.obj` | utility (ico)spheres | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `models/quad_*.obj` | utility quad | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `models/capsule_*.obj` | utility capsule | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `models/text_*.obj` | various texts | [tdbe](https://github.com/tdbe/) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+   ⠀
+
+
+-------------------------------
+
+   ⠀
 
 -------------------------------
 
@@ -75,14 +151,14 @@ Integrating both OpenXR and Vulkan yourself can be a daunting and painfully time
 2. Reference the code while writing your own implementation from scratch, to help you out if you are stuck with a problem, or simply for inspiration.
 
 
-# Running the OpenXR Vulkan Example
+# Running the OpenXR Vulkan Framework
 
 1. Download the latest [release](https://github.com/janhsimon/openxr-vulkan-example/releases) or build the project yourself with the steps below.
 2. Make sure your headset is connected to your computer.
 3. Run the program!
 
 
-# Building the OpenXR Vulkan Example
+# Building the OpenXR Vulkan Framework
 
 1. Install the [Vulkan SDK](https://vulkan.lunarg.com) version 1.3 or newer.
 2. Install [CMake](https://cmake.org/download) version 3.1 or newer.
