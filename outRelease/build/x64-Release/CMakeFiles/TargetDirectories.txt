@@ -1,0 +1,17 @@
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/boxer/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/boxer/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/glfw/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/glfw/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/glm/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/glm/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/openxr/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/openxr/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/tinyobjloader/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/external/tinyobjloader/CMakeFiles/rebuild_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/src/CMakeFiles/openxr-vulkan-framework.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/src/CMakeFiles/edit_cache.dir
+C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/src/CMakeFiles/rebuild_cache.dir

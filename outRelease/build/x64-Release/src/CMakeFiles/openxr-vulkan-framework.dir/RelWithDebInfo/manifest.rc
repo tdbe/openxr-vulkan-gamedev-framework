@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "C:/00-MC/00-Work/XR/tdbe-openxr-vulkan-example-framework/00-repos/tdbe-openxr-vulkan-example-extended/outRelease/build/x64-Release/src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/embed.manifest"

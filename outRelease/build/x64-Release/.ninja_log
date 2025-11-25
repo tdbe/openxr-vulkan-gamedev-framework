@@ -1,0 +1,26 @@
+# ninja log v5
+19	1323	7768000279679261	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/GameDataPool.cpp.obj	40c04e4f671b2b5a
+14	1386	7768000281113541	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameMechanics/GameBehaviour.cpp.obj	6537cd9f416eaac1
+18	1535	7768000282588554	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/Components/Light.cpp.obj	d705ee5cc4346217
+17	1657	7768000283986509	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/Components/GameComponent.cpp.obj	ec8c2d81bbc0fb46
+12	1716	7768000284201364	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameMechanics/InputTesterBehaviour.cpp.obj	40281ed6a503e7cb
+5	1722	7768000284516152	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/DataBuffer.cpp.obj	17d6727bc092e92b
+15	1725	7768000284648755	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/Entities/GameEntity.cpp.obj	ed913cef1704c349
+25	1776	7768000285516955	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/Pipeline.cpp.obj	f4ec29110a997e1c
+20	1787	7768000285149017	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/MeshData.cpp.obj	48c9f0b7904e282
+7	1818	7768000286162060	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/ImageBuffer.cpp.obj	d5a536f432151b3b
+21	1884	7768000286831725	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/Entities/GameEntityObject.cpp.obj	49172c150a99e3b6
+11	1899	7768000287001657	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameMechanics/HandsBehaviour.cpp.obj	7bc54994684d4667
+8	1903	7768000287025378	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/MirrorView.cpp.obj	84a8f5cc90cbb30e
+9	2259	7768000290581863	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameMechanics/WorldObjectsMiscBehaviour.cpp.obj	a5d524b2da049cad
+28	2372	7768000291716289	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/RenderProcess.cpp.obj	471dd31d9c055f85
+10	2384	7768000291837214	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameMechanics/LocomotionBehaviour.cpp.obj	45b0e8dc961bfbff
+6	2507	7768000293072537	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/Headset.cpp.obj	10134d4190978071
+4	2516	7768000293142917	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrInput/Input.cpp.obj	ba1f5d0b1a45ec92
+1330	2518	7768000293222931	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/RenderTarget.cpp.obj	44e3211bc40dd162
+3	2605	7768000294029184	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/Context.cpp.obj	a195ffc92f074ccd
+27	2640	7768000294418963	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/OpenXrAndVulkan/Renderer.cpp.obj	2ee50beb32ad7ba3
+1387	3069	7768000298712227	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/Utils/Util.cpp.obj	88486ced715035dc
+2	3848	7768000306470241	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/Main.cpp.obj	7e0f23089aa1e5e
+23	4211	7768000310081961	src/CMakeFiles/openxr-vulkan-framework.dir/RelWithDebInfo/GameData/GameData.cpp.obj	de2be88b55b617b4
+4211	6471	7768000312804301	src/RelWithDebInfo/openxr-vulkan-framework.exe	4f3507f174c1995
