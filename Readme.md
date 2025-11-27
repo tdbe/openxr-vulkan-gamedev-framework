@@ -6,22 +6,16 @@ Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gam
 
 \[Note: [you can leave github comments over on my blog post version 😉](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
 
-<figure class="half">
-	<video playsinline="" muted="" controls="" autoplay="" loop="" class="" style="">
-		<source src="https://www.deferredreality.com/images/snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm" type="video/webm">
-		Your browser does not support the video tag.
-	</video>
-	<figcaption>Demo video, summer 2025.</figcaption>
-</figure>
+[snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm](https://github.com/user-attachments/assets/55c64457-1fc2-48bf-80e3-1b6c703765b2)
 
-There's also a [1600x1600 youtube version](https://www.youtube.com/user/thistudor/featured).
+Demo video, summer 2025. (There's also a [1600x1600 youtube version](https://www.youtube.com/user/thistudor/featured).)
 
 # Abstract: 
 \*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but lack hoo-man compatibility. I've managed to translate their stack, for hoo-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
 
 It didn't help that [they don't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of rendering).
 
-You can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
+In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
 
 ## To set up and build:
 - See [Build-ProjectSetup.Readme.md](blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/`
@@ -151,14 +145,14 @@ Integrating both OpenXR and Vulkan yourself can be a daunting and painfully time
 2. Reference the code while writing your own implementation from scratch, to help you out if you are stuck with a problem, or simply for inspiration.
 
 
-# Running the OpenXR Vulkan Framework
+# Running the OpenXR Vulkan Example
 
 1. Download the latest [release](https://github.com/janhsimon/openxr-vulkan-example/releases) or build the project yourself with the steps below.
 2. Make sure your headset is connected to your computer.
 3. Run the program!
 
 
-# Building the OpenXR Vulkan Framework
+# Building the OpenXR Vulkan Example
 
 1. Install the [Vulkan SDK](https://vulkan.lunarg.com) version 1.3 or newer.
 2. Install [CMake](https://cmake.org/download) version 3.1 or newer.
