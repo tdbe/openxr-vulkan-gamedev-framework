@@ -6,7 +6,7 @@ Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gam
 
 \[Note: [you can leave github comments over on my blog post version 😉](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
 
-[snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm](https://github.com/user-attachments/assets/55c64457-1fc2-48bf-80e3-1b6c703765b2)
+[snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm](https://github.com/user-attachments/assets/410545fc-c14d-42bc-a6b8-046b0b7bae35)
 
 Demo video, summer 2025. (There's also a [hq 1600x1600/1440p youtube version](https://www.youtube.com/watch?v=0e41lgULUoA).)
 
