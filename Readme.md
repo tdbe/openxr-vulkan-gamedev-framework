@@ -30,7 +30,8 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 ## XR Locomotion
   - Rotating and (accelerated) Panning of the scene by grabbing with both hands, retreating into a non-euclideanly warped pocket dimension (pushing the world away from you non-linearly) and seeing a "tunnelvision" portal-style chaperone. Highest effectiveness and lowest sickness (carefully tweaked and tested across dozens of different people).
-  - Uses state machines for movment and for visuals. Supports animated teleportation with targets.
+  - Uses state machines for movement and for visuals. Supports animated teleportation with targets.
+![chaperone_demo_gif](https://github.com/user-attachments/assets/f5ef5e4b-5c8e-44c8-90fe-723dc2fd6602)
 
 ## Base XR gameplay mechanics
   - Mechanics system based on a list of `GameBehaviour`s set up as FSMs.
@@ -71,7 +72,8 @@ In any case, thanks to open-source you can now build something pretty good the r
   - `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
-  - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. 
+  - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. There's a [blog post on the tube lights](https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/):
+  ![mrp_volumetric_lights_gif](https://github.com/user-attachments/assets/2db52360-7aba-4801-b1b6-92affac455fd)
   - `TODO:` does not include clearcoat.
   - `TODO:` does not include subsurface scattering,
   - `TODO:` does not include shadows, 
