@@ -72,7 +72,7 @@ In any case, thanks to open-source you can now build something pretty good the r
   - `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
   
 ## Rendering
-  - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. There's a [blog post on the tube lights](https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/):
+  - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. There's a [blog post on correct tube lights](https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/):
   ![mrp_volumetric_lights_gif](https://github.com/user-attachments/assets/2db52360-7aba-4801-b1b6-92affac455fd)
   - `TODO:` does not include clearcoat.
   - `TODO:` does not include subsurface scattering,
