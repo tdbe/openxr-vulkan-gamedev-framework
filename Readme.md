@@ -8,7 +8,7 @@ Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gam
 
 [snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm](https://github.com/user-attachments/assets/55c64457-1fc2-48bf-80e3-1b6c703765b2)
 
-Demo video, summer 2025. (There's also a [1600x1600 youtube version](https://www.youtube.com/user/thistudor/featured).)
+Demo video, summer 2025. (There's also a [hq 1600x1600/1440p youtube version](https://www.youtube.com/watch?v=0e41lgULUoA).)
 
 # Abstract: 
 \*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but lack hoo-man compatibility. I've managed to translate their stack, for hoo-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
