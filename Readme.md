@@ -18,11 +18,11 @@ It didn't help that [they don't want to touch](https://community.khronos.org/t/w
 In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
 
 ## To set up and build:
-- See [Build-ProjectSetup.Readme.md](blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/`
+- See [Build-ProjectSetup.Readme.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/` (or the github Release).
 
 ## Controls:
 
-- [Controls.md](blob/main/Controls.md)
+- [Controls.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Controls.md)
 
 # My feature stack so far:
 
@@ -100,7 +100,7 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 ## A typical run log:
 
-- Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](blob/main/TypicalRunLogSample.md) 
+- Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/TypicalRunLogSample.md) 
 
 # Additional Attributions
 
