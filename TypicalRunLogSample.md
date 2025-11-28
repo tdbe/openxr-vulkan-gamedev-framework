@@ -1,5 +1,5 @@
-<details>
-<summary>What a typical run log looks like. Game world load, setup, updates & render loops, unload and exit.</summary>
+What a typical run log looks like. Game world load, setup, updates & render loops, unload and exit.
+```
 ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Support\oculus-runtime\RuntimeIPCServiceClient_64.dll
 [Game][GameData][Singleton]      All data pools are here. instanceId: "GameData_{ 0 }".
 [Game][GameData][LoadGameWorld]  .........................................................................................................................
@@ -1176,4 +1176,4 @@ ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Su
 [GameDataPool][Destructed<LIGHT_COMPONENTS>] and all its heap items.
 
 [Game][Main][EXIT_SUCCESS]       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-</details>
+```
