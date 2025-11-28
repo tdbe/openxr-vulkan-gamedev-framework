@@ -90,7 +90,7 @@ In any case, thanks to open-source you can now build something pretty good the r
   - Actions (buttons, sticks, triggers, pressure, proximity etc).
   - User presence / headset activity state.
   - Haptic feedback output.
-  - Exposes action state data (e.g. `lastChangeTime`, `isActive`, c`hangedSinceLastSync`)
+  - Exposes action state data (e.g. `lastChangeTime`, `isActive`, `changedSinceLastSync`)
 
 ## Utils
   - Utils and math for XR, input, general gamedev.
