@@ -407,6 +407,7 @@ void MRPointOnTubeLight(vec3 lightStartWS, vec3 centerAndRadiusWS, vec3 lightEnd
 
 	// ---
 
+	// [tdbe] (these are not const because of the animation trick I do further down)
 	/*const*/ float r_Dot_fpWsL0Ws = dot(normalReflectedView, fpWsL0Ws);
     /*const*/ float r_Dot_ldWS = dot(normalReflectedView, ldWS);
     /*const*/ float fpWsL0Ws_Dot_ldWS = dot(fpWsL0Ws, ldWS);
@@ -500,7 +501,7 @@ void MRPointOnTubeLight(vec3 lightStartWS, vec3 centerAndRadiusWS, vec3 lightEnd
 								- dot(litend0WS, ldWS) * refl_sqrMag;
 		const float tspec_den = (ldWS_sqrMag * refl_sqrMag - r_Dot_ldWS * r_Dot_ldWS);
 	}*/
-	// Note: The triangle math in this lighting method is optimized by corresponding dot products.
+	// [tdbe] Note: The triangle math in this lighting method is optimized by corresponding dot products.
 	// So be careful if something needs normalized or unnormalized vectors in the dots.
 	// [tdbe] optimized if normalReflectedView vector is normalized:
 	/*const*/ float tspec_num = (r_Dot_fpWsL0Ws * r_Dot_ldWS - fpWsL0Ws_Dot_ldWS);
@@ -513,8 +514,8 @@ void MRPointOnTubeLight(vec3 lightStartWS, vec3 centerAndRadiusWS, vec3 lightEnd
 	// [tdbe] instead of the ^above line:
 	// [tdbe] I patch 3 dealbreaking errors that nobody's implementations addresses.
 	// (Everyone just hides it by cherrypicking value & angle ranges. Can be independently observed by tweaking the roughness/intensity/positions settings of every single shadertoy/blog/github on this method to date (2025)).
-	// The tspec term causes a hard cutoff at the ends of the line/segment, and introduces 3 problems:
-	// Fix 1: deadeye: an "empty center hole" artifact when the reflected view dir is facing (almost) the same direction as the line light's dir (duh there's no line to pick a point on anymore).
+	// The tspec term causes a hard cutoff at the ends of the line/segment, and we can't pick points when the line is dead-on facing the reflection. Introduces 3 problems:
+	// Fix 1: deadeye: an "empty center hole" artifact when the reflected view dir is facing (almost) the same direction as the line light's dir.
 	// Fix 2: sharp end: at >45 degree angles there's a sharp "cylindrical edge" artifact in the reflection on the side of the line light that's furthest away from the fragment point (which should be the blurriest side not the sharpest!).
 	// Fix 3: horizon skew: when the reflected line is ~parallel to the surface (ground), and the light is big/long and far away, the reflection's end of the line that's closest to you, appears to have a downward sharp slope at the very end. And the opposite end gets a upward sharp end.
 	// ..I should have tried the frostbyte quad tube version lol nobody admitted how shit all the MRP techniques are.

@@ -1,6 +1,6 @@
 # TL;DR: 
-Performant open-source OpenXR, Vulkan, C++. 
-A boilerplate / engine to quickly make an actual playable modern royalty-free XR game.
+Performant open-source OpenXR, Vulkan, ECS, C++. 
+A boilerplate -> framework -> mini "game engine" to quickly make an actual playable modern royalty-free XR game.
 
 Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving khronos setup [openxr-vulkan-example](https://github.com/janhsimon/openxr-vulkan-example). 
 
