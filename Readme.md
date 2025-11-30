@@ -17,8 +17,10 @@ It didn't help that [they don't want to touch](https://community.khronos.org/t/w
 
 In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
 
-## To set up and build:
+## Builds:
 - See [Build-ProjectSetup.Readme.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/` (or the github Release).
+
+- "Recommended Specs and Minimum Requirements": The scene runs on a RTX 4070 mobile at 90FPS (the refresh rate of the headset) with 8 (animated) tube lights and 2 directional lights, and a lot of transparent objects overdraw. It also runs on a RTX 2060 mobile with a bit of lag spikes if you have too much overdraw right on your face.
 
 ## Controls:
 
