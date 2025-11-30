@@ -320,7 +320,7 @@ vec3 calcBRDF(
 // https://hal.science/hal-02155101/document,
 // https://www.realtimerendering.com/intersections.html -- neat collection of intersections math
 // -------------
-// TL;DR overview of current method (line/tube light): 
+// TL;DR overview of current method (line/tube light): https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/
 // - Get the line between light ends. 
 // - Check for horizon (surface) intersection and move submerged light end point to the surface. 
 // - If the light('s reflection) is pointing dead-on the same as the surface normal, then there is no line to calculate on, so we substitute it with the closest light end to the surface. 
