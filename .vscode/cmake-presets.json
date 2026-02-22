@@ -1,0 +1,37 @@
+{
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "msvc-x64",
+      "displayName": "MSVC x64 (Debug/Release)",
+      "description": "MSVC toolchain for x64 (Visual Studio 2022)",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build/msvc-x64",
+	  "tdbe_COMMENT_to_delete": "If you don't change the binary dir like this, you'll likely get a bs generated output path that is too long (even though your OS does not have path limits(?)) or a path that has illegal spaces or characters, like this: ${sourceDir}\build\Visual Studio Community 2022 Release - amd64\Debug\CMakeFiles\CMakeScratch\TryCompile-g6orow\cmTC_cbd8d.dir\Debug\cmTC_cbd8d.tlog\link-cvtres.write.1.tlog. These [ominous they] don't bother to sanitize or warn about names and paths, and pass the responsibility buck around, and it results in super misleading and buried compilation-failed errors that are a useless trolling-level time sink.",
+	  "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/msvc-x64/vcpkg-scripts/vcpkg.cmake"
+      },
+	  "environment": {
+        "PATH": "$penv{PATH}"
+      },
+	  "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostArchitecture": "x64"
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "msvc-x64-Debug",
+      "configurePreset": "msvc-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "msvc-x64-Release",
+      "configurePreset": "msvc-x64",
+      "configuration": "Release"
+    }
+  ]
+}

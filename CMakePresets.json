@@ -1,0 +1,36 @@
+{
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "msvc-x64",
+      "displayName": "MSVC x64 (Debug/Release)",
+      "description": "MSVC toolchain for x64 (Visual Studio 2022)",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build/msvc-x64",
+	  "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/msvc-x64/vcpkg-scripts/vcpkg.cmake"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostArchitecture": "x64"
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "msvc-x64-Debug",
+      "configurePreset": "msvc-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "msvc-x64-Release",
+      "configurePreset": "msvc-x64",
+      "configuration": "Release"
+    }
+  ]
+}
