@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../../Utils/Util.h"
 #include "Light.h"
 #include "Transform.h"
@@ -14,7 +14,7 @@ GameEntity* Light::GetOwner() const
 {
     std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
     GameEntity* found = nullptr;
-    for (int i = 0; i < ownerIDs.size(); i++)
+    for (size_t i = 0; i < ownerIDs.size(); i++)
     {
         found = GameData::Instance().GetEntity(ownerIDs[i]);
         break;
@@ -50,7 +50,7 @@ glm::mat4 Light::GetWorldMatrix()
 
 void Light::SetRenderProperties(int lightType)
 {
-    this->lightType = lightType;
+    this->lightType = (float)lightType;
     SetShaderProperties();
 }
 
@@ -75,7 +75,7 @@ void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultipl
 
 void Light::SetRenderProperties(glm::vec4 colorAndIntensity, int lightType)
 {
-    this->lightType = lightType;
+    this->lightType = (float)lightType;
     this->colorAndIntensity = colorAndIntensity;
     SetShaderProperties();
 }
@@ -83,7 +83,7 @@ void Light::SetRenderProperties(glm::vec4 colorAndIntensity, int lightType)
 void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier, int lightType)
 {
     this->radiusMultiplier = radiusMultiplier;
-    this->lightType = lightType;
+    this->lightType = (float)lightType;
     this->colorAndIntensity = colorAndIntensity;
     SetShaderProperties();
 }
@@ -91,7 +91,7 @@ void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultipl
 void Light::SetRenderProperties(float radiusMultiplier, int lightType)
 {
     this->radiusMultiplier = radiusMultiplier;
-    this->lightType = lightType;
+    this->lightType = (float)lightType;
     SetShaderProperties();
 }
 

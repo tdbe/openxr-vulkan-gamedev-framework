@@ -20,7 +20,7 @@ namespace Game
             // must inherit from GameComponent");
             auto target = std::type_index(typeid(T));
             std::vector<GameDataId::ID> foundVec = std::vector<GameDataId::ID>();
-            for (int i = 0; i < components.size(); i++)
+            for (size_t i = 0; i < components.size(); i++)
             {
                 if (components[i].IsCleared())
                     continue;
@@ -40,7 +40,7 @@ namespace Game
         {
             std::vector<GameDataId::ID> ids = GetComponentIDsByTypeIndex<T>();
             T* found = nullptr;
-            for (int i = 0; i < ids.size(); i++)
+            for (size_t i = 0; i < ids.size(); i++)
             {
                 found = static_cast<T*>(GameData::Instance().GetComponent(ids[i]));
                 break;
@@ -52,7 +52,7 @@ namespace Game
         {
             std::vector<GameDataId::ID> ids = GetComponentIDsByTypeIndex<T>();
             std::vector<T*> foundVec = std::vector<T*>();
-            for (int i = 0; i < ids.size(); i++)
+            for (size_t i = 0; i < ids.size(); i++)
             {
                 auto comp = static_cast<T*>(GameData::Instance().GetComponent(ids[i]));
                 foundVec.emplace_back(comp);

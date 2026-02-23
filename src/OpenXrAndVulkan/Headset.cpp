@@ -18,7 +18,7 @@ Headset::Headset(const Context* context) : context(context)
 {
   const VkDevice device = context->getVkDevice();
   const VkSampleCountFlagBits multisampleCount = context->getMultisampleCount();
-  xrReferenceSpacePose = util::makeIdentity();
+  xrReferenceSpacePose = util::makeXrIdentity();
 
   // Create a render pass
   {
@@ -580,7 +580,7 @@ Headset::BeginFrameResult Headset::beginFrame(uint32_t& swapchainImageIndex)
 
     // Update the view and projection Matrixes
     const XrPosef& pose = eyeRenderInfo.pose;
-    eyeViewMatrixes.at(eyeIndex) = glm::inverse(util::poseToMatrix(pose));
+    eyeViewMatrixes.at(eyeIndex) = glm::inverse(util::xrPoseToMatrix(pose));
     eyeProjectionMatrixes.at(eyeIndex) =
         util::createProjectionMatrix(eyeRenderInfo.fov, Renderer::NEAR_CLIP_PLANE, Renderer::FAR_CLIP_PLANE);
   }
@@ -716,7 +716,7 @@ XrPosef Headset::getXrReferenceSpacePose() const
 /// add.</param>
 void Headset::setXrReferenceSpacePose(glm::mat4 newWorldPoseMatrix)
 {
-  xrReferenceSpacePose = util::matrixToPose(newWorldPoseMatrix);
+  xrReferenceSpacePose = util::matrixToXrPose(newWorldPoseMatrix);
   reCreateReferenceSpaces();
 }
 

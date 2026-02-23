@@ -1,4 +1,4 @@
-#pragma once
+
 #include <boxer/boxer.h>
 #include <cstring>
 #include <fstream>
@@ -374,7 +374,8 @@ bool util::createAction(XrActionSet actionSet,
   return true;
 }
 
-XrPosef util::makeIdentity()
+
+XrPosef util::makeXrIdentity()
 {
   XrPosef identity;
   identity.position = { 0.0f, 0.0f, 0.0f };
@@ -382,7 +383,16 @@ XrPosef util::makeIdentity()
   return identity;
 }
 
-XrPosef util::matrixToPose(const glm::mat4 matrix)
+util::Posef util::makeIdentity()
+{
+  util::Posef identity;
+  identity.position = { 0.0f, 0.0f, 0.0f };
+  identity.scale = { 1.0f, 1.0f, 1.0f };
+  identity.orientation = { 0.0f, 0.0f, 0.0f, 1.0f };
+  return identity;
+}
+
+XrPosef util::matrixToXrPose(const glm::mat4 matrix)
 {
   XrPosef pose = {};
   pose.position = XrVector3f{ matrix[3].x, matrix[3].y, matrix[3].z };
@@ -392,7 +402,20 @@ XrPosef util::matrixToPose(const glm::mat4 matrix)
   return pose;
 }
 
-glm::mat4 util::poseToMatrix(const XrPosef& pose)
+util::Posef util::matrixToPose(const glm::mat4& matrix)
+{
+  util::Posef pose = {};
+  pose.position = glm::vec3{ matrix[3].x, matrix[3].y, matrix[3].z };
+  pose.scale = glm::vec3{
+                          glm::length(glm::vec3{ matrix[0].x, matrix[0].y, matrix[0].z }),
+                          glm::length(glm::vec3{ matrix[1].x, matrix[1].y, matrix[1].z }),
+                          glm::length(glm::vec3{ matrix[2].x, matrix[2].y, matrix[2].z })
+  };
+  pose.orientation = glm::toQuat(matrix);
+  return pose;
+}
+
+glm::mat4 util::xrPoseToMatrix(const XrPosef& pose)
 {
   const glm::mat4 translation =
     glm::translate(glm::mat4(1.0f), glm::vec3(pose.position.x, pose.position.y, pose.position.z));
@@ -403,19 +426,31 @@ glm::mat4 util::poseToMatrix(const XrPosef& pose)
   return translation * rotation;
 }
 
-glm::mat4 util::poseToMatrix(const util::posef& pose)
+glm::mat4 util::poseToMatrix(const util::Posef& pose)
 {
   const glm::mat4 translation =
     glm::translate(glm::mat4(1.0f), glm::vec3(pose.position.x, pose.position.y, pose.position.z));
 
-  const glm::mat4 rotation =
+  glm::mat4 rotation =
     glm::toMat4(glm::quat(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z));
 
+  rotation[0].x *= pose.scale.x;
+  rotation[0].y *= pose.scale.x;
+  rotation[0].z *= pose.scale.x;
+  
+  rotation[1].x *= pose.scale.y;
+  rotation[1].y *= pose.scale.y;
+  rotation[1].z *= pose.scale.y;
+  
+  rotation[2].x *= pose.scale.z;
+  rotation[2].y *= pose.scale.z;
+  rotation[2].z *= pose.scale.z;
+  
   return translation * rotation;
 }
 
-util::posef util::xrPosefToGlmPosef(const XrPosef& xrPosef){
-  util::posef pose = {
+util::Posef util::xrPosefToGlmPosef(const XrPosef& xrPosef){
+  util::Posef pose = {
     .orientation = util::xrQuaternionfToGlmQuat(xrPosef.orientation), 
     .position = util::xrVector3fToGlmVec3(xrPosef.position)
   };

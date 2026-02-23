@@ -1,4 +1,4 @@
-#pragma once
+
 #include "GameDataPool.h"
 
 //#include "Entities/GameEntity.h"

@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../../Utils/Util.h"
 #include "GameEntityObject.h"
 #include "../GameData.h"
@@ -9,13 +9,11 @@ std::unordered_map<std::string, GameEntityObject::EventType> GameEntityObject::O
 std::unordered_map<std::string, GameEntityObject::EventType> GameEntityObject::OnGameEntityObjectRemovedHandlers;
 
 GameEntityObject::GameEntityObject(GameDataId::ID id,
-                                   bool isVisible,
                                    std::string name,
                                    void (*runExtensions)(GameEntityObject* owner))
 : GameEntity(id)
 {
     this->name = name;
-    isVisible = isVisible;
 
     if (runExtensions != nullptr)
     {

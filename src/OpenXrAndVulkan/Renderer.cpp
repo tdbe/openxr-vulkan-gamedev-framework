@@ -1,4 +1,4 @@
-#pragma once
+
 #include <array>
 #include <stdio.h>
 
@@ -223,7 +223,7 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
     "shaders/Diffuse.frag.spv", { vertexInputBindingDescription }, { vertexInputAttributePosition,
     vertexInputAttributeColor }, pipelineMaterialPayload);
     */
-    for (int i = 0; i < materials->Size(); i++)
+    for (size_t i = 0; i < materials->Size(); i++)
     {
         Material* mat = materials->items[i];
         if (mat->id.IsCleared())

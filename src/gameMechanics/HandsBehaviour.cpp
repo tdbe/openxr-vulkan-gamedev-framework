@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../Utils/Util.h"
 #include "HandsBehaviour.h"
 #include "../GameData/Components/Transform.h"
@@ -34,9 +34,9 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
                             Inputspace::InputHaptics &inputHaptics)
 {
     Transform* worldRootTrans = GameData::Instance().gameEntityObjects->GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<Transform>();
-    GameEntityObject* handLeftGeo = GameData::Instance().gameVFXObjects->GetItem(playerObject.handLeftId);
+    GameEntityObject* handLeftGeo = GameData::Instance().gameVFXEntityObjects->GetItem(playerObject.handLeftId);
     Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();
-    GameEntityObject* handRightGeo = GameData::Instance().gameVFXObjects->GetItem(playerObject.handRightId);
+    GameEntityObject* handRightGeo = GameData::Instance().gameVFXEntityObjects->GetItem(playerObject.handRightId);
     Transform* handRightTrans = handRightGeo->GetComponentByTypeIndex<Transform>();
     glm::mat4 worldMatrix = worldRootTrans->GetWorldMatrix();
     glm::mat4 handLeftMatr = worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];

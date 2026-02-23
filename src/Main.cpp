@@ -1,4 +1,3 @@
-#pragma once
 // [tdbe] instead of using #define DEBUG, uncomment this line in CMakeLists.txt: #target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>) # Add a clean DEBUG prepocessor define if applicable
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,8 +27,8 @@ using namespace Scripting;
 
 /// <summary>
 /// [tdbe] Hello intrepid heroes! This repo will be heavily (& redundantly) commented, as if it's a blog post.
-/// Purpose of project is to be performant, useful, with wisdom & good programmer ux; do gamedev The Right Way �. 
-/// But it's also 0 budget and you got it for free on the internet so expect a bit of shortcuts, WIP, and no warranty.
+/// Purpose of the project is to be performant, useful, with wisdom and good programmer ux; do gamedev The Right Way™️.
+/// But it's also 1-person-no-budget, and you got it for free on the internet, so expect a bit of shortcuts, WIP, and no warranty.
 /// Cutting edge poor-man's "game engine": ECS, PBR, single pass, OpenXR.
 /// </summary>
 int main()
@@ -40,7 +39,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    // [tdbe] I recommend to not use fullscreen. I made the windowed mode size the same as the headset's eye texture.
+    // [tdbe] I recommend to not use fullscreen/scaling because I made the windowed mode default to the unscaled size of the headset's eye texture.
     // (as long as it's not larger than the monitor, if it is larger, it will scale but preserve aspect ratio).
     // Fullscreen mode will crop the and also scale the eye texture.
     bool fullscreen = false; 
@@ -100,7 +99,7 @@ int main()
     // [tdbe] the aim should always be to set up gpu bufferas once, with the max number of items you'll use in this game world,
     // the same idea as with the <see cref="GameDataPool"/>. (It doesn't cost gpu power to just have it there.)
     renderer.SetUpRenderProcesses(gameData.meshData, gameData.materialComponents, gameData.gameEntityObjects,
-                                   gameData.gameVFXObjects, gameData.lightComponents);
+                                   gameData.gameVFXEntityObjects, gameData.lightComponents);
     if (!renderer.IsValid())
     {
         return EXIT_FAILURE;
@@ -208,7 +207,7 @@ int main()
                             gameData.playerObjects[0]->IsPlayerInState(PlayerStates::ChaperoneState),
                             gameData.materialComponents, 
                             gameData.gameEntityObjects,
-                            gameData.gameVFXObjects, 
+                            gameData.gameVFXEntityObjects, 
                             gameData.lightComponents);
 
             const MirrorView::RenderResult mirrorResult = mirrorView.Render(swapchainImageIndex);

@@ -1,4 +1,4 @@
-#pragma once
+
 #include "LocomotionBehaviour.h"
 #include "../Utils/Util.h"
 #include "../GameData/Entities/GameEntityObject.h"
@@ -37,20 +37,20 @@ LocomotionBehaviour::LocomotionBehaviour(PlayerObject& playerObject,
     this->chaperoneSkyboxId = chaperoneSkyboxId;
     this->handsMaterialId = handsMaterialId;
 
-    Material* floorGridMat = GameData::Instance().gameVFXObjects->GetItem(floorGridId)
+    Material* floorGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* ceilingGridMat = GameData::Instance().gameVFXObjects->GetItem(ceilingGridId)
+    Material* ceilingGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
     Material* handsMat = GameData::Instance().materialComponents->GetItem(handsMaterialId);
     
     Material* chaperoneSkyMat =
         GameData::Instance()
-            .gameVFXObjects->GetItem(chaperoneSkyboxId)
+            .gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
 
-    Transform* floorGridTrans = GameData::Instance().gameVFXObjects->GetItem(floorGridId)
+    Transform* floorGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Transform>();
-    Transform* skyTrans = GameData::Instance().gameVFXObjects->GetItem(chaperoneSkyboxId)
+    Transform* skyTrans = GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
         ->GetComponentByTypeIndex<Transform>();
 
     origFloorGridMatr = floorGridTrans->GetWorldMatrix();
@@ -78,13 +78,13 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
         return;
     }
 
-    Material* floorGridMat = GameData::Instance().gameVFXObjects->GetItem(floorGridId)
+    Material* floorGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* ceilingGridMat = GameData::Instance().gameVFXObjects->GetItem(ceilingGridId)
+    Material* ceilingGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
     Material* handsMat = GameData::Instance().materialComponents->GetItem(handsMaterialId);
 
-    Material* chaperoneSkyMat = GameData::Instance().gameVFXObjects->GetItem(chaperoneSkyboxId)
+    Material* chaperoneSkyMat = GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
 
     Transform* worldRootTrans = GameData::Instance().gameEntityObjects->GetItem(playerObject.worldRootId)
@@ -93,13 +93,13 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
     GameEntityObject* handRightGeo = GameData::Instance().gameEntityObjects->GetItem(playerObject.handRightId);
     Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();
     Transform* handRightTrans = handRightGeo->GetComponentByTypeIndex<Transform>();
-    Transform* floorGridTrans = GameData::Instance().gameVFXObjects->GetItem(floorGridId)
+    Transform* floorGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Transform>();
-    Transform* ceilingGridTrans = GameData::Instance().gameVFXObjects->GetItem(ceilingGridId)
+    Transform* ceilingGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Transform>();
 
     Transform* chaperoneSkyTrans =
-        GameData::Instance().gameVFXObjects->GetItem(chaperoneSkyboxId)->GetComponentByTypeIndex<Transform>();
+        GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)->GetComponentByTypeIndex<Transform>();
     
     const float chaperoneRingRadius =
         0.39f; // [tdbe] distance along the radius of the screen at which to draw a boundary (a circle)

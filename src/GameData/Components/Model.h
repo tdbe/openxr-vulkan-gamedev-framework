@@ -25,7 +25,8 @@ namespace Game
         std::vector<GameEntity*> GetOwners() const
         {
             std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
-            std::vector<GameEntity*> foundVec = std::vector<GameEntity*>();
+            std::vector<GameEntity*> foundVec;
+            foundVec.reserve(ownerIDs.size());
             for (GameDataId::ID entId : ownerIDs)
             {
                 auto comp = GameData::Instance().GetEntity(entId);

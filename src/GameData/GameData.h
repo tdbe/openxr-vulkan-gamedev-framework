@@ -119,7 +119,7 @@ namespace Game
         /// [tdbe] entities with ids and versions ((weak) "references"); and know their components. 
         /// plus other little conveniences like events and .name.
         GameDataPool<GameEntityObject>* gameEntityObjects = nullptr;
-        GameDataPool<GameEntityObject>* gameVFXObjects = nullptr;
+        GameDataPool<GameEntityObject>* gameVFXEntityObjects = nullptr;
 
         /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameEntity* GetEntity(GameDataId::ID id);
@@ -146,8 +146,8 @@ namespace Game
 #pragma endregion Scripting
 
         bool LoadGameWorld();
-        /// [tdbe] Run on all the buffers (contiguously if <param name="fast"/> is true (`false` is to test as if you deleted specific individual objects)),
-        /// marking them as clear, and also deleting the pools, as if you're planning to quit or start from scratch.
+        /// [tdbe] Run on all the buffers marking them as clear
+        /// (contiguously if <param name="fast"/> is true (but then it doesn't detatch owners/children/components))
         bool UnLoadGameWorld(bool fast = true);
 
         static GameData& Instance()
@@ -167,6 +167,10 @@ namespace Game
         bool LoadGameLights();
         bool LoadGameEntityObjects();
         bool LoadPlayers();
+        
+        void DeletePlayers();
+        void DeleteEntityPools();
+        void DeleteComponentPools();
 
 #pragma region Events
         /// [tdbe] (There's a nice multi-subscribe Visual C++ event system, with __hook, __unhook, __event, __raise, keywords etc., but only compilable from visual studio. So instead we emulate it in peasant land :))

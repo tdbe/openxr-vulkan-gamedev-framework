@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../../Utils/Util.h"
 #include "GameEntity.h"
 #include "../GameData.h"
@@ -54,7 +54,7 @@ void GameEntity::ClearComponentId(GameDataId::ID component)
 
 void GameEntity::ClearComponentIDs()
 {
-    for (GameDataId::ID component : components)
+    for (GameDataId::ID& component : components)
     {
         component.Clear();
     }

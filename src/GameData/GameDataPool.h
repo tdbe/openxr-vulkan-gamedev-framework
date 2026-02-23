@@ -12,7 +12,7 @@ namespace Game
     /// <summary>
     /// [tdbe] This is a contiguous (but fragmentable (mark items as reusable)) heap array (vector) pool of entity style objects,
     /// allocated once, with the <see cref="maxPossibleSize"/>, and never resized.
-    /// It has best™ average-case performance, cache-coherency, no deletions, no garbage, and great UX via detailed ID handles.
+    /// It has bestï¿½ average-case performance, cache-coherency, no deletions, no garbage, and great UX via detailed ID handles.
     /// Ted talk inside.
     /// </summary>
     /// <typeparam name="T"> "where T : derived from GameDataId" </typeparam>
@@ -153,7 +153,7 @@ namespace Game
         /// [tdbe] Marks the pool items as empty without clearing memory, and update <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
         /// We also notify each item to reset its members. 
         /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
-        /// (But if you set <param name="unsafe"/> to false, it won't clear anything cross-buffer, e.g. won't access its components or owners.)
+        /// (But if you set <param name="unsafe"/> to true, it won't clear any slow cross-buffer stuff, e.g. won't update its components or owners.)
         void ClearItems(bool alsoDestroy = false, bool unsafe = false, bool clearDataLoadedFromStorage = false)
         {
             if (items.empty()) return;
@@ -209,7 +209,7 @@ namespace Game
             this->currentVersion = GameDataId::FREE;
             // [tdbe] Construct the whole span. That's what we want for best-average-case gamedev/memory.
             items.resize(maxPossibleSize, nullptr);
-            for (int i = 0; i < items.size(); i++)
+            for (int32_t i = 0; i < items.size(); i++)
             {
                 items[i] = new T();
                 GameDataId* gid = static_cast<GameDataId*>(items[i]);
@@ -228,7 +228,7 @@ namespace Game
         ~GameDataPool()
         {
             // (clears the allocated heap memory)
-            for (int i = 0; i < items.size(); i++)
+            for (int32_t i = 0; i < items.size(); i++)
             {
                 if (items[i] != nullptr)
                 {

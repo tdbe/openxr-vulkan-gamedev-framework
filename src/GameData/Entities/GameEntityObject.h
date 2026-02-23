@@ -43,7 +43,6 @@ namespace Game
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember you can add components.
         GameEntityObject(GameDataId::ID id = {},
-                         bool isVisible = true,
                          std::string name = "game object",
                          void (*runExtensions)(GameEntityObject* owner) = nullptr);
         ~GameEntityObject();

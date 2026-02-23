@@ -1,4 +1,4 @@
-#pragma once
+
 #include "Pipeline.h"
 
 Pipeline::Pipeline(const Context* context,

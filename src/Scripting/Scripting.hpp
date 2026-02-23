@@ -471,18 +471,18 @@ namespace Scripting
                                         { 0.75f, 0.75f, 0.75f }));
         
         // -------- [tdbe] set any non-default game VFX object props here.
-        gameData.gameVFXObjects->GetItem(gameData.namedVFXObjectIDs["icosphereSkybox"])
+        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["icosphereSkybox"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
                                         { 500.12f, 500.12f, 500.12f }));
 
         util::DebugLog("~~~~[Scripting] setting floorGrid. ");
-        gameData.gameVFXObjects->GetItem(gameData.namedVFXObjectIDs["floorGrid"])
+        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["floorGrid"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
         util::DebugLog("~~~~[Scripting] setting ceilingGrid. ");
-        gameData.gameVFXObjects->GetItem(gameData.namedVFXObjectIDs["ceilingGrid"])
+        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["ceilingGrid"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
 #pragma endregion GameObjects

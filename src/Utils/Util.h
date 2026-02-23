@@ -38,10 +38,11 @@ namespace util
 {
     static constexpr float PI = 3.1415926f;
 
-    typedef struct posef {
-        glm::quat orientation;
-        glm::vec3 position;
-    } posef;
+    typedef struct Posef {
+        glm::quat orientation = { 0.0f, 0.0f, 0.0f, 1.0f };
+        glm::vec3 position { 0.0f, 0.0f, 0.0f };
+        glm::vec3 scale = {1.0f, 1.0f, 1.0f};
+    } Posef;
 
     struct Plane
     {
@@ -160,17 +161,21 @@ namespace util
                       XrAction& action);
 
     /// Creates an OpenXR identity pose
-    XrPosef makeIdentity();
+    XrPosef makeXrIdentity();
+    
+    util::Posef makeIdentity();
 
     /// Converts a transformation matrix to an OpenXR pose
-    XrPosef matrixToPose(const glm::mat4 matrix);
+    XrPosef matrixToXrPose(const glm::mat4 matrix);
+
+    util::Posef matrixToPose(const glm::mat4& matrix);
 
     /// Converts an OpenXR pose to a transformation matrix
-    glm::mat4 poseToMatrix(const XrPosef& pose);
+    glm::mat4 xrPoseToMatrix(const XrPosef& pose);
 
-    glm::mat4 poseToMatrix(const util::posef& pose);
+    glm::mat4 poseToMatrix(const util::Posef& pose);
 
-    util::posef xrPosefToGlmPosef(const XrPosef& xrPosef);
+    util::Posef xrPosefToGlmPosef(const XrPosef& xrPosef);
 
     /// Creates an OpenXR projection matrix
     glm::mat4 createProjectionMatrix(XrFovf fov, float nearClip, float farClip);

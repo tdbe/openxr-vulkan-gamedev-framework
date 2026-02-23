@@ -27,13 +27,13 @@ namespace Inputspace{
       public: 
         // [tdbe] Poses
         std::vector<glm::mat4> eyePoseMatrixes; //(int)SideEnum::COUNT
-        std::vector<util::posef> eyePoses;      //(int)SideEnum::COUNT
+        std::vector<util::Posef> eyePoses;      //(int)SideEnum::COUNT
         glm::mat4 headPoseMatrix;
-        util::posef headPose;
+        util::Posef headPose;
         std::vector<glm::mat4> controllerAimPoseMatrixes; //(int)ControllerEnum::COUNT
-        std::vector<util::posef> controllerAimPoses;
+        std::vector<util::Posef> controllerAimPoses;
         std::vector<glm::mat4> controllerGripPoseMatrixes;
-        std::vector<util::posef> controllerGripPoses;
+        std::vector<util::Posef> controllerGripPoses;
 
         // [tdbe] Input States. Also includes lastChangeTime, isActive, changedSinceLastSync properties.
         std::vector<XrActionStateFloat> grabState{ XR_TYPE_ACTION_STATE_FLOAT };

@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../Utils/Util.h"
 #include "../GameData/Entities/GameEntityObject.h"
 #include "../GameData/Components/Material.h"

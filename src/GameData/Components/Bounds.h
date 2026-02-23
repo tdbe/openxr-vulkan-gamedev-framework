@@ -20,7 +20,7 @@ struct Bounds final : public GameComponent
         glm::vec3 min;
         glm::vec3 max;
 
-        std::array<glm::vec3,8> GetAlCorners()
+        std::array<glm::vec3,8> GetAllCorners() const
         {
             std::array<glm::vec3, 8> corners {
                     glm::vec3(min.x, min.y, min.z), 
@@ -67,7 +67,7 @@ struct Bounds final : public GameComponent
 
         bool Intersects(const Plane& plane)
         {
-            std::array<glm::vec3, 8> corners = GetAlCorners();
+            std::array<glm::vec3, 8> corners = GetAllCorners();
 
             // [tdbe] check if any opposite points are on opposite sides of the plane
             for (int i = 0; i < 8; i++)
@@ -91,7 +91,7 @@ struct Bounds final : public GameComponent
 
         bool IsInFrontOfPlane(const Plane plane)
         {
-            std::array<glm::vec3, 8> corners = GetAlCorners();
+            std::array<glm::vec3, 8> corners = GetAllCorners();
 
             // [tdbe] check if any point is behind the plane
             for (int i = 0; i < 8; i++)
@@ -140,7 +140,8 @@ struct Bounds final : public GameComponent
     std::vector<GameEntity*> GetOwners() const
     {
         std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
-        std::vector<GameEntity*> foundVec = std::vector<GameEntity*>();
+        std::vector<GameEntity*> foundVec;
+        foundVec.reserve(ownerIDs.size());
         for (GameDataId::ID entId : ownerIDs)
         {
             auto comp = GameData::Instance().GetEntity(entId);

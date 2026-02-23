@@ -1,4 +1,4 @@
-#pragma once
+
 #include "RenderProcess.h"
 #include "Renderer.h"
 

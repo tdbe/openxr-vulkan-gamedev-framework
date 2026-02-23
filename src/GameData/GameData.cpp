@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../Utils/Util.h"
 
 #include "GameData.h"
@@ -83,7 +83,7 @@ GameEntity* GameData::GetEntity(GameDataId::ID id)
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.GAME_VFX_OBJECTS)
     {
-        return gameVFXObjects->GetItem(id);
+        return gameVFXEntityObjects->GetItem(id);
     }
     else
     {
@@ -123,7 +123,7 @@ void GameData::ClearEntity(GameDataId::ID id)
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.GAME_VFX_OBJECTS)
     {
-        gameVFXObjects->ClearItem(gameVFXObjects->GetItem(id));
+        gameVFXEntityObjects->ClearItem(gameVFXEntityObjects->GetItem(id));
     }
 }
 
@@ -131,11 +131,11 @@ bool GameData::LoadModels()
 {
     bool success = true;
 
-    if(modelComponents != nullptr) { util::DebugError("[GameData][LoadModels]\t Somebody forgot to clear their heap allocations!");  modelComponents->ClearItems(false); }
+    if(modelComponents != nullptr) { util::DebugError("[GameData][LoadModels]\t Somebody forgot to clear their pool!");  modelComponents->ClearItems(false); }
     modelComponents = new GameDataPool<Model>(AllocationMagicNumbers::MAX_MODELS, 
                                               GlobalUIDSeeds.MODEL_COMPONENTS,
                                               GlobalUIDSeeds.ToString(GlobalUIDSeeds.MODEL_COMPONENTS));
-    DeleteAllMeshData();
+    DeleteAllMeshData(); // [tdbe] (meshes are kept on the gpu)
     meshData = new MeshData();
 
     Model* gco = modelComponents->GetFreeItem();
@@ -274,7 +274,7 @@ bool GameData::LoadMaterials()
 {
     bool success = true;
     
-    if(materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their heap allocations!");  materialComponents->ClearItems(false); }
+    if(materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their pool!");  materialComponents->ClearItems(false); }
     materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_MATERIALS, GlobalUIDSeeds.MATERIAL_COMPONENTS,
                                                     GlobalUIDSeeds.ToString(GlobalUIDSeeds.MATERIAL_COMPONENTS));
 
@@ -390,7 +390,7 @@ bool GameData::LoadGameLights()
 {
     bool success = true;
 
-    if(lightComponents != nullptr) { util::DebugError("[GameData][LoadGameLights]\t Somebody forgot to clear their heap allocations!");  lightComponents->ClearItems(false); }
+    if(lightComponents != nullptr) { util::DebugError("[GameData][LoadGameLights]\t Somebody forgot to clear their pool!");  lightComponents->ClearItems(false); }
     lightComponents = new GameDataPool<Light>(AllocationMagicNumbers::LIGHTS_COUNT, 
                                               GlobalUIDSeeds.LIGHT_COMPONENTS, 
                                               GlobalUIDSeeds.ToString(GlobalUIDSeeds.LIGHT_COMPONENTS));
@@ -427,19 +427,19 @@ bool GameData::LoadGameEntityObjects()
 {
     bool success = true;
     
-    if (gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their heap allocations!");  gameEntityObjects->ClearItems(false); }
+    if (gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  gameEntityObjects->ClearItems(false); }
     gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS,
                                                            GlobalUIDSeeds.GAME_ENTITY_OBJECTS,
                                                            GlobalUIDSeeds.ToString(GlobalUIDSeeds.GAME_ENTITY_OBJECTS));
-    if(gameVFXObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their heap allocations!");  gameVFXObjects->ClearItems(false); }
-    gameVFXObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
+    if(gameVFXEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  gameVFXEntityObjects->ClearItems(false); }
+    gameVFXEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
                                                         GlobalUIDSeeds.GAME_VFX_OBJECTS,
                                                         GlobalUIDSeeds.ToString(GlobalUIDSeeds.GAME_VFX_OBJECTS));
-    if(transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their heap allocations!");  transformComponents->ClearItems(false); }
+    if(transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  transformComponents->ClearItems(false); }
     transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
                                                       GlobalUIDSeeds.TRANSFORM_COMPONENTS,
                                                       GlobalUIDSeeds.ToString(GlobalUIDSeeds.TRANSFORM_COMPONENTS));
-    if(boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their heap allocations!");  boundsComponents->ClearItems(false); }
+    if(boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  boundsComponents->ClearItems(false); }
     boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::MAX_MODELS, 
                                                       GlobalUIDSeeds.BOUNDS_COMPONENTS,
                                                       GlobalUIDSeeds.ToString(GlobalUIDSeeds.BOUNDS_COMPONENTS));
@@ -969,7 +969,7 @@ bool GameData::LoadGameEntityObjects()
 
     // [tdbe] vfx objects are rendered at the end of the queue for the sake of the chaperone / depth etc.
     // ~~~~~~~~~~~~~ gameVFXObjects-> ~~~~~~~~~~~~~
-    gento = gameVFXObjects->GetFreeItem();
+    gento = gameVFXEntityObjects->GetFreeItem();
     gento->SetName("icosphereSkybox");
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
@@ -983,7 +983,7 @@ bool GameData::LoadGameEntityObjects()
     namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
-    gento = gameVFXObjects->GetFreeItem();
+    gento = gameVFXEntityObjects->GetFreeItem();
     gento->SetName("floorGrid");
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
@@ -997,7 +997,7 @@ bool GameData::LoadGameEntityObjects()
     namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
-    gento = gameVFXObjects->GetFreeItem();
+    gento = gameVFXEntityObjects->GetFreeItem();
     gento->SetName("ceilingGrid");
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
@@ -1012,7 +1012,7 @@ bool GameData::LoadGameEntityObjects()
     ConfiguredGameObject(gento);
     util::DebugLog("[Game][GameData][LoadGameWorld][GameEntityObject]\t Done configuring entities.\n");
 
-    gento = gameVFXObjects->GetFreeItem();
+    gento = gameVFXEntityObjects->GetFreeItem();
     gento->SetName("handLeft");
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
@@ -1030,7 +1030,7 @@ bool GameData::LoadGameEntityObjects()
     namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
-    gento = gameVFXObjects->GetFreeItem();
+    gento = gameVFXEntityObjects->GetFreeItem();
     gento->SetName("handRight");
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
@@ -1137,7 +1137,6 @@ bool Game::GameData::UnLoadGameWorld(bool fast)
 {
     util::DebugLog("[Game][GameData][UnLoadGameWorld]\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     util::DebugLog("[Game][GameData][UnLoadGameWorld]\t Unloading entities and components, unhooking events, clearing any maps:");
-    //DeleteAllMeshData();
     
     namedModelComponentIDs.clear();
     namedMaterialComponentIDs.clear();
@@ -1146,26 +1145,46 @@ bool Game::GameData::UnLoadGameWorld(bool fast)
     namedGameObjectIDs.clear();
     namedVFXObjectIDs.clear();
     
+    
     UnhookOnGameObjectEvents();
     gameEntityObjects->ClearItems(true, fast);
-    gameVFXObjects->ClearItems(true, fast);
+    gameVFXEntityObjects->ClearItems(true, fast);
 
     transformComponents->ClearItems(true, fast);
     modelComponents->ClearItems(true, fast);
     boundsComponents->ClearItems(true, fast);
     materialComponents->ClearItems(true, fast);
     lightComponents->ClearItems(true, fast);
-
-
-    for (PlayerObject* player : playerObjects)
-        delete player;
-    playerObjects.clear();
-    
+        
     //std::exception("NotImplementedException");
     return true;
 }
 
+void Game::GameData::DeletePlayers()
+{
+    for (PlayerObject* player : playerObjects)
+        delete player;
+    playerObjects.clear();
+}
+
+void Game::GameData::DeleteEntityPools()
+{
+    gameEntityObjects->~GameDataPool();
+    gameVFXEntityObjects->~GameDataPool();
+}
+
+void Game::GameData::DeleteComponentPools()
+{
+    transformComponents->~GameDataPool();
+    modelComponents->~GameDataPool();
+    boundsComponents->~GameDataPool();
+    materialComponents->~GameDataPool();
+    lightComponents->~GameDataPool();
+}
+
 GameData::~GameData()
 {
-
+    DeletePlayers();
+    DeleteEntityPools();
+    DeleteComponentPools();
 }

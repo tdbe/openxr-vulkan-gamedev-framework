@@ -1,4 +1,4 @@
-#pragma once
+
 #include "Input.h"
 
 namespace
@@ -597,7 +597,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
 
     // [tdbe] Head poses
     /*
-    XrSpaceLocation player_space_in_game_space = { XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
+    XrSpaceLocation player_space_in_game_space = { XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeXrIdentity() };
     result = xrLocateSpace(xrHeadReferenceSpace, xrReferenceSpace, predictedDisplayTime, &player_space_in_game_space);
     if (XR_FAILED(result))
     {
@@ -616,9 +616,9 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
     }*/
     // [tdbe] TODO: figure out what/how head poses/joints work in openxr
     // https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html
-    inputData.eyePoseMatrixes[(int)SideEnum::LEFT] = util::poseToMatrix(eyePoses[(int)SideEnum::LEFT].pose);
+    inputData.eyePoseMatrixes[(int)SideEnum::LEFT] = util::xrPoseToMatrix(eyePoses[(int)SideEnum::LEFT].pose);
     inputData.eyePoses[(int)SideEnum::LEFT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::LEFT].pose);
-    inputData.eyePoseMatrixes[(int)SideEnum::RIGHT] = util::poseToMatrix(eyePoses[(int)SideEnum::RIGHT].pose);
+    inputData.eyePoseMatrixes[(int)SideEnum::RIGHT] = util::xrPoseToMatrix(eyePoses[(int)SideEnum::RIGHT].pose);
     inputData.eyePoses[(int)SideEnum::RIGHT] = util::xrPosefToGlmPosef(eyePoses[(int)SideEnum::RIGHT].pose);
     inputData.headPose = { .orientation = inputData.eyePoses[(int)SideEnum::LEFT].orientation,
                            .position = 0.5f * (inputData.eyePoses[(int)SideEnum::LEFT].position +
@@ -635,7 +635,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
         XrActionStatePose aimPoseState = Input::GetActionPoseState(actionSetData.aimPoseAction, ci);
         if (aimPoseState.isActive)
         {
-            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
+            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeXrIdentity() };
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_aim[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result))
@@ -651,7 +651,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
                 XR_SPACE_LOCATION_ORIENTATION_VALID_BIT | XR_SPACE_LOCATION_ORIENTATION_TRACKED_BIT;
             if ((spaceLocation.locationFlags & checkFlags) == checkFlags)
             {
-                inputData.controllerAimPoseMatrixes.at(i) = util::poseToMatrix(spaceLocation.pose);
+                inputData.controllerAimPoseMatrixes.at(i) = util::xrPoseToMatrix(spaceLocation.pose);
                 inputData.controllerAimPoses.at(i) = util::xrPosefToGlmPosef(spaceLocation.pose);
             }
         }
@@ -660,7 +660,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
         XrActionStatePose gripPoseState = Input::GetActionPoseState(actionSetData.gripPoseAction, ci);
         if (gripPoseState.isActive)
         {
-            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeIdentity() };
+            XrSpaceLocation spaceLocation{ XR_TYPE_SPACE_LOCATION, NULL, 0, util::makeXrIdentity() };
             result = xrLocateSpace(actionSetData.controllerReferenceSpaces_grip[i], xrReferenceSpace, predictedDisplayTime, 
                                     &spaceLocation);
             if(XR_FAILED(result))
@@ -676,7 +676,7 @@ bool Input::Sync(XrSpace xrReferenceSpace, std::vector<XrView> eyePoses,
                 XR_SPACE_LOCATION_ORIENTATION_VALID_BIT | XR_SPACE_LOCATION_ORIENTATION_TRACKED_BIT;
             if ((spaceLocation.locationFlags & checkFlags) == checkFlags)
             {
-                inputData.controllerGripPoseMatrixes.at(i) = util::poseToMatrix(spaceLocation.pose);
+                inputData.controllerGripPoseMatrixes.at(i) = util::xrPoseToMatrix(spaceLocation.pose);
                 inputData.controllerGripPoses.at(i) = util::xrPosefToGlmPosef(spaceLocation.pose);
             }
         }
