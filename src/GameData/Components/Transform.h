@@ -80,7 +80,9 @@ namespace Game
         /// todo: this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[Component][Transform]\t clearing this item: " + this->id.PrintGlobalUID());
+            #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             worldPose = util::makeIdentity();
             worldMatrix = glm::mat4(1.0f);

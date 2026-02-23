@@ -154,7 +154,9 @@ struct Bounds final : public GameComponent
     /// todo: this should be restricted to <see cref"GameDataPool"/>
     virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
     {
+        #ifdef DEBUG_VERBOSE
         util::DebugLog("[Component][Bounds]\t clearing this item: " + this->id.PrintGlobalUID());
+        #endif
         GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
         aabb.SetVals(glm::vec3(0.0f), glm::vec3(0.0f));
     };

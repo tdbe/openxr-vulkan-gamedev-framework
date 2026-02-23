@@ -107,7 +107,9 @@ namespace Game
         {
             GameDataId::ID id = {};
             SpotInPool status = GetFirstFree(id, skipThisManyFreeSlots);
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[GameDataPool][GetFreeItem<" + topTypeStr + ">]\t "+id.PrintGlobalUID());
+            #endif
             if (status == SpotInPool::FAIL)
             {
                 return nullptr;
@@ -131,7 +133,9 @@ namespace Game
         void ClearItem(T* item, bool unsafe = false, bool clearDataLoadedFromStorage = false)
         {
             GameDataId* gid = static_cast<GameDataId*>(item);
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[GameDataPool][ClearItem<" + topTypeStr + ">]\t "+item->id.PrintGlobalUID());
+            #endif
             if (!IsIdValidItem(gid->id))
             {
                 util::DebugError("[GameDataPool][ClearItem<" + topTypeStr +">]\t There's a mistake: you're trying to clear id \"" +
@@ -183,12 +187,14 @@ namespace Game
                 }
                 else
                 {
+                    #ifdef DEBUG_VERBOSE
                     if (alsoDestroy)
                         util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr +
                                        ">]\t Delete item only: already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
                     else
                         util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr +
                                        ">]\t Skipping already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
+                    #endif
                 }
             }
 
@@ -354,9 +360,10 @@ namespace Game
                     if (maxUsedIndex < items[firstEmptyIndexPlus]->id.index)
                         maxUsedIndex = items[firstEmptyIndexPlus]->id.index;
                     itemId = items[firstEmptyIndexPlus]->id;
-
+                    #ifdef DEBUG_VERBOSE
                     util::DebugLog("[GameDataPool][GetFirstFree<" + topTypeStr + ">]\t Found free item at index: " + util::ToString(firstEmptyIndexPlus) + ", with id: " + itemId.PrintGlobalUID() +
                                    ", validSize: " + util::ToString(validSize) + ", currentVersion: " + util::ToString(currentVersion));
+                    #endif
                 }
             }
 

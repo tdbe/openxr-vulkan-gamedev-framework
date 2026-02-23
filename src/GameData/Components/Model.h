@@ -39,7 +39,9 @@ namespace Game
         /// todo: this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[Component][Model]\t clearing this item: " + this->id.PrintGlobalUID());
+            #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             firstIndex = 0u;
             indexCount = 0u;

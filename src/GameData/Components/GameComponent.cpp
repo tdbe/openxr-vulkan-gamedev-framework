@@ -100,7 +100,9 @@ void GameComponent::NotifyItemVersionChanged()
 
 void GameComponent::ClearItemDependencies()
 {
+    #ifdef DEBUG_VERBOSE
     util::DebugLog("[GameComponent][ClearItem]\t " + id.PrintGlobalUID());
+    #endif
 
     if (id.IsCleared())
     {

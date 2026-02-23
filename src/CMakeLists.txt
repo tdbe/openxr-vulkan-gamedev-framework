@@ -132,8 +132,15 @@ target_sources(${TARGET_NAME} PRIVATE ${SRC})
 target_include_directories(${TARGET_NAME} PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${TARGET_NAME} PRIVATE boxer glfw glm openxr tinyobjloader ${Vulkan_LIBRARIES})
 
-# [tdbe] this instead of #define DEBUG
-#target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>) # Add a clean DEBUG prepocessor define if applicable
+# [tdbe] use these instead of e.g. #define DEBUG or define _DEBUG
+# [tdbe] DEBUG preprocessor macro (when building in Debug configuration)
+target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
+# [tdbe] DEBUG_VERBOSE for messages triggered by objects/entities that might spam a lot, e.g. get pool item, parent/children changed, or item cleared.
+target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG_VERBOSE>)
+# [tdbe] DEBUG_RELEASE for optional messages in RLEASE builds
+target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Release>:DEBUG_RELEASE>)
+# [tdbe] _DEBUG - actually, this sets the MSVC debugger path, and when you build in Debug configuration with the MSVC compiler, it automatically defines the _DEBUG preprocessor macro by default.
+# in case you're wondering, the above preprocessor macros (e.g. DEBUG) still work with this active. I just don't use the _DEBUG anywhere.
 set_target_properties(${TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${TARGET_NAME}>") # For MSVC debugging
 
 # Copy shared library binaries on Windows

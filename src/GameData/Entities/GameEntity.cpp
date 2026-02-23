@@ -102,8 +102,9 @@ size_t GameEntity::CountValidComponents() const
 
 void GameEntity::ClearItemDependencies()
 {
+    #ifdef DEBUG_VERBOSE
     util::DebugLog("[GameEntity][ClearItem]\t " + id.PrintGlobalUID());
-
+    #endif
     if (id.IsCleared())
     {
         util::DebugError("[GameDataPool][ClearItem]\t There's a mistake: you're trying to clear id \"" +

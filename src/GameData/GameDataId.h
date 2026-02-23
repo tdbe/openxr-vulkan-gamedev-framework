@@ -69,7 +69,9 @@ namespace Game
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false)
         {
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[Game][GameDataId]\t Id Cleared: " + this->id.PrintGlobalUID());
+            #endif
             id.Clear();
         };
 
@@ -77,7 +79,9 @@ namespace Game
         /// todo: this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged()
         {
+            #ifdef DEBUG_VERBOSE
             //util::DebugLog("[Game][GameComponent]\t On NotifyItemVersionChanged: " + this->id.PrintGlobalUID());
+            #endif
         };
 
         GameDataId(GameDataId::ID id = { 0, 0, 0, std::type_index(typeid(int)) })
