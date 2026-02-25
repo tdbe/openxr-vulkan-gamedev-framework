@@ -14,6 +14,9 @@ namespace Game
     struct MeshData;
     struct GameComponent;
     struct Transform;
+    struct Parent;
+    struct Children;
+    struct ARoot;
     struct Model;
     struct Bounds;
     struct Material;
@@ -41,6 +44,9 @@ namespace Game
             static const uint16_t GAME_ENTITY_OBJECTS = 100;
             static const uint16_t GAME_VFX_OBJECTS = 200;
             static const uint16_t TRANSFORM_COMPONENTS = 300;
+            static const uint16_t PARENT_COMPONENTS = 310;
+            static const uint16_t CHILDREN_COMPONENTS = 311;
+            static const uint16_t ROOT_ATTRIBUTE_COMPONENTS = 315;
             static const uint16_t MODEL_COMPONENTS = 400;
             static const uint16_t BOUNDS_COMPONENTS = 500;
             static const uint16_t MATERIAL_COMPONENTS = 600;
@@ -55,6 +61,12 @@ namespace Game
                     return "GAME_VFX_OBJECTS";
                 else if (id == TRANSFORM_COMPONENTS)
                     return "TRANSFORM_COMPONENTS";
+                else if (id == PARENT_COMPONENTS)
+                    return "PARENT_COMPONENTS";
+                else if (id == CHILDREN_COMPONENTS)
+                    return "CHILDREN_COMPONENTS";
+                else if (id == ROOT_ATTRIBUTE_COMPONENTS)
+                    return "ROOT_ATTRIBUTE_COMPONENTS";
                 else if (id == MODEL_COMPONENTS)
                     return "MODEL_COMPONENTS";
                 else if (id == BOUNDS_COMPONENTS)
@@ -75,7 +87,7 @@ namespace Game
             static const uint32_t MAX_MODELS = 32;
             static const uint32_t MAX_MATERIALS = 50;
             static const uint32_t LIGHTS_COUNT = 10;// [tdbe] remember to change LIGHT_COUNT in _Lighting.glsl, and maybe in Light.vert and LightTentacle.vert
-            static const uint32_t DEFAULT_COMPONENTS_PER_GAME_ENTITY_OBJECT = 6;
+            static const uint32_t DEFAULT_COMPONENTS_PER_GAME_ENTITY_OBJECT = 16;
             static const uint32_t MAX_PLAYER_OBJECTS = 1;
         } AllocationMagicNumbers;
 
@@ -95,6 +107,9 @@ namespace Game
         /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
         /// The transform is one per game entity.
         GameDataPool<Transform>* transformComponents = nullptr;
+        GameDataPool<Parent>* parentComponents = nullptr;
+        GameDataPool<Children>* childrenComponents = nullptr;
+        GameDataPool<ARoot>* rootAttributeComponents = nullptr;
         /// [tdbe] entities with ids and versions ((weak) "references"); and know their owner(s).
         /// multiple Models can use the same MeshData; we load the meshData into models
         GameDataPool<Model>* modelComponents = nullptr;
@@ -112,7 +127,8 @@ namespace Game
 
         /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameComponent* GetComponent(GameDataId::ID id);
-        void ClearComponent(GameDataId::ID id);
+        /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
+        void ClearComponent(GameDataId::ID id, bool unsafe = false);
 #pragma endregion GameComponent
 
 #pragma region GameEntity
@@ -123,7 +139,8 @@ namespace Game
 
         /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameEntity* GetEntity(GameDataId::ID id);
-        void ClearEntity(GameDataId::ID id);
+        /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
+        void ClearEntity(GameDataId::ID id, bool unsafe = false);
 #pragma endregion GameEntity
 
 #pragma region Players

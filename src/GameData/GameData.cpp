@@ -4,6 +4,9 @@
 #include "GameData.h"
 #include "MeshData.h"
 #include "Components/Transform.h"
+#include "Components/Parent.h"
+#include "Components/Children.h"
+#include "Components/ARoot.h"
 #include "Components/Model.h"
 #include "Components/Bounds.h"
 #include "Components/Material.h"
@@ -53,6 +56,18 @@ GameComponent* GameData::GetComponent(GameDataId::ID id)
     {
         return transformComponents->GetItem(id);
     }
+    else if (id.globalUIDSeed == GlobalUIDSeeds.PARENT_COMPONENTS)
+    {
+        return parentComponents->GetItem(id);
+    }
+    else if (id.globalUIDSeed == GlobalUIDSeeds.CHILDREN_COMPONENTS)
+    {
+        return childrenComponents->GetItem(id);
+    }
+    else if (id.globalUIDSeed == GlobalUIDSeeds.ROOT_ATTRIBUTE_COMPONENTS)
+    {
+        return rootAttributeComponents->GetItem(id);
+    }
     else if (id.globalUIDSeed == GlobalUIDSeeds.MODEL_COMPONENTS)
     {
         return modelComponents->GetItem(id);
@@ -91,39 +106,39 @@ GameEntity* GameData::GetEntity(GameDataId::ID id)
     }
 }
 
-void GameData::ClearComponent(GameDataId::ID id)
+void GameData::ClearComponent(GameDataId::ID id, bool unsafe)
 {
     if (id.globalUIDSeed == GlobalUIDSeeds.TRANSFORM_COMPONENTS)
     {
-        transformComponents->ClearItem(transformComponents->GetItem(id));
+        transformComponents->ClearItem(transformComponents->GetItem(id), unsafe);
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.MODEL_COMPONENTS)
     {
-        modelComponents->ClearItem(modelComponents->GetItem(id));
+        modelComponents->ClearItem(modelComponents->GetItem(id), unsafe);
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.BOUNDS_COMPONENTS)
     {
-        boundsComponents->ClearItem(boundsComponents->GetItem(id));
+        boundsComponents->ClearItem(boundsComponents->GetItem(id), unsafe);
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.MATERIAL_COMPONENTS)
     {
-        materialComponents->ClearItem(materialComponents->GetItem(id));
+        materialComponents->ClearItem(materialComponents->GetItem(id), unsafe);
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.LIGHT_COMPONENTS)
     {
-        lightComponents->ClearItem(lightComponents->GetItem(id));
+        lightComponents->ClearItem(lightComponents->GetItem(id), unsafe);
     }
 }
 
-void GameData::ClearEntity(GameDataId::ID id)
+void GameData::ClearEntity(GameDataId::ID id, bool unsafe)
 {
     if (id.globalUIDSeed == GlobalUIDSeeds.GAME_ENTITY_OBJECTS)
     {
-        gameEntityObjects->ClearItem(gameEntityObjects->GetItem(id));
+        gameEntityObjects->ClearItem(gameEntityObjects->GetItem(id), unsafe);
     }
     else if (id.globalUIDSeed == GlobalUIDSeeds.GAME_VFX_OBJECTS)
     {
-        gameVFXEntityObjects->ClearItem(gameVFXEntityObjects->GetItem(id));
+        gameVFXEntityObjects->ClearItem(gameVFXEntityObjects->GetItem(id), unsafe);
     }
 }
 
@@ -427,25 +442,42 @@ bool GameData::LoadGameEntityObjects()
 {
     bool success = true;
     
-    if (gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  gameEntityObjects->ClearItems(false); }
+    if (gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (gameEntityObjects)!");  gameEntityObjects->ClearItems(false); }
     gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS,
                                                            GlobalUIDSeeds.GAME_ENTITY_OBJECTS,
                                                            GlobalUIDSeeds.ToString(GlobalUIDSeeds.GAME_ENTITY_OBJECTS));
-    if(gameVFXEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  gameVFXEntityObjects->ClearItems(false); }
+    if(gameVFXEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (gameVFXEntityObjects)!");  gameVFXEntityObjects->ClearItems(false); }
     gameVFXEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
                                                         GlobalUIDSeeds.GAME_VFX_OBJECTS,
                                                         GlobalUIDSeeds.ToString(GlobalUIDSeeds.GAME_VFX_OBJECTS));
-    if(transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  transformComponents->ClearItems(false); }
+    if(transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!");  transformComponents->ClearItems(false); }
     transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
                                                       GlobalUIDSeeds.TRANSFORM_COMPONENTS,
                                                       GlobalUIDSeeds.ToString(GlobalUIDSeeds.TRANSFORM_COMPONENTS));
+    if(parentComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (parentComponents)!");  parentComponents->ClearItems(false); }
+    parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
+                                                      GlobalUIDSeeds.PARENT_COMPONENTS,
+                                                      GlobalUIDSeeds.ToString(GlobalUIDSeeds.PARENT_COMPONENTS));
+    if(childrenComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (childrenComponents)!");  childrenComponents->ClearItems(false); }
+    childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
+                                                      GlobalUIDSeeds.CHILDREN_COMPONENTS,
+                                                      GlobalUIDSeeds.ToString(GlobalUIDSeeds.CHILDREN_COMPONENTS));
     if(boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!");  boundsComponents->ClearItems(false); }
     boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::MAX_MODELS, 
                                                       GlobalUIDSeeds.BOUNDS_COMPONENTS,
                                                       GlobalUIDSeeds.ToString(GlobalUIDSeeds.BOUNDS_COMPONENTS));
+    
+    // [tdbe] these are added or removed automatically
+    if(rootAttributeComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (rootAttributeComponents)!");  rootAttributeComponents->ClearItems(false); }
+    rootAttributeComponents = new GameDataPool<ARoot>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS/2+1, 
+                                                      GlobalUIDSeeds.ROOT_ATTRIBUTE_COMPONENTS,
+                                                      GlobalUIDSeeds.ToString(GlobalUIDSeeds.ROOT_ATTRIBUTE_COMPONENTS));
+    
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
     Transform* trans = nullptr;
+    Parent* parent = nullptr;
+    Children* children = nullptr;
     Bounds* bounds = nullptr;
 
     gento = gameEntityObjects->GetFreeItem();
@@ -453,6 +485,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
@@ -464,6 +502,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs["mainDirectionalLightComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -478,6 +522,12 @@ bool GameData::LoadGameEntityObjects()
         trans = transformComponents->GetFreeItem();
         trans->AddOwnerId(gento->id);
         gento->AddComponentId(trans->id);
+        parent = parentComponents->GetFreeItem();
+        parent->AddOwnerId(gento->id);
+        gento->AddComponentId(parent->id);
+        children = childrenComponents->GetFreeItem();
+        children->AddOwnerId(gento->id);
+        gento->AddComponentId(children->id);
         comp = GetComponent(namedLightComponentIDs["tentacleLightComp0" + util::ToString(i, true)]);
         comp->AddOwnerId(gento->id);
         gento->AddComponentId(comp->id);
@@ -501,6 +551,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs["handLight01Comp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -523,6 +579,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs["handLight02Comp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -545,6 +607,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs["bikeLightComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -568,6 +636,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -584,6 +658,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["groundModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -602,6 +682,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["ruinsModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -620,6 +706,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["carModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -638,6 +730,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["carModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -656,6 +754,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["beetleModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -674,6 +778,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["beetleGlassModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -695,6 +805,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["bikeModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -716,6 +832,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["logoModel1Comp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -734,6 +856,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["logoModel2Comp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -752,6 +880,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["textLocomotionModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -770,6 +904,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["textSudaBeamModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -788,6 +928,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["textSeeControlsMdModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -806,6 +952,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["cubeModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -824,6 +976,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -842,6 +1000,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -863,6 +1027,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["sudaBeamModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -881,6 +1051,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["sudaBeamModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -899,6 +1075,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["squidModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -917,6 +1099,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["suzanneMonkeModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -935,6 +1123,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereRoughModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -953,6 +1147,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereRoughModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -974,6 +1174,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["icosphereModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -988,6 +1194,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["quadModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -1002,6 +1214,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["quadModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -1017,6 +1235,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["handModelComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
@@ -1035,6 +1259,12 @@ bool GameData::LoadGameEntityObjects()
     trans = transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
+    parent = parentComponents->GetFreeItem();
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = childrenComponents->GetFreeItem();
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs["handModelComp"]);
     // comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
     comp->AddOwnerId(gento->id);
@@ -1151,6 +1381,9 @@ bool Game::GameData::UnLoadGameWorld(bool fast)
     gameVFXEntityObjects->ClearItems(true, fast);
 
     transformComponents->ClearItems(true, fast);
+    parentComponents->ClearItems(true, fast);
+    childrenComponents->ClearItems(true, fast);
+    rootAttributeComponents->ClearItems(true, fast);
     modelComponents->ClearItems(true, fast);
     boundsComponents->ClearItems(true, fast);
     materialComponents->ClearItems(true, fast);
@@ -1176,6 +1409,9 @@ void Game::GameData::DeleteEntityPools()
 void Game::GameData::DeleteComponentPools()
 {
     transformComponents->~GameDataPool();
+    parentComponents->~GameDataPool();
+    childrenComponents->~GameDataPool();
+    rootAttributeComponents->~GameDataPool();
     modelComponents->~GameDataPool();
     boundsComponents->~GameDataPool();
     materialComponents->~GameDataPool();

@@ -4,7 +4,8 @@
 
 namespace Game
 {
-	/// [tdbe] Matrix information for Translate Rotate Scale of object
+	/// [tdbe] Matrix & Pose information, local and world, for Translate Rotate Scale of Entity.
+    /// [tdbe] TODO: could use an "isDirty" (TRS changed) for <see cref="SystemTRSParentingPropagation"/>", but realistically / ecs / jobs wise it would need to manage timestamps.
     /// [RequireOwnerRestriction(1)]
 	struct Transform : public GameComponent
 	{
@@ -12,10 +13,9 @@ namespace Game
         {
             std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
             GameEntity* found = nullptr;
-            for (size_t i = 0; i < ownerIDs.size(); i++)
+            if(!ownerIDs[0].IsCleared())
             {
-                found = GameData::Instance().GetEntity(ownerIDs[i]);
-                break;
+                found = GameData::Instance().GetEntity(ownerIDs[0]);
             }
             return found;
         };
@@ -53,6 +53,20 @@ namespace Game
         {
             UpdateWorldPoseFromDeltaLocalPose(newLocalPose);
             localPose = newLocalPose;
+        };
+        
+        /// [tdbe] sets the localPose without changing the worldPose
+        void ParentTo(util::Posef parentWorldPose)
+        {
+            localPose.position = worldPose.position - parentWorldPose.position;
+            localPose.scale = worldPose.scale / parentWorldPose.scale;
+            localPose.orientation = worldPose.orientation * glm::inverse(parentWorldPose.orientation);
+        };
+        
+        /// [tdbe] sets the localPose to worldPose
+        void Unparent()
+        {
+            localPose = worldPose;
         };
         
         util::Posef GetLocalPose() const
@@ -118,7 +132,7 @@ namespace Game
         void UpdateLocalPoseFromDeltaWorldPose(util::Posef newWorldPose)
         {
             localPose.position += worldPose.position - newWorldPose.position;
-            localPose.scale += worldPose.scale - newWorldPose.scale;
+            localPose.scale *= newWorldPose.scale / worldPose.scale;
             glm::quat diff = worldPose.orientation * glm::inverse(newWorldPose.orientation);
             localPose.orientation = diff * localPose.orientation;
         }
@@ -126,7 +140,7 @@ namespace Game
         void UpdateWorldPoseFromDeltaLocalPose(util::Posef newLocalPose)
         {
             worldPose.position += localPose.position - newLocalPose.position;
-            worldPose.scale += localPose.scale - newLocalPose.scale;
+            worldPose.scale *= newLocalPose.scale / localPose.scale;
             glm::quat diff = localPose.orientation * glm::inverse(newLocalPose.orientation);
             worldPose.orientation = diff * worldPose.orientation;
         }

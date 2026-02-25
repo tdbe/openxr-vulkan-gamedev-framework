@@ -14,10 +14,9 @@ GameEntity* Light::GetOwner() const
 {
     std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
     GameEntity* found = nullptr;
-    for (size_t i = 0; i < ownerIDs.size(); i++)
+    if(!ownerIDs[0].IsCleared())
     {
-        found = GameData::Instance().GetEntity(ownerIDs[i]);
-        break;
+        found = GameData::Instance().GetEntity(ownerIDs[0]);
     }
     return found;
 }

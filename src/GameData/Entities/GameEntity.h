@@ -78,7 +78,9 @@ namespace Game
         /// todo: this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override;
 
+        /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
         void SetEnabled(bool enabled);
+        /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
         bool IsEnabled() const;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
@@ -87,7 +89,8 @@ namespace Game
         virtual ~GameEntity() {};
 
       private:
-        bool isEnabled = true; // [tdbe] e.g. whether or not it will be rendered. Some components also have an isVisible.
+        /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
+        bool isEnabled = true; 
 
         /// [tdbe] References for immediate/scripting convenience. An entity usually has just a few (e.g. 3-5) components.
         /// Note: must be marked as free on <see cref="NotifyItemCleared"/>.

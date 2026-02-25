@@ -84,6 +84,12 @@ set(SRC
 	GameData/Components/Bounds.h
 	GameData/Components/Material.h
 	GameData/Components/Model.h
+	
+	GameData/Components/Parent.h
+	GameData/Components/Parent.cpp
+	GameData/Components/Children.h
+	GameData/Components/Children.cpp
+	GameData/Components/ARoot.h
 
 	GameData/Components/Light.h
 	GameData/Components/Light.cpp

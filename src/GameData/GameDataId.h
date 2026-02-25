@@ -2,6 +2,7 @@
 #include <typeindex>
 #include <stdint.h>
 #include <string>
+#include <functional>
 
 #include "../Utils/Util.h"
 
@@ -102,4 +103,19 @@ namespace Game
         GameDataId id;// [tdbe] current empty or used
         GameDataId nextItem;// [tdbe] next empty or used
     };*/
-    } // namespace Game
+} // namespace Game
+
+namespace std
+{
+    template<>
+    struct hash<Game::GameDataId::ID>
+    {
+        size_t operator()(const Game::GameDataId::ID& id) const noexcept
+        {
+            size_t h1 = hash<int32_t>{}(id.index);
+            size_t h2 = hash<uint32_t>{}(id.version);
+            size_t h3 = hash<uint16_t>{}(id.globalUIDSeed);
+            return h1 ^ (h2 << 1) ^ (h3 << 2);
+        }
+    };
+}
