@@ -86,7 +86,7 @@ namespace Game
         /// Note: this pointer might point to a reused or free item. So use handles (IDs), <see cref="GameDataId::IsCleared"/>.
         // [tdbe] newb-friendly-note: you'll get linker errors if you declare but don't define template
         // functimons in the header file. (the compiler won't read the definition and won't know if/how to handle the various types, 
-        // (and of course won't explain this to you in hu-man terms or any terms))
+        // (and of course won't explain this to you in hoo-man terms or any terms))
         T* GetItem(GameDataId::ID id) const
         {
             if (IsIdValidItem(id))
@@ -112,13 +112,22 @@ namespace Game
             #endif
             if (status == SpotInPool::FAIL)
             {
+                util::DebugError("[GameDataPool][GetFreeItem<" + topTypeStr +
+                                 ">]\t Somehow fetched a SpotInPool::FAIL?");
                 return nullptr;
             }
             else if (status == SpotInPool::UNINITIALIZED)
             {
                 util::DebugError("[GameDataPool][GetFreeItem<" + topTypeStr +
-                                 ">]\t Somehow we forgot to initialize the GameDataPool. If "
-                                 "this was intended, change this function.");
+                                 ">]\t Somehow fetched a SpotInPool::UNINITIALIZED.");
+                return nullptr;
+            }
+            else if (status == SpotInPool::UNINITIALIZED)
+            {
+                #ifdef DEBUG_VERBOSE
+                util::DebugLog("[GameDataPool][GetFreeItem<" + topTypeStr +
+                                 ">]\t Fetched a SpotInPool::UNINITIALIZED.");
+                #endif
                 return nullptr;
             }
 
@@ -207,8 +216,8 @@ namespace Game
                 delete this;
         };
 
-        GameDataPool(int maxPossibleSize = 0, uint16_t globalUIDSeed = 0, std::string topTypeStr = "T")
-        : maxPossibleSize(maxPossibleSize), globalUIDSeed(globalUIDSeed), topTypeStr(topTypeStr)
+        GameDataPool(int maxPossibleSize = 0, int worldIndex = 0, uint16_t typeUID = 0, std::string topTypeStr = "T")
+        : maxPossibleSize(maxPossibleSize), worldIndex(worldIndex), typeUID(typeUID), topTypeStr(topTypeStr)
         {
             this->maxUsedIndex = 0;
             this->firstEmptyIndex = 0;
@@ -219,13 +228,15 @@ namespace Game
             {
                 items[i] = new T();
                 GameDataId* gid = static_cast<GameDataId*>(items[i]);
-                gid->id.globalUIDSeed = globalUIDSeed;
+                gid->id.worldIndex = worldIndex;
+                gid->id.typeUID = typeUID;
+                gid->id.chunkIndex = 0;// TODO:
                 gid->id.index = i;
                 gid->id.version = GameDataId::FREE;
                 gid->id.typeIndex = std::type_index(typeid(T));
             }
             util::DebugLog("\n[GameDataPool][Constructed<" + topTypeStr + ">] maxPossibleSize: \"" + 
-                            util::ToString(maxPossibleSize) + "\", globalUIDSeed: \"" + util::ToString(globalUIDSeed) + "_" + topTypeStr +
+                            util::ToString(maxPossibleSize) + "\", world: " + util::ToString(worldIndex) + ", typeUID: \"" + util::ToString(typeUID) + "_" + topTypeStr +
                             "\", firstEmptyIndex: " + util::ToString(firstEmptyIndex) +", T: " +
                             typeid(T).name() + ".");// [tdbe] typeid(T)::name() is only human-readable in Visual C++ :(
         };
@@ -263,8 +274,8 @@ namespace Game
       private:
         enum SpotInPool
         {
-            FAIL = 0,// [tdbe] depends on context; couldn't get a spot; could be full.
-            UNINITIALIZED,// [tdbe] could be we reserved the space but didn't emplace/construct. E.g. in case we allowed that to happen in the constructor.
+            FAIL = 0,// depends on context; couldn't get a spot; could be full.
+            UNINITIALIZED,// could be we reserved the space but didn't emplace/construct. E.g. in case we allowed that to happen in the constructor.
             USED,
             FREE
         };
@@ -276,7 +287,8 @@ namespace Game
         int32_t maxPossibleSize = std::numeric_limits<int32_t>::max();
         /// [tdbe] item in the array that is empty or is marked as empty as far as we're concerned
         int32_t firstEmptyIndex = 0;
-        uint16_t globalUIDSeed = 0;
+        uint16_t typeUID = 0;
+        uint16_t worldIndex = 0;
         std::string topTypeStr = "T";
         int32_t validSize = 0;
 
@@ -333,7 +345,8 @@ namespace Game
                 itemId.version = ++currentVersion;
                 validSize++;
                 itemId.index = firstEmptyIndexPlus;
-                itemId.globalUIDSeed = globalUIDSeed;
+                itemId.typeUID = typeUID;
+                itemId.worldIndex = worldIndex;
                 itemId.typeIndex = std::type_index(typeid(T));
                 if (maxUsedIndex < itemId.index)
                     maxUsedIndex = itemId.index;

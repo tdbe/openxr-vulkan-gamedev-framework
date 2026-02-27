@@ -37,16 +37,14 @@ void Light::NotifyItemVersionChanged()
     GameComponent::NotifyItemVersionChanged();
 }
 
-glm::mat4 Light::GetWorldMatrix()
+glm::mat4 Light::GetOwnerTransformWorldMatrix()
 {
-    if (cachedTransformComponent == nullptr)
-    {
-        GameDataId::ID ownerId = GetOwnerIDs().front();
-        auto owningEntity = static_cast<GameEntityObject*>(GameData::Instance().GetEntity(ownerId));
-        auto transformId = owningEntity->GetComponentIDsByTypeIndex<Transform>().front();// [tdbe] very aggressive programming but you should always have an owner and a transform, and there are exceptions thrown upstream 
-        cachedTransformComponent = static_cast<Transform*>(GameData::Instance().GetComponent(transformId));
-    }
-    return cachedTransformComponent->GetWorldMatrix();
+    //GameDataId::ID ownerId = GetOwnerIDs().front();
+    //auto owningEntity = static_cast<GameEntityObject*>(GameData::Instance().GetEntity(ownerId));
+    //auto transformId = owningEntity->GetComponentIDsByTypeIndex<Transform>().front();
+    //auto transform = static_cast<Transform*>(GameData::Instance().GetComponent(transformId));
+    // [tdbe] aggressive but you should always have an owner and a transform, and there are exceptions thrown upstream 
+    return GetOwner()->GetComponentByTypeIndex<Transform>()->GetWorldMatrix();
 }
 
 void Light::SetRenderProperties(int lightType)
@@ -121,7 +119,7 @@ bool Light::IsVisible()
 
 void Light::SetShaderProperties()
 {
-    glm::mat4 worldMatrix = GetWorldMatrix();
+    glm::mat4 worldMatrix = GetOwnerTransformWorldMatrix();
     glm::vec4 mainVec = glm::vec4(1.0f);
     glm::vec4 shapeVec0 = glm::vec4(1.0f);
     glm::vec4 shapeVec1 = glm::vec4(1.0f);

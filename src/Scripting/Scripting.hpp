@@ -22,7 +22,7 @@ namespace Scripting
         // at least do a material2.CopyFrom(material1)
 
         Material* skyMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["skyMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["skyMaterialComp"]);
         skyMaterial->vertShaderName = "shaders/Sky.vert.spv";
         skyMaterial->fragShaderName = "shaders/Sky.frag.spv";
         skyMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -34,7 +34,7 @@ namespace Scripting
         skyMaterial->dynamicUniformData.ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] Todo: sky index of refraction? :)
 
         Material* diffuseMetalishMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
         diffuseMetalishMaterial->vertShaderName = "shaders/Diffuse.vert.spv";
         diffuseMetalishMaterial->fragShaderName = "shaders/Diffuse.frag.spv";
         diffuseMetalishMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -47,7 +47,7 @@ namespace Scripting
             glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
 
         Material* diffuseStoneMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseStoneMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseStoneMaterialComp"]);
         diffuseStoneMaterial->vertShaderName = "shaders/Diffuse.vert.spv";
         diffuseStoneMaterial->fragShaderName = "shaders/Diffuse.frag.spv";
         diffuseStoneMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -59,7 +59,7 @@ namespace Scripting
         diffuseStoneMaterial->dynamicUniformData.ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 0.0f); // [tdbe] gold paint index of refraction
 
         Material* textMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["textMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["textMaterialComp"]);
         textMaterial->vertShaderName = "shaders/Diffuse.vert.spv";
         textMaterial->fragShaderName = "shaders/Diffuse.frag.spv";
         textMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -71,7 +71,7 @@ namespace Scripting
 
 
         Material* logoMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["logoMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["logoMaterialComp"]);
         logoMaterial->vertShaderName = "shaders/Diffuse.vert.spv";
         logoMaterial->fragShaderName = "shaders/Diffuse.frag.spv";
         logoMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -85,7 +85,7 @@ namespace Scripting
         // reserved in relative order in the <see cref="GameData"/> materials pool.
 
         Material* groundMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["groundMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["groundMaterialComp"]);
         groundMaterial->vertShaderName = "shaders/Ground.vert.spv";
         groundMaterial->fragShaderName = "shaders/Ground.frag.spv";
         groundMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -96,7 +96,7 @@ namespace Scripting
         groundMaterial->dynamicUniformData.ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
 
         Material* lightMaterial = // [tdbe] represents/displays the visible "bulb" or "fixture" of a light component
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["lightMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["lightMaterialComp"]);
         lightMaterial->vertShaderName = "shaders/Light.vert.spv";
         lightMaterial->fragShaderName = "shaders/Light.frag.spv";
         lightMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -106,7 +106,7 @@ namespace Scripting
         lightMaterial->dynamicUniformData.ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
 
         Material* tentacleMaterial = 
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["tentacleLightMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["tentacleLightMaterialComp"]);
         tentacleMaterial->vertShaderName = "shaders/LightTentacle.vert.spv";
         tentacleMaterial->fragShaderName = "shaders/LightTentacle.frag.spv";
         tentacleMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -117,7 +117,7 @@ namespace Scripting
             glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
 
         Material* squidMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["squidMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["squidMaterialComp"]);
         squidMaterial->vertShaderName = "shaders/TripShader.vert.spv";
         squidMaterial->fragShaderName = "shaders/TripShader.frag.spv";
         squidMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -128,7 +128,7 @@ namespace Scripting
             glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.5f); // [tdbe] gold paint index of refraction
 
         Material* eyeMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseEyesMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseEyesMaterialComp"]);
         eyeMaterial->vertShaderName = "shaders/EyeShader.vert.spv";
         eyeMaterial->fragShaderName = "shaders/EyeShader.frag.spv";
         eyeMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -139,7 +139,7 @@ namespace Scripting
             glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.5f); // [tdbe] gold paint index of refraction
         
         Material* handsMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["handsMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["handsMaterialComp"]);
         handsMaterial->vertShaderName = "shaders/Hands.vert.spv";
         handsMaterial->fragShaderName = "shaders/Hands.frag.spv";
         handsMaterial->pipelineData.blendEnable = VK_FALSE;
@@ -150,7 +150,7 @@ namespace Scripting
         handsMaterial->dynamicUniformData.ior = glm::vec4(9.16095e-12f, 1.81225e-12f, 0.0024589f, 1.0f); // [tdbe] gold paint index of refraction
 
         Material* diffuseTripIcosphereMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTripIcosphereMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTripIcosphereMaterialComp"]);
         // [tdbe] the only thing that makes an instanced material instanced, is the instanceCount > 1.
         // (and the vertex shader consuming gl_InstanceIndex)
         diffuseTripIcosphereMaterial->instanceCount = 104u;
@@ -169,7 +169,7 @@ namespace Scripting
         // E.g. opaque rendered before transparent, then the vfx materials are last.
         // this is already set up in <see cref="GameData::LoadMaterials()"/>.
 
-        Material* glassMaterialB = gameData.materialComponents->GetItem(
+        Material* glassMaterialB = gameData.entityObjectsWorld->materialComponents->GetItem(
             gameData.namedMaterialComponentIDs["glassTransparentBackfaceMaterialComp"]);
         glassMaterialB->vertShaderName = "shaders/DiffuseTransparent.vert.spv";
         glassMaterialB->fragShaderName = "shaders/DiffuseTransparent.frag.spv";
@@ -188,7 +188,7 @@ namespace Scripting
         // to an entity (this backface is the 2nd).
         glassMaterialB->SetVisible(true);
 
-        Material* glassMaterialF = gameData.materialComponents->GetItem(
+        Material* glassMaterialF = gameData.entityObjectsWorld->materialComponents->GetItem(
             gameData.namedMaterialComponentIDs["glassTransparentFrontfaceMaterialComp"]);
         glassMaterialF->vertShaderName = "shaders/DiffuseTransparent.vert.spv";
         glassMaterialF->fragShaderName = "shaders/DiffuseTransparent.frag.spv";
@@ -210,7 +210,7 @@ namespace Scripting
         glassMaterialF->SetVisible(true);
 
         Material* bikeMaterialB = 
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["bikeTransparentBackfaceMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["bikeTransparentBackfaceMaterialComp"]);
         bikeMaterialB->vertShaderName = "shaders/DiffuseTransparent.vert.spv";
         bikeMaterialB->fragShaderName = "shaders/DiffuseTransparent.frag.spv";
         bikeMaterialB->pipelineData.blendEnable = VK_TRUE;
@@ -228,7 +228,7 @@ namespace Scripting
         bikeMaterialB->SetVisible(true);
 
         Material* bikeMaterialF =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["bikeTransparentFrontfaceMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["bikeTransparentFrontfaceMaterialComp"]);
         bikeMaterialF->vertShaderName = "shaders/DiffuseTransparent.vert.spv";
         bikeMaterialF->fragShaderName = "shaders/DiffuseTransparent.frag.spv";
         bikeMaterialF->pipelineData.blendEnable = VK_TRUE;
@@ -250,7 +250,7 @@ namespace Scripting
         bikeMaterialF->SetVisible(true);
 
         Material* diffuseTransparentInstancedB = 
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTransparentBackfaceInstancedMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTransparentBackfaceInstancedMaterialComp"]);
         // [tdbe] the only thing that makes an instanced material instanced, is the instanceCount > 1.
         // (and the vertex shader consuming gl_InstanceIndex)
         diffuseTransparentInstancedB->instanceCount = 75u;
@@ -273,7 +273,7 @@ namespace Scripting
         diffuseTransparentInstancedB->SetVisible(true);
 
         Material* diffuseTransparentInstancedF = 
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTransparentFrontfaceInstancedMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["diffuseTransparentFrontfaceInstancedMaterialComp"]);
         // [tdbe] the only thing that makes an instanced material instanced, is the instanceCount > 1.
         // (and the vertex shader consuming gl_InstanceIndex)
         diffuseTransparentInstancedF->instanceCount = 75u;
@@ -298,7 +298,7 @@ namespace Scripting
         diffuseTransparentInstancedF->SetVisible(true);
 
         Material* skyOfChaperoneMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["skyOfChaperoneMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["skyOfChaperoneMaterialComp"]);
         skyOfChaperoneMaterial->vertShaderName = "shaders/SkyOfChaperone.vert.spv";
         skyOfChaperoneMaterial->fragShaderName = "shaders/SkyOfChaperone.frag.spv";
         skyOfChaperoneMaterial->pipelineData.blendEnable = VK_TRUE;
@@ -319,7 +319,7 @@ namespace Scripting
         skyOfChaperoneMaterial->SetVisible(false);
 
         Material* floorGridMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["floorGridMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["floorGridMaterialComp"]);
         floorGridMaterial->vertShaderName = "shaders/GridGround.vert.spv";
         floorGridMaterial->fragShaderName = "shaders/GridGround.frag.spv";
         floorGridMaterial->pipelineData.blendEnable = VK_TRUE;
@@ -337,7 +337,7 @@ namespace Scripting
         floorGridMaterial->SetVisible(false);
 
         Material* ceilingGridMaterial =
-            gameData.materialComponents->GetItem(gameData.namedMaterialComponentIDs["ceilingGridMaterialComp"]);
+            gameData.entityObjectsWorld->materialComponents->GetItem(gameData.namedMaterialComponentIDs["ceilingGridMaterialComp"]);
         ceilingGridMaterial->vertShaderName = "shaders/GridSimple.vert.spv";
         ceilingGridMaterial->fragShaderName = "shaders/GridSimple.frag.spv";
         ceilingGridMaterial->pipelineData.blendEnable = VK_TRUE;
@@ -358,19 +358,19 @@ namespace Scripting
 
         // -------- [tdbe] edit any "game object" properties here. --------
 #pragma region GameObjects
-        GameEntityObject* worldRoot = gameData.gameEntityObjects->GetItem(gameData.playerObjects[0]->worldRootId);
+        GameEntityObject* worldRoot = gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.playerObjects[0]->worldRootId);
         Transform* worldRootTrans = worldRoot->GetComponentByTypeIndex<Transform>();
         glm::mat4 worldRootMatr = glm::mat4(1.0f);
         worldRootTrans->SetWorldMatrix(worldRootMatr); // [tdbe] origin, render origin
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSkybox"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSkybox"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
                                         { 500.12f, 500.12f, 500.12f }));
         
         util::DebugLog("~~~~[Scripting] setting ground size: ");
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["ground"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["ground"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(
                                 glm::translate(
@@ -379,21 +379,21 @@ namespace Scripting
                                     { 0.0f, 0.0f, 0.0f }),
                                 glm::radians(-45.0f), { 0.0f, 1.0f, 0.0f }));
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["ruins"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["ruins"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }),
                                          glm::radians(0.0f), { 0.0f, 1.0f, 0.0f }));
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["carLeft"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["carLeft"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, 
                                                         { -4.35f, 0.0f, -1.7f }),//{ -3.5f, 0.0f, -0.5f }),
                                          glm::radians(150.0f), { 0.0f, 1.0f, 0.0f }));//75.0f
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["carRight"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["carRight"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, { 8.4f, 0.0f, -14.5f }),
                                          glm::radians(-37.0f), { 0.0f, 1.0f, 0.0f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["beetle"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["beetle"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(
                                         glm::rotate(
@@ -401,88 +401,88 @@ namespace Scripting
                                                                   { -3.0f, 0.0f, -7.5f }),//{ -3.5f, 0.0f, -7.0f }),
                                                     glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 1.1f, 1.1f, 1.1f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["beetleGlass"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["beetleGlass"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, 
                                                                   { -3.0f, 0.0f, -7.5f }),
                                                     glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 1.1f, 1.1f, 1.1f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["logo1"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["logo1"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 3.0f, -10.0f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["logo2"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["logo2"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 3.0f, -10.0f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["bike"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["bike"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, 
                                                         { 0.0f, 0.0f, -4.5f }), 
                                          0.2f, { 0.0f, 1.0f, 0.0f }));
         // glm::scale(glm::translate(worldRoot.worldMatrix, { 4.0f, 2.0f, -2.5f }), { 0.5f, 0.5f, 0.5f });
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["cube"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["cube"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, 
                                                       { 0.0f, -0.45f, -4.5f }),
                                         { 0.5f, 0.5f, 0.5f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textLocomotion"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textLocomotion"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(
                 glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.835f, -1.7f }),
                                        -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                            { 0.25f, 0.25f, 0.25f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textSudaBeam"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textSudaBeam"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.2325f, -1.3f }),//2.825f, 0.23f, -1.7f
                                                     -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 0.225f, 0.225f, 0.225f }));
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textSeeControlsMd"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["textSeeControlsMd"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.205f, -3.2f }),
                                                     -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 0.2f, 0.2f, 0.2f }));                  
         
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSmoothForInstancing"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSmoothForInstancing"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { -2.25f, 1.25f, -14.5f }),
                                         { 0.5f, 0.5f, 0.5f }));
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSmoothTripInstancing"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["icosphereSmoothTripInstancing"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }),// { 2.0f, 2.0f, -2.5f }
                                         { 0.7f, 0.7f, 0.7f }));
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monke"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monke"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.5f }));// [tdbe] mesh is offset and baked from blender
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monkeEye1"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monkeEye1"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 9.87879f, 1.99395f, -10.586f + 0.5f }),
                                         { 0.283856f, 0.283856f, 0.283856f }));
 
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monkeEye2"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["monkeEye2"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 10.3927f, 2.55881f, -9.76025f + 0.5f}),
                                         { 0.283856f, 0.283856f, 0.283856f }));
         
-        gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["squid"])
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["squid"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 3.62f, 2.5f, -9.95f }),//-10.125f
                                         { 0.75f, 0.75f, 0.75f }));
         
         // -------- [tdbe] set any non-default game VFX object props here.
-        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["icosphereSkybox"])
+        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedVFXObjectIDs["icosphereSkybox"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
                                         { 500.12f, 500.12f, 500.12f }));
 
         util::DebugLog("~~~~[Scripting] setting floorGrid. ");
-        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["floorGrid"])
+        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedVFXObjectIDs["floorGrid"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
         util::DebugLog("~~~~[Scripting] setting ceilingGrid. ");
-        gameData.gameVFXEntityObjects->GetItem(gameData.namedVFXObjectIDs["ceilingGrid"])
+        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedVFXObjectIDs["ceilingGrid"])
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
 #pragma endregion GameObjects
@@ -491,8 +491,8 @@ namespace Scripting
 #pragma region Lights
         // [tdbe] tube light: z: tube length, x (and/or) y: tube radius
 
-        Light* dirLightComp = gameData.lightComponents->GetItem(gameData.namedLightComponentIDs["mainDirectionalLightComp"]);
-        Transform* dirLightTrans = gameData.gameEntityObjects->GetItem(gameData.namedGameObjectIDs["mainDirectionalLight"])
+        Light* dirLightComp = gameData.entityObjectsWorld->lightComponents->GetItem(gameData.namedLightComponentIDs["mainDirectionalLightComp"]);
+        Transform* dirLightTrans = gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs["mainDirectionalLight"])
                 ->GetComponentByTypeIndex<Transform>();
         glm::mat4 dirLightMatr = dirLightTrans->GetWorldMatrix();
         dirLightMatr[3] = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f); // [tdbe] for directional light, set the direction only
@@ -505,12 +505,12 @@ namespace Scripting
         //bikeLightComp->SetRenderProperties(glm::vec4(1.0f, 0.0f, 0.0f,0.0048828125f), 5.0f, Light::LightTypes::LIGHT_TYPE_TUBE);
         //bikeLightComp->SetVisible(true);
 
-        Light* handLight01Comp = gameData.lightComponents->GetItem(gameData.namedLightComponentIDs["handLight01Comp"]);
+        Light* handLight01Comp = gameData.entityObjectsWorld->lightComponents->GetItem(gameData.namedLightComponentIDs["handLight01Comp"]);
         // [tdbe] z: tube length, x (and/or) y: tube radius
         handLight01Comp->SetRenderProperties(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), Light::LightTypes::LIGHT_TYPE_TUBE);
         handLight01Comp->SetVisible(true);
 
-        Light* handLight02Comp = gameData.lightComponents->GetItem(gameData.namedLightComponentIDs["handLight02Comp"]);
+        Light* handLight02Comp = gameData.entityObjectsWorld->lightComponents->GetItem(gameData.namedLightComponentIDs["handLight02Comp"]);
         // [tdbe] z: tube length, x (and/or) y: tube radius
         handLight02Comp->SetRenderProperties(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), Light::LightTypes::LIGHT_TYPE_TUBE);
         handLight02Comp->SetVisible(true);
@@ -526,7 +526,7 @@ namespace Scripting
         auto id01 = GameData::Instance().namedLightComponentIDs["tentacleLightComp01"];
         for (int i = 1; i < 7; i++)
         {
-            Light* tentacleLightComp = gameData.lightComponents->items[id01.index + i - 1];
+            Light* tentacleLightComp = gameData.entityObjectsWorld->lightComponents->items[id01.index + i - 1];
             // [tdbe] z: tube length, x (and/or) y: tube radius
             tentacleLightComp->SetRenderProperties(tentacleColors[i-1], 1.0, 
                                                    Light::LightTypes::LIGHT_TYPE_TENTACLE);

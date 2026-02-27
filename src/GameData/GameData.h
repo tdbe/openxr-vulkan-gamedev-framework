@@ -38,11 +38,11 @@ namespace Game
         const std::string instanceId;
 
         /// [tdbe] for global uids, and used to fetch different categories of items, you can create more here.
-        static const struct GlobalUIDSeeds
+        static const struct TypeUIDs
         {
             static const uint16_t FREE = GameDataId::FREE;
             static const uint16_t GAME_ENTITY_OBJECTS = 100;
-            static const uint16_t GAME_VFX_OBJECTS = 200;
+            static const uint16_t GAME_ENTITIES = 200;
             static const uint16_t TRANSFORM_COMPONENTS = 300;
             static const uint16_t PARENT_COMPONENTS = 310;
             static const uint16_t CHILDREN_COMPONENTS = 311;
@@ -57,8 +57,8 @@ namespace Game
                     return "FREE";
                 else if (id == GAME_ENTITY_OBJECTS)
                     return "GAME_ENTITY_OBJECTS";
-                else if (id == GAME_VFX_OBJECTS)
-                    return "GAME_VFX_OBJECTS";
+                else if (id == GAME_ENTITIES)
+                    return "GAME_ENTITIES";
                 else if (id == TRANSFORM_COMPONENTS)
                     return "TRANSFORM_COMPONENTS";
                 else if (id == PARENT_COMPONENTS)
@@ -78,7 +78,7 @@ namespace Game
                 else
                     return "~~~PLEASE_DEFINE~~~";
             };
-        } GlobalUIDSeeds; 
+        } TypeUIDs; 
 
         static const struct AllocationMagicNumbers
         {
@@ -86,11 +86,54 @@ namespace Game
             static const uint32_t MAX_VFX_GAME_ENTITY_OBJECTS = 6;
             static const uint32_t MAX_MODELS = 32;
             static const uint32_t MAX_MATERIALS = 50;
+            static const uint32_t MAX_VFX_MATERIALS = 4;
             static const uint32_t LIGHTS_COUNT = 10;// [tdbe] remember to change LIGHT_COUNT in _Lighting.glsl, and maybe in Light.vert and LightTentacle.vert
             static const uint32_t DEFAULT_COMPONENTS_PER_GAME_ENTITY_OBJECT = 16;
             static const uint32_t MAX_PLAYER_OBJECTS = 1;
         } AllocationMagicNumbers;
 
+        /// [tdbe] GameWorlds are just a way to sort and conceptually chunk classes of entities + components.
+        /// You might want a "bullets entity world", a "game entity object world", a "vfx world" etc.
+        /// [tdbe] Tiles: elements don't have to be in order "index per column" but they have to all belong to each other in the current tile.
+        /// (Because of pool reuse + tiling, (re)adding a component asks for the tile of the owner entity (stored in entity ID).)
+        /// (If you're not using a pool then don't allocate it.)
+        struct GameWorld
+        {
+          #pragma region Regular Components
+            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
+            /// The transform is one per game entity.
+            GameDataPool<Transform>* transformComponents = nullptr;
+            GameDataPool<Parent>* parentComponents = nullptr;
+            GameDataPool<Children>* childrenComponents = nullptr;
+            GameDataPool<ARoot>* rootAttributeComponents = nullptr;
+            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
+            /// Bounds (AABB) - technically is created per model, and is free if you don't have a model, and it's stored per entity.
+            GameDataPool<Bounds>* boundsComponents = nullptr;
+          #pragma endregion Regular Components
+            
+          #pragma region Shared Components
+            /// [tdbe] entities with ids and versions ((weak) "references"); and know their owner(s).
+            /// multiple Models can use the same MeshData; we load the meshData into models
+            GameDataPool<Model>* modelComponents = nullptr;
+            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
+            /// Just having different materials won't really affect rendering performance; rederer queues per-model right now. 
+            /// We have global, per mesh, and per material data, all found in these Materials. The data modifies the
+            /// vulkan descriptor or pipeline used if you change a corresponding property.
+            GameDataPool<Material>* materialComponents = nullptr;
+          #pragma endregion Shared Components
+        
+          #pragma region Sparse Components  
+            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
+            /// The first light is directional (the main directional light)
+            GameDataPool<Light>* lightComponents = nullptr;
+          #pragma region Sparse Components
+          
+            /// [tdbe] entities with ids and versions ((weak) "references"); and know their components. 
+            /// plus the derived GameEntityObject has other little conveniences like events and .name.
+            /// <see cref="GameEntity"/> or <see cref="GameEntityObject"/>-- TODO: we can't solve this with std:any and Templates unfortunately. So for now just using the heavier semi oop derived type: <see cref="GameEntityObject"/>.
+            GameDataPool<GameEntityObject>* gameEntityObjects = nullptr;
+        };
+        
 #pragma region StorageData
         /// [tdbe] data buffer loaded from e.g. 3d objects in storage
         MeshData* meshData = nullptr;
@@ -104,27 +147,6 @@ namespace Game
 #pragma endregion StorageData
 
 #pragma region GameComponent
-        /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-        /// The transform is one per game entity.
-        GameDataPool<Transform>* transformComponents = nullptr;
-        GameDataPool<Parent>* parentComponents = nullptr;
-        GameDataPool<Children>* childrenComponents = nullptr;
-        GameDataPool<ARoot>* rootAttributeComponents = nullptr;
-        /// [tdbe] entities with ids and versions ((weak) "references"); and know their owner(s).
-        /// multiple Models can use the same MeshData; we load the meshData into models
-        GameDataPool<Model>* modelComponents = nullptr;
-        /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-        /// Bounds (AABB) - technically is created per model, but set it as one per game object so we can mess with the bounds regardless of the referenced mesh.
-        GameDataPool<Bounds>* boundsComponents = nullptr;
-        /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-        /// Just having different materials won't really affect rendering performance; rederer queues per-model right now. 
-        /// We have global, per mesh, and per material data, all found in these Materials. The data modifies the
-        /// vulkan descriptor or pipeline used if you change a corresponding property.
-        GameDataPool<Material>* materialComponents = nullptr;
-        /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-        /// The first light is directional (the main directional light)
-        GameDataPool<Light>* lightComponents = nullptr;
-
         /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameComponent* GetComponent(GameDataId::ID id);
         /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
@@ -132,16 +154,27 @@ namespace Game
 #pragma endregion GameComponent
 
 #pragma region GameEntity
-        /// [tdbe] entities with ids and versions ((weak) "references"); and know their components. 
-        /// plus other little conveniences like events and .name.
-        GameDataPool<GameEntityObject>* gameEntityObjects = nullptr;
-        GameDataPool<GameEntityObject>* gameVFXEntityObjects = nullptr;
-
         /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameEntity* GetEntity(GameDataId::ID id);
         /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
         void ClearEntity(GameDataId::ID id, bool unsafe = false);
 #pragma endregion GameEntity
+
+#pragma region GameWorld
+        GameWorld* entityObjectsWorld = nullptr;
+        /// [tdbe] vfx objects need to be at the end of the list (because their materials need special late drawcalls)
+        GameWorld* vfxEntityObjectsWorld = nullptr;
+        std::vector<GameWorld*> gameWorlds;
+        int GameWorldsIndexOf(GameWorld* world)
+        {
+            for(int i = 0; i < gameWorlds.size(); i++)
+            {
+                if(gameWorlds[i] == world)
+                    return i;
+            }
+            return -1;
+        };
+#pragma endregion GameWorld
 
 #pragma region Players
         /// [tdbe] for now a player is a collection of game entity object pointers, and states.
@@ -183,11 +216,13 @@ namespace Game
         bool LoadMaterials();
         bool LoadGameLights();
         bool LoadGameEntityObjects();
+        bool LoadVFXEntityObjects();
         bool LoadPlayers();
         
         void DeletePlayers();
         void DeleteEntityPools();
         void DeleteComponentPools();
+        void DeleteWorlds();
 
 #pragma region Events
         /// [tdbe] (There's a nice multi-subscribe Visual C++ event system, with __hook, __unhook, __event, __raise, keywords etc., but only compilable from visual studio. So instead we emulate it in peasant land :))

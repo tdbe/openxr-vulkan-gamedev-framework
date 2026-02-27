@@ -137,17 +137,15 @@ struct Bounds final : public GameComponent
         SetBoundsAABB(model);
     };
 
-    std::vector<GameEntity*> GetOwners() const
+    GameEntity* GetOwner() const
     {
         std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
-        std::vector<GameEntity*> foundVec;
-        foundVec.reserve(ownerIDs.size());
-        for (GameDataId::ID entId : ownerIDs)
+        GameEntity* found = nullptr;
+        if(!ownerIDs[0].IsCleared())
         {
-            auto comp = GameData::Instance().GetEntity(entId);
-            foundVec.emplace_back(comp);
+            found = GameData::Instance().GetEntity(ownerIDs[0]);
         }
-        return foundVec;
+        return found;
     };
 
     /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).

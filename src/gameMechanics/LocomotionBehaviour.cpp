@@ -37,20 +37,20 @@ LocomotionBehaviour::LocomotionBehaviour(PlayerObject& playerObject,
     this->chaperoneSkyboxId = chaperoneSkyboxId;
     this->handsMaterialId = handsMaterialId;
 
-    Material* floorGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
+    Material* floorGridMat = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* ceilingGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
+    Material* ceilingGridMat = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* handsMat = GameData::Instance().materialComponents->GetItem(handsMaterialId);
+    Material* handsMat = GameData::Instance().vfxEntityObjectsWorld->materialComponents->GetItem(handsMaterialId);
     
     Material* chaperoneSkyMat =
         GameData::Instance()
-            .gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
+            .vfxEntityObjectsWorld->gameEntityObjects->GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
 
-    Transform* floorGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
+    Transform* floorGridTrans = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Transform>();
-    Transform* skyTrans = GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
+    Transform* skyTrans = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(chaperoneSkyboxId)
         ->GetComponentByTypeIndex<Transform>();
 
     origFloorGridMatr = floorGridTrans->GetWorldMatrix();
@@ -78,28 +78,28 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
         return;
     }
 
-    Material* floorGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
+    Material* floorGridMat = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* ceilingGridMat = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
+    Material* ceilingGridMat = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* handsMat = GameData::Instance().materialComponents->GetItem(handsMaterialId);
+    Material* handsMat = GameData::Instance().vfxEntityObjectsWorld->materialComponents->GetItem(handsMaterialId);
 
-    Material* chaperoneSkyMat = GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)
+    Material* chaperoneSkyMat = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
 
-    Transform* worldRootTrans = GameData::Instance().gameEntityObjects->GetItem(playerObject.worldRootId)
+    Transform* worldRootTrans = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(playerObject.worldRootId)
         ->GetComponentByTypeIndex<Transform>();
-    GameEntityObject* handLeftGeo = GameData::Instance().gameEntityObjects->GetItem(playerObject.handLeftId);
-    GameEntityObject* handRightGeo = GameData::Instance().gameEntityObjects->GetItem(playerObject.handRightId);
+    GameEntityObject* handLeftGeo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(playerObject.handLeftId);
+    GameEntityObject* handRightGeo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(playerObject.handRightId);
     Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();
     Transform* handRightTrans = handRightGeo->GetComponentByTypeIndex<Transform>();
-    Transform* floorGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(floorGridId)
+    Transform* floorGridTrans = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(floorGridId)
         ->GetComponentByTypeIndex<Transform>();
-    Transform* ceilingGridTrans = GameData::Instance().gameVFXEntityObjects->GetItem(ceilingGridId)
+    Transform* ceilingGridTrans = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Transform>();
 
     Transform* chaperoneSkyTrans =
-        GameData::Instance().gameVFXEntityObjects->GetItem(chaperoneSkyboxId)->GetComponentByTypeIndex<Transform>();
+        GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(chaperoneSkyboxId)->GetComponentByTypeIndex<Transform>();
     
     const float chaperoneRingRadius =
         0.39f; // [tdbe] distance along the radius of the screen at which to draw a boundary (a circle)
@@ -363,8 +363,8 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         return;
     }
 
-    Transform* worldRootTrans = GameData::Instance()
-                                        .gameEntityObjects->GetItem(playerObject.worldRootId)
+    Transform* worldRootTrans = GameData::Instance().entityObjectsWorld->
+                                        gameEntityObjects->GetItem(playerObject.worldRootId)
                                         ->GetComponentByTypeIndex<Transform>();
     glm::mat4 worldRootMatr = worldRootTrans->GetWorldMatrix();
 
@@ -401,13 +401,14 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
 
     auto handleUpdateState = [&](bool autoTransition = true)
     {
-        Transform* handLeftTrans =  GameData::Instance()
-                                       .gameEntityObjects->GetItem(playerObject.handLeftId)
+        Transform* handLeftTrans =  GameData::Instance().entityObjectsWorld->
+                                       gameEntityObjects->GetItem(playerObject.handLeftId)
                                        ->GetComponentByTypeIndex<Transform>();
-        Transform* handRightTrans = GameData::Instance()
-                                        .gameEntityObjects->GetItem(playerObject.handRightId)
+        Transform* handRightTrans = GameData::Instance().entityObjectsWorld->
+                                        gameEntityObjects->GetItem(playerObject.handRightId)
                                         ->GetComponentByTypeIndex<Transform>();
-        Transform* skyTrans =       GameData::Instance().gameEntityObjects->GetItem(icosphereSkyboxId)
+        Transform* skyTrans =       GameData::Instance().entityObjectsWorld->
+                                        gameEntityObjects->GetItem(icosphereSkyboxId)
                                         ->GetComponentByTypeIndex<Transform>();
 
         moveStateData.posLeft =

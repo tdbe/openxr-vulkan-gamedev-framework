@@ -36,9 +36,9 @@ class RenderProcess final
     // [tdbe] TODO: create a per-material buffer for e.g. brdf, colors, textures etc
 
     /// [tdbe] vertex shader dynamic uniform properties to bind to per model / gameObject.
-    /// (in case you don't know: this struct is bound to a memory span slot on the gpu (one that you can name
-    /// whatever you want on the gpu e.g. DynVertBufData in vert shaders), so that's why you can't find a
-    /// direct reference between them)
+    /// (protip: this struct is bound to a memory span slot on the gpu (one that you can name
+    /// whatever you want on the gpu e.g. DynVertBufData in vert shaders), so that's why you 
+    /// might not find a direct reference between them)
     struct DynamicVertexUniformData
     {
         /// [tdbe] per model/mesh
@@ -52,9 +52,9 @@ class RenderProcess final
     std::vector<DynamicVertexUniformData> dynamicVertexUniformData;
 
     /// [tdbe] vertex shader  global uniform properties
-    /// (in case you don't know: this struct is bound to a memory span slot on the gpu (one that you can name
-    /// whatever you want on the gpu e.g. StaVertBufData in vert shaders), so that's why you can't find a
-    /// direct reference between them)
+    /// (protip: this struct is bound to a memory span slot on the gpu (one that you can name
+    /// whatever you want on the gpu e.g. StaVertBufData in vert shaders), so that's why you 
+    /// might not find a direct reference between them)
     struct StaticVertexUniformData
     {
         std::array<glm::mat4, 2u> handsWorldMatrixes;     // [tdbe] 0 = left hand, 1 = right hand

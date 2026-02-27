@@ -5,7 +5,7 @@ ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Su
 [Game][GameData][LoadGameWorld]  .........................................................................................................................
 [Game][GameData][LoadGameWorld]  Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:
 
-[GameDataPool][Constructed<MODEL_COMPONENTS>] maxPossibleSize: "{ 32 }", globalUIDSeed: "{ 400 }_MODEL_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Model.
+[GameDataPool][Constructed<MODEL_COMPONENTS>] maxPossibleSize: "{ 32 }", typeUID: "{ 400 }_MODEL_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Model.
 [GameDataPool][GetFirstFree<MODEL_COMPONENTS>]   Found free item at index: { 0 }, with id: { 400 }:{ 0 }:{ 1 }, validSize: { 1 }, currentVersion: { 1 }
 [GameDataPool][GetFreeItem<MODEL_COMPONENTS>]    { 400 }:{ 0 }:{ 1 }
 [MeshData] LoadModel: models/quad.obj; total meshData size so far: { 288 }
@@ -91,7 +91,7 @@ ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Su
 [MeshData] LoadModel: models/SuzanneHighQuality20k.obj; total meshData size so far: { 46632528 }
 [Game][GameData][LoadGameWorld][Component][Model]        Configured component with id: "{ 400 }:{ 20 }:{ 21 }", is std::type_index(typeid(Model)): true.
 
-[GameDataPool][Constructed<MATERIAL_COMPONENTS>] maxPossibleSize: "{ 50 }", globalUIDSeed: "{ 600 }_MATERIAL_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Material.
+[GameDataPool][Constructed<MATERIAL_COMPONENTS>] maxPossibleSize: "{ 50 }", typeUID: "{ 600 }_MATERIAL_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Material.
 [GameDataPool][GetFirstFree<MATERIAL_COMPONENTS>]        Found free item at index: { 0 }, with id: { 600 }:{ 0 }:{ 1 }, validSize: { 1 }, currentVersion: { 1 }
 [GameDataPool][GetFreeItem<MATERIAL_COMPONENTS>]         { 600 }:{ 0 }:{ 1 }
 [Game][GameData][LoadGameWorld][Component][Material]     Configured component with id: "{ 600 }:{ 0 }:{ 1 }", is std::type_index(typeid(Material)): true.
@@ -156,7 +156,7 @@ ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Su
 [GameDataPool][GetFreeItem<MATERIAL_COMPONENTS>]         { 600 }:{ 40 }:{ 21 }
 [Game][GameData][LoadGameWorld][Component][Material]     Configured component with id: "{ 600 }:{ 40 }:{ 21 }", is std::type_index(typeid(Material)): true.
 
-[GameDataPool][Constructed<LIGHT_COMPONENTS>] maxPossibleSize: "{ 10 }", globalUIDSeed: "{ 700 }_LIGHT_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Light.
+[GameDataPool][Constructed<LIGHT_COMPONENTS>] maxPossibleSize: "{ 10 }", typeUID: "{ 700 }_LIGHT_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Light.
 [GameDataPool][GetFirstFree<LIGHT_COMPONENTS>]   Found free item at index: { 0 }, with id: { 700 }:{ 0 }:{ 1 }, validSize: { 1 }, currentVersion: { 1 }
 [GameDataPool][GetFreeItem<LIGHT_COMPONENTS>]    { 700 }:{ 0 }:{ 1 }
 [Game][GameData][LoadGameWorld][Component][Light]        Configured component with id: "{ 700 }:{ 0 }:{ 1 }", is std::type_index(typeid(Light)): true.
@@ -188,13 +188,13 @@ ipcLoader [RUNTIMEIPC]RuntimeIPC: Loaded library from C:\Program Files\Oculus\Su
 [GameDataPool][GetFreeItem<LIGHT_COMPONENTS>]    { 700 }:{ 9 }:{ 10 }
 [Game][GameData][LoadGameWorld][Component][Light]        Configured component with id: "{ 700 }:{ 9 }:{ 10 }", is std::type_index(typeid(Light)): true.
 
-[GameDataPool][Constructed<GAME_ENTITY_OBJECTS>] maxPossibleSize: "{ 100 }", globalUIDSeed: "{ 100 }_GAME_ENTITY_OBJECTS", firstEmptyIndex: { 0 }, T: struct Game::GameEntityObject.
+[GameDataPool][Constructed<GAME_ENTITY_OBJECTS>] maxPossibleSize: "{ 100 }", typeUID: "{ 100 }_GAME_ENTITY_OBJECTS", firstEmptyIndex: { 0 }, T: struct Game::GameEntityObject.
 
-[GameDataPool][Constructed<GAME_VFX_OBJECTS>] maxPossibleSize: "{ 4 }", globalUIDSeed: "{ 200 }_GAME_VFX_OBJECTS", firstEmptyIndex: { 0 }, T: struct Game::GameEntityObject.
+[GameDataPool][Constructed<GAME_VFX_OBJECTS>] maxPossibleSize: "{ 4 }", typeUID: "{ 200 }_GAME_VFX_OBJECTS", firstEmptyIndex: { 0 }, T: struct Game::GameEntityObject.
 
-[GameDataPool][Constructed<TRANSFORM_COMPONENTS>] maxPossibleSize: "{ 100 }", globalUIDSeed: "{ 300 }_TRANSFORM_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Transform.
+[GameDataPool][Constructed<TRANSFORM_COMPONENTS>] maxPossibleSize: "{ 100 }", typeUID: "{ 300 }_TRANSFORM_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Transform.
 
-[GameDataPool][Constructed<BOUNDS_COMPONENTS>] maxPossibleSize: "{ 32 }", globalUIDSeed: "{ 500 }_BOUNDS_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Bounds.
+[GameDataPool][Constructed<BOUNDS_COMPONENTS>] maxPossibleSize: "{ 32 }", typeUID: "{ 500 }_BOUNDS_COMPONENTS", firstEmptyIndex: { 0 }, T: struct Game::Bounds.
 [GameDataPool][GetFirstFree<GAME_ENTITY_OBJECTS>]        Found free item at index: { 0 }, with id: { 100 }:{ 0 }:{ 1 }, validSize: { 1 }, currentVersion: { 1 }
 [GameDataPool][GetFreeItem<GAME_ENTITY_OBJECTS>]         { 100 }:{ 0 }:{ 1 }
 [Game][GameData][GameEntityObject]       Using: {name: "game object", id: "{ 100 }:{ 0 }:{ 1 }", is std::type_index(typeid(GameEntityObject)): true.

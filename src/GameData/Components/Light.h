@@ -82,12 +82,8 @@ namespace Game
         glm::mat4 shaderMatrix = glm::mat4(1.0f);
         glm::vec4 colorAndIntensity = glm::vec4(1.0f);
 
-        /// [tdbe] For performance. 
-        /// NOTE: assumes the game entity owner of the light component doesn't change and neither does its Transform. In a bigger game engine you'd enforce or track this.
-        Transform* cachedTransformComponent = nullptr;
-
         // [tdbe] for lights, the matrix will be baked into the multi value shadermatrix that gets sent to the shaders
-        glm::mat4 GetWorldMatrix();
+        glm::mat4 GetOwnerTransformWorldMatrix();
         void SetShaderProperties();
     };
 } // namespace Game

@@ -13,7 +13,7 @@ namespace Game
 	{
         static const uint32_t FREE = 0;
         /// [tdbe] Essentially used as a weak reference in the data spans in <see cref="GameData"/>.
-        /// globalUIDSeed:index:version and typeIndex
+        /// worldIndex:typeUID:index:version and typeIndex
         struct ID 
         {
             /// [tdbe] index in owning vector/array. 2^32, +-2,147,483,647 -> the max number of items in an owning
@@ -23,10 +23,16 @@ namespace Game
             /// u2^32, 0 to 4,294,967,295 -> the total max number of times you can change items in the owning
             /// vector/array while still maintaining unique IDs.
             uint32_t version = 0;
+            
+            /// [tdbe] We don't have advanced chunking but we have Tiled pools. Chunky Tiles.
+            uint16_t chunkIndex = 0;
 
-            /// [tdbe] the above entries make up an ID relative to the container of this item. This one is a global UID seed,
-            /// aka the index of the container of this item.
-            uint16_t globalUIDSeed = 0;
+            /// [tdbe] the above entries make up an ID relative to the container<this item type>. 
+            /// This a custom uid of the type of element.
+            uint16_t typeUID = 0;
+            
+            /// [tdbe] the above entries can be found in one of multiple game worlds.
+            int worldIndex = 0;
 
             /// [tdbe] Allows static cast find by type (but doesn't find your object if it's derived from this type.
             /// (obv must set this to the topmost inheritor of this class e.g. a <see cref="GameEntityObject"/>)
@@ -47,13 +53,13 @@ namespace Game
 
             std::string PrintGlobalUID() const
             {
-                return util::ToString(globalUIDSeed) + ":" + util::ToString(index) + ":" + util::ToString(version);
+                return util::ToString(worldIndex) + ":" + util::ToString(typeUID) + ":" + util::ToString(chunkIndex) + ":" + util::ToString(index) + ":" + util::ToString(version);
             }
 
             bool Equals(GameDataId::ID other) const
             {
-                return index == other.index && version == other.version &&
-                       globalUIDSeed == other.globalUIDSeed;
+                return index == other.index && version == other.version && chunkIndex == other.chunkIndex &&
+                       typeUID == other.typeUID && worldIndex == other.worldIndex;
             }
 
             bool operator==(const GameDataId::ID& other) const
@@ -85,12 +91,14 @@ namespace Game
             #endif
         };
 
-        GameDataId(GameDataId::ID id = { 0, 0, 0, std::type_index(typeid(int)) })
+        GameDataId(GameDataId::ID id = { 0, 0, 0, 0, 0, std::type_index(typeid(int)) })
         {
             this->id.index = id.index;
             this->id.version = id.version;
+            this->id.chunkIndex = id.chunkIndex;
             this->id.typeIndex = id.typeIndex;
-            this->id.globalUIDSeed = id.globalUIDSeed;
+            this->id.typeUID = id.typeUID;
+            this->id.worldIndex = id.worldIndex;
 		};
         ~GameDataId() {};
 	};
@@ -114,8 +122,10 @@ namespace std
         {
             size_t h1 = hash<int32_t>{}(id.index);
             size_t h2 = hash<uint32_t>{}(id.version);
-            size_t h3 = hash<uint16_t>{}(id.globalUIDSeed);
-            return h1 ^ (h2 << 1) ^ (h3 << 2);
+            size_t h3 = hash<uint32_t>{}(id.chunkIndex);
+            size_t h4 = hash<uint16_t>{}(id.typeUID);
+            size_t h5 = hash<uint16_t>{}(id.worldIndex);
+            return h1 ^ (h2 << 1) ^ (h3 << 2) ^ (h4 << 3) ^ (h5 << 4);
         }
     };
 }

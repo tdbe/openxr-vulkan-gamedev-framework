@@ -70,7 +70,7 @@ void Parent::ClearParent(bool ripple)
     ARoot* rootAttrib = owner->GetComponentByTypeIndex<ARoot>();
     if(rootAttrib == nullptr && children->HasChildren())
     {
-        rootAttrib = GameData::Instance().rootAttributeComponents->GetFreeItem();
+        rootAttrib = GameData::Instance().entityObjectsWorld->rootAttributeComponents->GetFreeItem();
         rootAttrib->AddOwnerId(owner->id);
         owner->AddComponentId(rootAttrib->id);
     }

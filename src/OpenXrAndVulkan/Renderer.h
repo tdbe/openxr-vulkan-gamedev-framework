@@ -14,6 +14,7 @@ namespace Game
     struct Material;
     struct Light;
     struct GameEntityObject;
+    struct GameData;
 }
 using namespace Game;
 
@@ -49,10 +50,7 @@ public:
     /// The aim should always be to set up gpu bufferas once, with the max number of items you'll use in this game
     /// world, the same idea as with the <see cref="GameDataPool"/>. (It doesn't cost gpu power to just have it there.)
     void SetUpRenderProcesses(const Game::MeshData* meshData,
-                               const GameDataPool<Material>* materials,
-                               const GameDataPool<GameEntityObject>* gameEntityObjects,
-                               const GameDataPool<GameEntityObject>* gameVFXObjects,
-                               const GameDataPool<Light>* gameLights);
+                              const Game::GameData& gameData);
     /// [tdbe] Render. (The ideal is indirect rendering, and)
     /// Prefer less drawcalls, less cpu-gpu communication:
     /// - one draw call per material "instanced geometry" style,
@@ -66,10 +64,7 @@ public:
                 float time,
                 const Inputspace::InputData& inputData,
                 const bool playerIsInChaperone,
-                const GameDataPool<Material>* materials,
-                const GameDataPool<GameEntityObject>* gameEntityObjects,
-                const GameDataPool<GameEntityObject>* gameVFXObjects,
-                const GameDataPool<Light>* gameLights);
+                const Game::GameData& gameData);
     void submit(bool useSemaphores) const;
 
     bool IsValid() const;

@@ -13,7 +13,7 @@ namespace Game
         /// [tdbe] faster than dynamic casts but won't return objects that inherit from T.
         /// [tdbe] newb-friendly-note: you'll get linker errors if you declare but don't define template
         /// functimons in the header file. (the compiler won't read the definition and won't know if/how to handle the
-        /// various types, (and of course won't explain this to you in hu-man terms or any terms))
+        /// various types, (and of course won't explain this to you in hoo-man terms or any terms))
         template <typename T> std::vector<GameDataId::ID> GetComponentIDsByTypeIndex() const
         {
             // static_assert(std::is_base_of<GameComponent, T>::value, 

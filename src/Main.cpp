@@ -81,7 +81,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    GameEntityObject* worldRoot = gameData.gameEntityObjects->GetItem(gameData.playerObjects[0]->worldRootId);
+    GameEntityObject* worldRoot = gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.playerObjects[0]->worldRootId);
     Transform* worldRootTrans = worldRoot->GetComponentByTypeIndex<Transform>();
 
     success = Scripting::SceneSetup(gameData);
@@ -98,8 +98,7 @@ int main()
     Renderer renderer = Renderer(&context, &headset);
     // [tdbe] the aim should always be to set up gpu bufferas once, with the max number of items you'll use in this game world,
     // the same idea as with the <see cref="GameDataPool"/>. (It doesn't cost gpu power to just have it there.)
-    renderer.SetUpRenderProcesses(gameData.meshData, gameData.materialComponents, gameData.gameEntityObjects,
-                                   gameData.gameVFXEntityObjects, gameData.lightComponents);
+    renderer.SetUpRenderProcesses(gameData.meshData, gameData);
     if (!renderer.IsValid())
     {
         return EXIT_FAILURE;
@@ -205,10 +204,7 @@ int main()
                             gameTime,
                             inputData,
                             gameData.playerObjects[0]->IsPlayerInState(PlayerStates::ChaperoneState),
-                            gameData.materialComponents, 
-                            gameData.gameEntityObjects,
-                            gameData.gameVFXEntityObjects, 
-                            gameData.lightComponents);
+                            gameData);
 
             const MirrorView::RenderResult mirrorResult = mirrorView.Render(swapchainImageIndex);
             if (mirrorResult == MirrorView::RenderResult::Error)
