@@ -7,6 +7,8 @@
 
 namespace Game
 {
+    /// [tdbe] Note on chunking memory layout, cache: The entity contains certain somewhat expandable data ie std::vector<GameDataId::ID> components; 
+    /// We could make it a unique pointer to some heap but there won't ever be that many components per entity.
     struct GameEntity : GameDataId
     {
       public:

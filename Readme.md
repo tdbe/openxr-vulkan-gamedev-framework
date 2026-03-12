@@ -65,12 +65,13 @@ In any case, thanks to open-source you can now build something pretty good the r
 ## Systems, Queries, ECB (Entity Command Buffer), System Stages
   - 
   ### Transform Propagation System
-    - [WIP] parenting system that runs after the "simulation stage" and before "rendering stage" processes the chain of local (relative) Transform data (position, orientation, scale) based on Parent Components and entity query jobs.
+    - (WIP) parenting system that runs after the "simulation stage" and before "rendering stage" processes the chain of local (relative) Transform data (position, orientation, scale) based on Parent Components and entity query jobs.
 
 ## GameData
   - `GameWorld` `{` tiled/chunked `GameEntity`, `GameEntityObject`, and regular and shared `Component`s `}`.
   - Everything is set in generic memory-span pools, by type. You set up a game world with maximum allocated memory for each pool, then during gameplay you can request to use a free object, or mark a used one as free and reusable. There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`).
   - (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; customizable e.g. build order)
+  - TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
   - The chunky Tiles are kept in `GameWorld`s (e.g. main, enemies, bullets, vfx). Each world has many Tiles each with e.g. 128 of every non-shared component and entity pools.
   - Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][chunkIndex][index][version]` and a cached `[typeIndex]` of the top level type for convenience.
   - Entity Parenting support with automatic (or manual) management, and a builtin Transform Propagation System.
@@ -113,7 +114,9 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 - Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/TypicalRunLogSample.md) 
 
-# Additional Attributions
+# Attributions #2
+
+(attributions #1 [here](https://github.com/tdbe/openxr-vulkan-gamedev-framework/tree/main?tab=readme-ov-file#attributions))
 
 | Asset | Title | Author | License |
 | --- | --- | --- | --- |

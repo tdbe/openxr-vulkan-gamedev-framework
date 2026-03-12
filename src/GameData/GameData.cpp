@@ -15,6 +15,7 @@
 #include "PlayerObject.h"
 
 using namespace Game;
+using namespace boost;
 
 uint32_t GameData::instanceIdSeed = 0;
 
@@ -105,6 +106,7 @@ GameEntity* GameData::GetEntity(GameDataId::ID id)
         //return gameWorlds[id.worldIndex]->gameEntities->GetItem(id);
         // TODO:
         util::DebugError("[GameData][ClearEntity] 'NotImplementedException': see GameWorld::gameEntityObjects");
+        return nullptr;
     }
     else
     {
@@ -514,7 +516,7 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign("worldRoot", gento->id);
     ConfiguredGameObject(gento);
 
     // [tdbe] (the following order does not affect render/batching order; that order's in the material pool)
@@ -1279,7 +1281,7 @@ bool GameData::LoadVFXEntityObjects()
     comp = GetComponent(namedMaterialComponentIDs["skyOfChaperoneMaterialComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1299,7 +1301,7 @@ bool GameData::LoadVFXEntityObjects()
     comp = GetComponent(namedMaterialComponentIDs["floorGridMaterialComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1319,7 +1321,7 @@ bool GameData::LoadVFXEntityObjects()
     comp = GetComponent(namedMaterialComponentIDs["ceilingGridMaterialComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     util::DebugLog("[Game][GameData][LoadGameWorld][GameEntityObject]\t Done configuring entities.\n");
 
@@ -1344,7 +1346,7 @@ bool GameData::LoadVFXEntityObjects()
     comp = GetComponent(namedMaterialComponentIDs["handsMaterialComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1369,7 +1371,7 @@ bool GameData::LoadVFXEntityObjects()
     comp = GetComponent(namedMaterialComponentIDs["handsMaterialComp"]);
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedVFXObjectIDs.insert_or_assign(gento->GetName(), gento->id);
+    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX (max game objects in this case) (but also check each components' max)
@@ -1382,8 +1384,8 @@ bool GameData::LoadPlayers()
     bool success = true;
     playerObjects.resize(AllocationMagicNumbers.MAX_PLAYER_OBJECTS);
     playerObjects.at(0) = new PlayerObject(namedGameObjectIDs["worldRoot"], 
-                                           namedVFXObjectIDs["handLeft"],
-                                           namedVFXObjectIDs["handRight"], 
+                                           namedGameObjectIDs["handLeft"],
+                                           namedGameObjectIDs["handRight"], 
                                            "XR Player 1");
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX
@@ -1466,7 +1468,6 @@ bool Game::GameData::UnLoadGameWorld(bool fast)
     namedLightComponentIDs.clear();
 
     namedGameObjectIDs.clear();
-    namedVFXObjectIDs.clear();
     
     
     UnhookOnGameObjectEvents();

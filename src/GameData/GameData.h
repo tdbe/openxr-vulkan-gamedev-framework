@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/bimap.hpp>
 #include <string>
 #include <array>
 #include <glm/mat4x4.hpp>
@@ -96,7 +97,9 @@ namespace Game
         /// You might want a "bullets entity world", a "game entity object world", a "vfx world" etc.
         /// [tdbe] Tiles: elements don't have to be in order "index per column" but they have to all belong to each other in the current tile.
         /// (Because of pool reuse + tiling, (re)adding a component asks for the tile of the owner entity (stored in entity ID).)
+        /// (The "chunking" does not measure size (e.g. 64kb) it's just based on number of slots, most flexible for components & gamedev.)
         /// (If you're not using a pool then don't allocate it.)
+        /// [tdbe] TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
         struct GameWorld
         {
           #pragma region Regular Components

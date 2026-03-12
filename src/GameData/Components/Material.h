@@ -43,7 +43,7 @@ namespace Game
 
         std::vector<GameEntity*> GetOwners() const
         {
-            std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
+            const std::vector<GameDataId::ID>& ownerIDs = GetOwnerIDs();
             std::vector<GameEntity*> foundVec;
             foundVec.reserve(ownerIDs.size());
             for (GameDataId::ID entId : ownerIDs)

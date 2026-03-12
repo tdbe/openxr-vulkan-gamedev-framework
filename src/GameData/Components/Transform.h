@@ -37,15 +37,13 @@ namespace Game
         {
             util::Posef newWorldPose = util::matrixToPose(newWorldMatrix);
             UpdateLocalPoseFromDeltaWorldPose(newWorldPose);
-            worldMatrix = newWorldMatrix;
             worldPose = newWorldPose;
         };
 
         /// [tdbe] automatically fetched from worldPose and localPose on the spot
         glm::mat4 GetWorldMatrix()
         {
-            UpdateWorldMatrixFromWorldPose();
-            return worldMatrix;
+            return GetWorldMatrixFromWorldPose();
         };
         
         /// [tdbe] automatically updates worldPose
@@ -79,15 +77,13 @@ namespace Game
         {
             util::Posef newLocalPose = util::matrixToPose(newLocalMatrix);
             UpdateWorldPoseFromDeltaLocalPose(newLocalPose);
-            localMatrix = newLocalMatrix;
             localPose = newLocalPose;
         };
 
         /// [tdbe] automatically updates localPose and worldPose on the spot
         glm::mat4 GetLocalMatrix()
         {
-            UpdateLocalMatrixFromLocalPose();
-            return localMatrix;
+            return GetLocalMatrixFromLocalPose();
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
@@ -99,9 +95,7 @@ namespace Game
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             worldPose = util::makeIdentity();
-            worldMatrix = glm::mat4(1.0f);
             localPose = util::makeIdentity();
-            localMatrix = glm::mat4(1.0f);
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
@@ -119,12 +113,12 @@ namespace Game
         ~Transform(){};
 
 	  private:
-        void UpdateWorldMatrixFromWorldPose()
+        glm::mat4 GetWorldMatrixFromWorldPose()
         {
-            worldMatrix = util::poseToMatrix(worldPose);
+            return util::poseToMatrix(worldPose);
         }
         
-        void UpdateWorldPoseFromWorldMatrix()
+        void UpdateWorldPoseFromWorldMatrix(glm::mat4 worldMatrix)
         {
             worldPose = util::matrixToPose(worldMatrix);
         }
@@ -145,29 +139,21 @@ namespace Game
             worldPose.orientation = diff * worldPose.orientation;
         }
         
-        void UpdateLocalPoseFromLocalMatrix()
+        void UpdateLocalPoseFromLocalMatrix(glm::mat4 localMatrix)
         {
             localPose = util::matrixToPose(localMatrix);
         }
         
-        void UpdateLocalMatrixFromLocalPose()
+        glm::mat4 GetLocalMatrixFromLocalPose()
         {
-            localMatrix = util::poseToMatrix(localPose);
+            return util::poseToMatrix(localPose);
         }
-      
-        /// [tdbe] TRS. Created from the worldPose and master-stored into the worldPose (matrixes degrade over time)
-        /// [tdbe] coordinate system: Y is up, Z is forward
-        glm::mat4 worldMatrix = glm::mat4(1.0f);
-        
-        /// [tdbe] losslessly stores position, rotation, and scale
+              
+        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
         /// [tdbe] coordinate system: Y is up, Z is forward
         util::Posef worldPose = util::makeIdentity();
-        
-        /// [tdbe] TRS. Created from the localPose and master-stored into the localPose (matrixes degrade over time)
-        /// [tdbe] coordinate system: Y is up, Z is forward
-        glm::mat4 localMatrix = glm::mat4(1.0f);
-        
-        /// [tdbe] losslessly stores position, rotation, and scale
+                
+        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
         /// [tdbe] coordinate system: Y is up, Z is forward
         util::Posef localPose = util::makeIdentity();
 	};

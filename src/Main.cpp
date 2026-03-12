@@ -117,10 +117,10 @@ int main()
     std::vector<GameBehaviour*> gameBehaviours = {
         // [tdbe] must be first because it moves everything
         new LocomotionBehaviour(*gameData.playerObjects[0], 
-                                gameData.namedVFXObjectIDs["floorGrid"],
-                                gameData.namedVFXObjectIDs["ceilingGrid"], 
+                                gameData.namedGameObjectIDs["floorGrid"],
+                                gameData.namedGameObjectIDs["ceilingGrid"], 
                                 gameData.namedGameObjectIDs["icosphereSkybox"],
-                                gameData.namedVFXObjectIDs["icosphereSkybox"],
+                                gameData.namedGameObjectIDs["icosphereSkybox"],
                                 gameData.namedMaterialComponentIDs["handsMaterialComp"], 
                                 1.0f, 
                                 3.1f, 

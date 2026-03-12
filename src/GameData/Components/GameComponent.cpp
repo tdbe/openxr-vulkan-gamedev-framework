@@ -9,22 +9,22 @@ using namespace Game;
 /// cref="GameEntityObject"/>.
 GameComponent::GameComponent(GameDataId::ID id, GameDataId::ID owner) : GameDataId(id)
 {
-    owners = std::vector<GameDataId::ID>(1);
+    owners = std::make_unique<std::vector<GameDataId::ID>>(1);
     if (!owner.IsCleared())
-        owners.emplace_back(owner);
+        owners->emplace_back(owner);
 }
 
-std::vector<GameDataId::ID> GameComponent::GetOwnerIDs() const
+const std::vector<GameDataId::ID>& GameComponent::GetOwnerIDs() const
 {
-    return owners;
+    return *owners;
 }
 
 size_t GameComponent::CountValidOwners() const
 {
     size_t count = 0;
-    for (size_t i = 0u; i < owners.size(); i++)
+    for (size_t i = 0u; i < owners->size(); i++)
     {
-        if (owners[i].version == GameDataId::FREE) continue;
+        if ((*owners)[i].version == GameDataId::FREE) continue;
 
         count++;
     }
@@ -41,9 +41,9 @@ void GameComponent::AddOwnerId(GameDataId::ID owner)
 
     size_t firstEmpty;
     bool foundEmpty = false;
-    for (size_t i = 0u; i < owners.size(); i++)
+    for (size_t i = 0u; i < owners->size(); i++)
     {
-        if (owners[i].version == GameDataId::FREE)
+        if ((*owners)[i].version == GameDataId::FREE)
         {
             if (!foundEmpty)
             {
@@ -53,23 +53,23 @@ void GameComponent::AddOwnerId(GameDataId::ID owner)
             continue;
         }
 
-        if (owners[i].Equals(owner))
+        if ((*owners)[i].Equals(owner))
             return;
     }
 
     if (foundEmpty)
-        owners[firstEmpty] = owner;
+        (*owners)[firstEmpty] = owner;
     else
-        owners.emplace_back(owner);
+        (*owners).emplace_back(owner);
 }
 
 void GameComponent::ClearOwnerId(GameDataId::ID owner)
 {
-    for (size_t i = 0u; i < owners.size(); i++)
+    for (size_t i = 0u; i < owners->size(); i++)
     {
-        if (owners[i].Equals(owner))
+        if ((*owners)[i].Equals(owner))
         {
-            owners[i].Clear();
+            (*owners)[i].Clear();
             break;
         }
     }
@@ -77,9 +77,9 @@ void GameComponent::ClearOwnerId(GameDataId::ID owner)
 
 void GameComponent::ClearOwnerIDs()
 {
-    for (size_t i = 0u; i < owners.size(); i++)
+    for (size_t i = 0u; i < owners->size(); i++)
     {
-        owners[i].Clear();
+        (*owners)[i].Clear();
     }
 };
 

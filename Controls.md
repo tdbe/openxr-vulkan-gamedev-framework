@@ -1,6 +1,6 @@
 ## Note:
 
-The input management code is pretty great™️and cross-platform, but this project was only tested on:
+My input management code is pretty great™️and cross-platform but was only tested on:
 - old Oculus Rift CV1 (the 1.0 from 2016, not the Rift S)
 - Valve Index (but on an older version of this project, in 2023)
 - aethervr (openxr virtual headset) https://github.com/chnoblouch/aethervr

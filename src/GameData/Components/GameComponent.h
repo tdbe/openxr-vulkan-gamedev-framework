@@ -9,10 +9,14 @@ namespace Game
 {
     struct GameEntityObject;// [tdbe] newb-friendly-note: predeclaring here because we're only storing a pointer to the owner (and we need to avoid circular dependency)
 
+    /// [tdbe] Note on chunking, memory layout, cache: there's no distinction in here between shared components and non-shared, so the expandable data ie "owners" is a pointer to somewhere on the heap.
     struct GameComponent : GameDataId
     {
       public:
-        std::vector<GameDataId::ID> GetOwnerIDs() const;
+        /// [tdbe] ECS Note: serve a const reference to unique heap data, but owners can change (in addition to some version ids maybe becoming outdated). 
+        /// [tdbe] Use the owner fetching methods in derived components which return a safe copy,
+        /// especially if there isn't a huge amount of owners.
+        const std::vector<GameDataId::ID>& GetOwnerIDs() const;
         size_t CountValidOwners() const;
 
         void AddOwnerId(GameDataId::ID owner);
@@ -36,7 +40,7 @@ namespace Game
         /// [tdbe] References for immediate/scripting convenience. A component may have maxint owners or even 0 owners (e.g. a lone material).
         /// Note: must be marked as free on <see cref="NotifyItemCleared"/>.
         /// todo: should enforce even at ancestor level: some components must (really should) have only one owner... like the Light or the Transform.
-        std::vector<GameDataId::ID> owners;
+        std::unique_ptr<std::vector<GameDataId::ID>> owners;
         /// [tdbe] Also find anyone that caches our ID and clear that also (e.g. our owners).
         /// Note: if you wanted to be maximally efficient clearing millions of items, you wouldn't hop around memory with this function, you'd instead 
         /// construct some global command buffers marking all the entities and all the components the game wants to clear on this frame, 

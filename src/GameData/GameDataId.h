@@ -13,7 +13,8 @@ namespace Game
 	{
         static const uint32_t FREE = 0;
         /// [tdbe] Essentially used as a weak reference in the data spans in <see cref="GameData"/>.
-        /// worldIndex:typeUID:index:version and typeIndex
+        /// worldIndex:typeUID:chnukIndex:index:version and typeIndex
+        /// The ID is a little big/verbose but the aim is to not compromize real-world game-making convenience.
         struct ID 
         {
             /// [tdbe] index in owning vector/array. 2^32, +-2,147,483,647 -> the max number of items in an owning
