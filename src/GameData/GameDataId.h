@@ -72,6 +72,15 @@ namespace Game
             {
                 return !operator==(other);
             }
+
+            bool operator<(const GameDataId::ID& other) const
+            {
+                if(worldIndex != other.worldIndex) return worldIndex < other.worldIndex;
+                if(typeUID != other.typeUID) return typeUID < other.typeUID;
+                if(chunkIndex != other.chunkIndex) return chunkIndex < other.chunkIndex;
+                if(index != other.index) return index < other.index;
+                return version < other.version;
+            }
         } id;
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).

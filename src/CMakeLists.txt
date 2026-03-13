@@ -83,7 +83,9 @@ set(SRC
 	GameData/Components/Transform.h
 	GameData/Components/Bounds.h
 	GameData/Components/Material.h
+	GameData/Components/Material.cpp
 	GameData/Components/Model.h
+	GameData/Components/Model.cpp
 	
 	GameData/Components/Parent.h
 	GameData/Components/Parent.cpp
@@ -136,7 +138,7 @@ find_package(Vulkan REQUIRED)
 add_executable(${TARGET_NAME})
 target_sources(${TARGET_NAME} PRIVATE ${SRC})
 target_include_directories(${TARGET_NAME} PRIVATE ${Vulkan_INCLUDE_DIRS})
-target_link_libraries(${TARGET_NAME} PRIVATE boxer glfw glm openxr tinyobjloader ${Vulkan_LIBRARIES})
+target_link_libraries(${TARGET_NAME} PRIVATE boxer glfw glm openxr tinyobjloader boost ${Vulkan_LIBRARIES})
 
 # [tdbe] use these instead of e.g. #define DEBUG or define _DEBUG
 # [tdbe] DEBUG preprocessor macro (when building in Debug configuration)

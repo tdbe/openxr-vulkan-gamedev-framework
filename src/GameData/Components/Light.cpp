@@ -202,6 +202,32 @@ void Light::SetShaderProperties()
     */
 }
 
+/// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+void Light::SetName(std::string name)
+{
+    auto it = GameData::Instance().namedLightComponentIDs.right.find(id);
+    if(it == GameData::Instance().namedLightComponentIDs.right.end())
+    {
+        GameData::Instance().namedLightComponentIDs.insert({name, id});
+    }
+    else
+    {
+        auto it = GameData::Instance().namedLightComponentIDs.left.find(GetName());
+        GameData::Instance().namedLightComponentIDs.left.replace_key(it, name);
+    }
+}
+
+
+/// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+std::string Light::GetName() const
+{
+    auto it = GameData::Instance().namedLightComponentIDs.right.find(id);
+    if(it != GameData::Instance().namedLightComponentIDs.right.end())
+        return GameData::Instance().namedLightComponentIDs.right.at(id);
+    else
+        return "NO_NAME_LIGHT";
+}
+
 Light::~Light()
 {
 }

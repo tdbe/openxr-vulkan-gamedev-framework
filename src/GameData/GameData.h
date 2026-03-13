@@ -132,7 +132,7 @@ namespace Game
           #pragma region Sparse Components
           
             /// [tdbe] entities with ids and versions ((weak) "references"); and know their components. 
-            /// plus the derived GameEntityObject has other little conveniences like events and .name.
+            /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable).
             /// <see cref="GameEntity"/> or <see cref="GameEntityObject"/>-- TODO: we can't solve this with std:any and Templates unfortunately. So for now just using the heavier semi oop derived type: <see cref="GameEntityObject"/>.
             GameDataPool<GameEntityObject>* gameEntityObjects = nullptr;
         };
@@ -186,16 +186,15 @@ namespace Game
 
 #pragma region Scripting
         /// [tdbe] named shortcuts for convenience / scripting reasons; the actual entities are on <see cref="GameDataPool"/>'s.
-        std::unordered_map<std::string, GameDataId::ID> namedGameObjectIDs;
-        /// [tdbe] named shortcuts for convenience / scripting reasons; the actual entities are on <see cref="GameDataPool"/>'s.
-        std::unordered_map<std::string, GameDataId::ID> namedVFXObjectIDs;
+        /// (across all game worlds and entity types)
+        boost::bimap<std::string, GameDataId::ID> namedGameObjectIDs;
 
         /// [tdbe] named shortcuts for convenience / scripting reasons; the actual components are on <see cref="GameDataPool"/>'s.
-        std::unordered_map<std::string, GameDataId::ID> namedModelComponentIDs;
+        boost::bimap<std::string, GameDataId::ID> namedModelComponentIDs;
         /// [tdbe] named shortcuts for convenience / scripting reasons; the actual components are on <see cref="GameDataPool"/>'s.
-        std::unordered_map<std::string, GameDataId::ID> namedMaterialComponentIDs;
+        boost::bimap<std::string, GameDataId::ID> namedMaterialComponentIDs;
         /// [tdbe] named shortcuts for convenience / scripting reasons; the actual components are on <see cref="GameDataPool"/>'s.
-        std::unordered_map<std::string, GameDataId::ID> namedLightComponentIDs;
+        boost::bimap<std::string, GameDataId::ID> namedLightComponentIDs;
 #pragma endregion Scripting
 
         bool LoadGameWorld();

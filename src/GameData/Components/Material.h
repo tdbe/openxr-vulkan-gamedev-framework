@@ -5,7 +5,7 @@
 
 namespace Game
 {
-    /// [tdbe] Default Material struct. Can treat as "uber material" data, or can make multiple versions of this.
+    /// [tdbe] Shared Component. Default Material struct. Can treat as "uber material" data, or can make multiple versions of this.
     /// When you create different "copies" of the same material (e.g. same shader & blending but different uniform properties (color etc)), 
     /// please create them together (next to each other in the <see cref="GameDataPool<Material>"/>) so that the renderer can batch them.
     /// If you add a new material at runtime, you must use an already existing pipeline. (and you probably can't batch it)
@@ -76,6 +76,12 @@ namespace Game
         {
             GameComponent::NotifyItemVersionChanged();
         };
+        
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        void SetName(std::string name);
+
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        std::string GetName() const;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.

@@ -4,7 +4,7 @@
 
 namespace Game
 {
-    /// [tdbe] The mesh is part of a global memory span of indices for the locations of vertices (positions, normals) and
+    /// [tdbe] Shared Component. The mesh is part of a global memory span of indices for the locations of vertices (positions, normals) and
     /// triangle indices on the mesh. <see cref="MeshData"/> 
     /// Here we just store the start location and count of the indices for one mesh.
     /// One mesh/model can be rendered multiple times with different materials etc. 
@@ -53,6 +53,12 @@ namespace Game
         {
             GameComponent::NotifyItemVersionChanged();
         };
+        
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        void SetName(std::string name);
+
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        std::string GetName() const;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.

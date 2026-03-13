@@ -30,7 +30,9 @@ namespace Game
                 OnGameEntityObjectRemovedHandlers.erase(uniqueFunctionIdentifier_Removed);
         }
 #pragma endregion Events
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
         void SetName(std::string name);
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
         std::string GetName() const;
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
@@ -43,12 +45,10 @@ namespace Game
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember you can add components.
         GameEntityObject(GameDataId::ID id = {},
-                         std::string name = "game object",
                          void (*runExtensions)(GameEntityObject* owner) = nullptr);
         ~GameEntityObject();
 
       private:
-        std::string name = "game object";
 
 #pragma region Events
         /// [tdbe] Raised when its version was updated.

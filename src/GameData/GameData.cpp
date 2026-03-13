@@ -167,127 +167,127 @@ bool GameData::LoadModels()
     Model* gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/quad.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("quadModelComp", gco->id);
+    namedModelComponentIDs.insert({"quadModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/ground_displaced_4096.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("groundModelComp", gco->id);
+    namedModelComponentIDs.insert({"groundModelComp", gco->id});
     ConfiguredGameModel(gco);
     
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Ruins.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("ruinsModelComp", gco->id);
+    namedModelComponentIDs.insert({"ruinsModelComp", gco->id});
     ConfiguredGameModel(gco);
     
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Car.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("carModelComp", gco->id);
+    namedModelComponentIDs.insert({"carModelComp", gco->id});
     ConfiguredGameModel(gco);
     
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Beetle_glassless.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("beetleModelComp", gco->id);
+    namedModelComponentIDs.insert({"beetleModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Beetle_glass_only.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("beetleGlassModelComp", gco->id);
+    namedModelComponentIDs.insert({"beetleGlassModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Bike.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("bikeModelComp", gco->id);
+    namedModelComponentIDs.insert({"bikeModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Hand.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("handModelComp", gco->id);
+    namedModelComponentIDs.insert({"handModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/cube.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("cubeModelComp", gco->id);
+    namedModelComponentIDs.insert({"cubeModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Logo_OpenXR_Vulkan.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("logoModel1Comp", gco->id);
+    namedModelComponentIDs.insert({"logoModel1Comp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Logo_Framework.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("logoModel2Comp", gco->id);
+    namedModelComponentIDs.insert({"logoModel2Comp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Text_Locomotion_Flat.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("textLocomotionModelComp", gco->id);
+    namedModelComponentIDs.insert({"textLocomotionModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Text_Suda_Beam_Flat.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("textSudaBeamModelComp", gco->id);
+    namedModelComponentIDs.insert({"textSudaBeamModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Text_See_Controls_md.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("textSeeControlsMdModelComp", gco->id);
+    namedModelComponentIDs.insert({"textSeeControlsMdModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/icosphere_subdiv4_half_smooth.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("icosphereModelComp", gco->id);
+    namedModelComponentIDs.insert({"icosphereModelComp", gco->id});
     ConfiguredGameModel(gco);
     
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/icosphere_subdiv4_smooth.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("icosphereSmoothModelComp", gco->id);
+    namedModelComponentIDs.insert({"icosphereSmoothModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/icosphere_subdiv3_0.75_smooth.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("icosphereRoughModelComp", gco->id);
+    namedModelComponentIDs.insert({"icosphereRoughModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/tube_light_1_03.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("tube_light_1_03", gco->id);
+    namedModelComponentIDs.insert({"tube_light_1_03", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/SudaBeam.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("sudaBeamModelComp", gco->id);
+    namedModelComponentIDs.insert({"sudaBeamModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/Squid_Happy_Grumpy.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("squidModelComp", gco->id);
+    namedModelComponentIDs.insert({"squidModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     gco = entityObjectsWorld->modelComponents->GetFreeItem();
     if (!meshData->LoadModel("models/SuzanneHighQuality20k.obj", MeshData::Color::White, gco))
         return false;
-    namedModelComponentIDs.insert_or_assign("suzanneMonkeModelComp", gco->id);
+    namedModelComponentIDs.insert({"suzanneMonkeModelComp", gco->id});
     ConfiguredGameModel(gco);
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX 
@@ -312,38 +312,38 @@ bool GameData::LoadMaterials()
                                                     TypeUIDs.ToString(TypeUIDs.MATERIAL_COMPONENTS));
 
     Material* gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("skyMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"skyMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseMetalishMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseMetalishMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseStoneMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseStoneMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseTripIcosphereMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseTripIcosphereMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseEyesMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseEyesMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
     
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("textMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"textMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("logoMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"logoMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     // [tdbe] ^ all the (entities with the) materials above are meant to have the same diffuse style blend pipeline,
     // so they'll be batched in the <see cref="Renderer"/> because the materials are reserved here in relative order in the pool.
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("groundMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"groundMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     // [tdbe] customization / hack: we skip <see cref="skip"/> free slots in case we want to 
@@ -352,15 +352,15 @@ bool GameData::LoadMaterials()
     uint32_t lastDiffuseMaterialAt = gco->id.index;// we'd have to share this with whoever adds new mats at runtime
     
     gco = entityObjectsWorld->materialComponents->GetFreeItem(skip);
-    namedMaterialComponentIDs.insert_or_assign("squidMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"squidMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("lightMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"lightMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("tentacleLightMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"tentacleLightMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     // [tdbe] Transparent materials (todo: add a job for sorting objects.
@@ -374,44 +374,44 @@ bool GameData::LoadMaterials()
     // (an entity (and its model component) can have multiple materials, the engine doesn't care / enforce it but only copies the unioform data from the first entry.)
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseTransparentBackfaceInstancedMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseTransparentBackfaceInstancedMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("bikeTransparentBackfaceMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"bikeTransparentBackfaceMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("diffuseTransparentFrontfaceInstancedMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"diffuseTransparentFrontfaceInstancedMaterialComp", gco->id});
     ConfiguredGameMaterial(gco); 
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("bikeTransparentFrontfaceMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"bikeTransparentFrontfaceMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("glassTransparentBackfaceMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"glassTransparentBackfaceMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
     gco = entityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("glassTransparentFrontfaceMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"glassTransparentFrontfaceMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     // [tdbe] VFX materials
 
     gco = vfxEntityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("skyOfChaperoneMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"skyOfChaperoneMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
     
     gco = vfxEntityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("floorGridMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"floorGridMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = vfxEntityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("ceilingGridMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"ceilingGridMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     gco = vfxEntityObjectsWorld->materialComponents->GetFreeItem();
-    namedMaterialComponentIDs.insert_or_assign("handsMaterialComp", gco->id);
+    namedMaterialComponentIDs.insert({"handsMaterialComp", gco->id});
     ConfiguredGameMaterial(gco);
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX
@@ -432,26 +432,26 @@ bool GameData::LoadGameLights()
                                               TypeUIDs.ToString(TypeUIDs.LIGHT_COMPONENTS));
 
     Light* gco = entityObjectsWorld->lightComponents->GetFreeItem();
-    namedLightComponentIDs.insert_or_assign("mainDirectionalLightComp", gco->id);
+    namedLightComponentIDs.insert({"mainDirectionalLightComp", gco->id});
     ConfiguredGameLight(gco);
 
     for (int i = 1; i < 7; i++)
     {
         gco = entityObjectsWorld->lightComponents->GetFreeItem();
-        namedLightComponentIDs.insert_or_assign("tentacleLightComp0" + util::ToString(i, true), gco->id);
+        namedLightComponentIDs.insert({"tentacleLightComp0" + util::ToString(i, true), gco->id});
         ConfiguredGameLight(gco);
     }
 
     gco = entityObjectsWorld->lightComponents->GetFreeItem();
-    namedLightComponentIDs.insert_or_assign("handLight01Comp", gco->id);
+    namedLightComponentIDs.insert({"handLight01Comp", gco->id});
     ConfiguredGameLight(gco);
 
     gco = entityObjectsWorld->lightComponents->GetFreeItem();
-    namedLightComponentIDs.insert_or_assign("handLight02Comp", gco->id);
+    namedLightComponentIDs.insert({"handLight02Comp", gco->id});
     ConfiguredGameLight(gco);
 
     gco = entityObjectsWorld->lightComponents->GetFreeItem();
-    namedLightComponentIDs.insert_or_assign("bikeLightComp", gco->id);
+    namedLightComponentIDs.insert({"bikeLightComp", gco->id});
     ConfiguredGameLight(gco);
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX
@@ -516,7 +516,7 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    namedGameObjectIDs.insert_or_assign("worldRoot", gento->id);
+    namedGameObjectIDs.insert({"worldRoot", gento->id});
     ConfiguredGameObject(gento);
 
     // [tdbe] (the following order does not affect render/batching order; that order's in the material pool)
@@ -533,11 +533,10 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedLightComponentIDs["mainDirectionalLightComp"]);
+    comp = GetComponent(namedLightComponentIDs.left.at("mainDirectionalLightComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     static_cast<Light*>(comp)->SetVisible(false);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     for (int i = 1; i < 7; i++)
@@ -553,21 +552,20 @@ bool GameData::LoadGameEntityObjects()
         children = entityObjectsWorld->childrenComponents->GetFreeItem();
         children->AddOwnerId(gento->id);
         gento->AddComponentId(children->id);
-        comp = GetComponent(namedLightComponentIDs["tentacleLightComp0" + util::ToString(i, true)]);
+        comp = GetComponent(namedLightComponentIDs.left.at("tentacleLightComp0" + util::ToString(i, true)));
         comp->AddOwnerId(gento->id);
         gento->AddComponentId(comp->id);
         static_cast<Light*>(comp)->SetVisible(false);
-        comp = GetComponent(namedModelComponentIDs["tube_light_1_03"]);
+        comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));
         comp->AddOwnerId(gento->id);
         gento->AddComponentId(comp->id);
         bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
         bounds->SetBoundsAABB(static_cast<Model*>(comp));
         bounds->AddOwnerId(gento->id);
         gento->AddComponentId(bounds->id);
-        comp = GetComponent(namedMaterialComponentIDs["tentacleLightMaterialComp"]);
+        comp = GetComponent(namedMaterialComponentIDs.left.at("tentacleLightMaterialComp"));
         comp->AddOwnerId(gento->id);
         gento->AddComponentId(comp->id);
-        namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
         ConfiguredGameObject(gento);
     }    
 
@@ -582,21 +580,20 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedLightComponentIDs["handLight01Comp"]);
+    comp = GetComponent(namedLightComponentIDs.left.at("handLight01Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     static_cast<Light*>(comp)->SetVisible(false);
-    comp = GetComponent(namedModelComponentIDs["tube_light_1_03"]);// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
+    comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["lightMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("lightMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -610,21 +607,20 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedLightComponentIDs["handLight02Comp"]);
+    comp = GetComponent(namedLightComponentIDs.left.at("handLight02Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     static_cast<Light*>(comp)->SetVisible(false);
-    comp = GetComponent(namedModelComponentIDs["tube_light_1_03"]);// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
+    comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["lightMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("lightMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -638,7 +634,7 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedLightComponentIDs["bikeLightComp"]);
+    comp = GetComponent(namedLightComponentIDs.left.at("bikeLightComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     static_cast<Light*>(comp)->SetVisible(false);
@@ -651,7 +647,6 @@ bool GameData::LoadGameEntityObjects()
     // comp = GetComponent(namedMaterialComponentIDs["lightMaterialComp"]);
     // comp->AddOwnerId(gento->id);
     // gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     // [tdbe] world sky
@@ -667,13 +662,12 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["skyMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("skyMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     // [tdbe] regular game entities
@@ -689,17 +683,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["groundModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("groundModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["groundMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("groundMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -713,17 +706,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["ruinsModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("ruinsModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseStoneMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseStoneMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -737,17 +729,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["carModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("carModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseMetalishMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -761,17 +752,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["carModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("carModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseMetalishMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -785,17 +775,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["beetleModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("beetleModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseMetalishMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -809,20 +798,19 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["beetleGlassModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("beetleGlassModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["glassTransparentFrontfaceMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("glassTransparentFrontfaceMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["glassTransparentBackfaceMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("glassTransparentBackfaceMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -836,20 +824,19 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["bikeModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("bikeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["bikeTransparentFrontfaceMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("bikeTransparentFrontfaceMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["bikeTransparentBackfaceMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("bikeTransparentBackfaceMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -863,17 +850,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["logoModel1Comp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("logoModel1Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["logoMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("logoMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -887,17 +873,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["logoModel2Comp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("logoModel2Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["logoMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("logoMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -911,17 +896,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["textLocomotionModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("textLocomotionModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["textMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("textMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -935,17 +919,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["textSudaBeamModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("textSudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["textMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("textMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -959,17 +942,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["textSeeControlsMdModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("textSeeControlsMdModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["textMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("textMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -983,17 +965,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["cubeModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("cubeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseStoneMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseStoneMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1007,17 +988,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseTripIcosphereMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseTripIcosphereMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1031,20 +1011,19 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseTransparentFrontfaceInstancedMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseTransparentFrontfaceInstancedMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseTransparentBackfaceInstancedMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseTransparentBackfaceInstancedMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1058,17 +1037,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["sudaBeamModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("sudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseMetalishMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1082,17 +1060,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["sudaBeamModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("sudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseMetalishMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseMetalishMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1106,17 +1083,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["squidModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("squidModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["squidMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("squidMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1130,17 +1106,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["suzanneMonkeModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("suzanneMonkeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseStoneMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseStoneMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1154,17 +1129,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["icosphereRoughModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("icosphereRoughModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseEyesMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseEyesMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1178,17 +1152,16 @@ bool GameData::LoadGameEntityObjects()
     children = entityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = GetComponent(namedModelComponentIDs["icosphereRoughModelComp"]);
+    comp = GetComponent(namedModelComponentIDs.left.at("icosphereRoughModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["diffuseEyesMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("diffuseEyesMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX (max game objects in this case) (but also check each components' max)
@@ -1260,7 +1233,6 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
 
@@ -1275,13 +1247,12 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs["icosphereModelComp"]);// stole model from main world
+    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("icosphereModelComp"));// stole model from main world
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["skyOfChaperoneMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("skyOfChaperoneMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1295,13 +1266,12 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs["quadModelComp"]);// stole model from main world
+    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("quadModelComp"));// stole model from main world
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["floorGridMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("floorGridMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1315,13 +1285,12 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs["quadModelComp"]);// stole model from main world
+    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("quadModelComp"));// stole model from main world
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    comp = GetComponent(namedMaterialComponentIDs["ceilingGridMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("ceilingGridMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     util::DebugLog("[Game][GameData][LoadGameWorld][GameEntityObject]\t Done configuring entities.\n");
 
@@ -1336,17 +1305,16 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs["handModelComp"]);// stole model from main world
+    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("handModelComp"));// stole model from main world
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = vfxEntityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["handsMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("handsMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
@@ -1360,18 +1328,17 @@ bool GameData::LoadVFXEntityObjects()
     children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
-    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs["handModelComp"]);// stole model from main world
-    // comp = GetComponent(namedModelComponentIDs["icosphereSmoothModelComp"]);
+    comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("handModelComp"));// stole model from main world
+    // comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     bounds = vfxEntityObjectsWorld->boundsComponents->GetFreeItem();
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
-    comp = GetComponent(namedMaterialComponentIDs["handsMaterialComp"]);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("handsMaterialComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    namedGameObjectIDs.insert_or_assign(gento->GetName(), gento->id);
     ConfiguredGameObject(gento);
     
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX (max game objects in this case) (but also check each components' max)
@@ -1383,9 +1350,9 @@ bool GameData::LoadPlayers()
 {
     bool success = true;
     playerObjects.resize(AllocationMagicNumbers.MAX_PLAYER_OBJECTS);
-    playerObjects.at(0) = new PlayerObject(namedGameObjectIDs["worldRoot"], 
-                                           namedGameObjectIDs["handLeft"],
-                                           namedGameObjectIDs["handRight"], 
+    playerObjects.at(0) = new PlayerObject(namedGameObjectIDs.left.at("worldRoot"), 
+                                           namedGameObjectIDs.left.at("handLeft"),
+                                           namedGameObjectIDs.left.at("handRight"), 
                                            "XR Player 1");
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX

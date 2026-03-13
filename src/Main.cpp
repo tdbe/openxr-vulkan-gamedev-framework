@@ -117,27 +117,27 @@ int main()
     std::vector<GameBehaviour*> gameBehaviours = {
         // [tdbe] must be first because it moves everything
         new LocomotionBehaviour(*gameData.playerObjects[0], 
-                                gameData.namedGameObjectIDs["floorGrid"],
-                                gameData.namedGameObjectIDs["ceilingGrid"], 
-                                gameData.namedGameObjectIDs["icosphereSkybox"],
-                                gameData.namedGameObjectIDs["icosphereSkybox"],
-                                gameData.namedMaterialComponentIDs["handsMaterialComp"], 
+                                gameData.namedGameObjectIDs.left.at("floorGrid"),
+                                gameData.namedGameObjectIDs.left.at("ceilingGrid"), 
+                                gameData.namedGameObjectIDs.left.at("icosphereSkybox"),
+                                gameData.namedGameObjectIDs.left.at("icosphereSkybox"),
+                                gameData.namedMaterialComponentIDs.left.at("handsMaterialComp"), 
                                 1.0f, 
                                 3.1f, 
                                 1),
         new HandsBehaviour(*gameData.playerObjects[0],
                             // [tdbe] the "player inventory":
-                            gameData.namedGameObjectIDs["sudaBeam01"],
-                            gameData.namedGameObjectIDs["handLight01"], 
-                            gameData.namedGameObjectIDs["sudaBeam02"],
-                            gameData.namedGameObjectIDs["handLight02"]
+                            gameData.namedGameObjectIDs.left.at("sudaBeam01"),
+                            gameData.namedGameObjectIDs.left.at("handLight01"), 
+                            gameData.namedGameObjectIDs.left.at("sudaBeam02"),
+                            gameData.namedGameObjectIDs.left.at("handLight02")
                             ),
         //new InputTesterBehaviour(),
-        new WorldObjectsMiscBehaviour(gameData.namedGameObjectIDs["bike"], 
-                                      gameData.namedGameObjectIDs["bikeLight"],
-                                      gameData.namedMaterialComponentIDs["textMaterialComp"],
-                                      gameData.namedMaterialComponentIDs["logoMaterialComp"],
-                                      gameData.namedMaterialComponentIDs["handsMaterialComp"])
+        new WorldObjectsMiscBehaviour(gameData.namedGameObjectIDs.left.at("bike"), 
+                                      gameData.namedGameObjectIDs.left.at("bikeLight"),
+                                      gameData.namedMaterialComponentIDs.left.at("textMaterialComp"),
+                                      gameData.namedMaterialComponentIDs.left.at("logoMaterialComp"),
+                                      gameData.namedMaterialComponentIDs.left.at("handsMaterialComp"))
     };
 
     bool highQualityMirrorView = true;// [tdbe] made the mirror view the same size and aspect ratio as the headset, scaled down if it doesn't fit your monitor.

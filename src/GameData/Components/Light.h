@@ -65,6 +65,12 @@ namespace Game
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
         /// todo: this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override;
+        
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        void SetName(std::string name);
+
+        /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
+        std::string GetName() const;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.

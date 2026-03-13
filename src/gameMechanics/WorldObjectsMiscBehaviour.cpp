@@ -84,7 +84,7 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
         RotateMatColor(gameTime, 0.33f);
         //RotateMatColorUnrealistic(gameTime);
 
-    auto id01 = GameData::Instance().namedGameObjectIDs["tentacle01"];
+    auto id01 = GameData::Instance().namedGameObjectIDs.left.at("tentacle01");
     for (int i = 1; i < 7; i++)
     {
         // float rotationStep = i * 45.0f - 30.0f;
