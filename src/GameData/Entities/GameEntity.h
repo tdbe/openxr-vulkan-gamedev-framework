@@ -84,7 +84,13 @@ namespace Game
         void SetEnabled(bool enabled);
         /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
         bool IsEnabled() const;
-
+        
+        /// [tdbe] whether the mask to match is included in this entity's archetype mask.
+        /// [tdbe] usage: MatchesArchetype(GameData::TypeUIDs.someIdOrSomeCombinationOfIDs)
+        bool MatchesArchetype(uint64_t toMatch) const;
+        /// [tdbe] if you want to check in reverse, check for == exact match etc.
+        uint64_t GetArchetype() const;
+        
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorld"/>. And remember you can add components.
         GameEntity(GameDataId::ID id = {});
@@ -93,6 +99,7 @@ namespace Game
       private:
         /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
         bool isEnabled = true; 
+        uint64_t archetypeMask = 0ULL;
 
         /// [tdbe] References for immediate/scripting convenience. An entity usually has just a few (e.g. 3-5) components.
         /// Note: must be marked as free on <see cref="NotifyItemCleared"/>.
@@ -103,5 +110,10 @@ namespace Game
         /// construct some global command buffers marking all the entities and all the components the game wants to clear on this frame, 
         /// and then run a sync point with a job on the buffers coherently contiguously.
         void ClearItemDependencies();
+        
+        /// [tdbe] usage: AddToArchetype(GameData::TypeUIDs.someIdOrSomeCombinationOfIDs)
+        void AddToArchetype(uint64_t componentMask);
+        /// [tdbe] usage: RemoveFromArchetype(GameData::TypeUIDs.someIdOrSomeCombinationOfIDs)
+        void RemoveFromArchetype(uint64_t componentMask);
     };
 } // namespace Game

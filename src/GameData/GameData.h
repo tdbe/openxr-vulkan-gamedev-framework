@@ -38,23 +38,31 @@ namespace Game
         /// (note: todo: right now this a quick addition only used here; the events are also mostly just for show for now)
         const std::string instanceId;
 
-        /// [tdbe] for global uids, and used to fetch different categories of items, you can create more here.
+        /// [tdbe] for global uids, 
+        /// - used to fetch different categories of items.
+        /// - used to assemble archetype bitmasks e.g. on entities.
+        /// create more here as you create components.
         static const struct TypeUIDs
         {
-            static const uint16_t FREE = GameDataId::FREE;
-            static const uint16_t GAME_ENTITY_OBJECTS = 100;
-            static const uint16_t GAME_ENTITIES = 200;
-            static const uint16_t TRANSFORM_COMPONENTS = 300;
-            static const uint16_t PARENT_COMPONENTS = 310;
-            static const uint16_t CHILDREN_COMPONENTS = 311;
-            static const uint16_t ROOT_ATTRIBUTE_COMPONENTS = 315;
-            static const uint16_t MODEL_COMPONENTS = 400;
-            static const uint16_t BOUNDS_COMPONENTS = 500;
-            static const uint16_t MATERIAL_COMPONENTS = 600;
-            static const uint16_t LIGHT_COMPONENTS = 700;
-            static std::string ToString(const uint16_t id)
+            // [tdbe] Note: uint64_t means max component count of 64 - these 3
+            static const uint64_t FREE = 0ULL;
+            static const uint64_t GAME_ENTITY_OBJECTS = 1ULL<<1;
+            static const uint64_t GAME_ENTITIES = 1ULL<<2;
+            
+            static const uint64_t TRANSFORM_COMPONENTS = 1ULL<<3;
+            static const uint64_t PARENT_COMPONENTS = 1ULL<<4;
+            static const uint64_t CHILDREN_COMPONENTS = 1ULL<<5;
+            static const uint64_t ROOT_ATTRIBUTE_COMPONENTS = 1ULL<<6;
+            static const uint64_t MODEL_COMPONENTS = 1ULL<<7;
+            static const uint64_t BOUNDS_COMPONENTS = 1ULL<<8;
+            static const uint64_t MATERIAL_COMPONENTS = 1ULL<<9;
+            static const uint64_t LIGHT_COMPONENTS = 1ULL<<10;
+            
+            static std::uint64_t FromTypeIndex(std::type_index typeIndex);
+            
+            static std::string ToString(const uint64_t id)
             {
-                if (id == GameDataId::FREE)
+                if (id == FREE)
                     return "FREE";
                 else if (id == GAME_ENTITY_OBJECTS)
                     return "GAME_ENTITY_OBJECTS";

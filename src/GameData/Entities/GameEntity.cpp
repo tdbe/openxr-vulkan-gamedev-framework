@@ -38,6 +38,8 @@ void GameEntity::AddComponentId(GameDataId::ID component)
         components[firstEmpty] = component;
     else
         components.emplace_back(component);
+        
+    AddToArchetype(component.typeUID);
 }
 
 void GameEntity::ClearComponentId(GameDataId::ID component)
@@ -50,6 +52,7 @@ void GameEntity::ClearComponentId(GameDataId::ID component)
             break;
         }
     }
+    RemoveFromArchetype(component.typeUID);
 }
 
 void GameEntity::ClearComponentIDs()
@@ -57,6 +60,7 @@ void GameEntity::ClearComponentIDs()
     for (GameDataId::ID& component : components)
     {
         component.Clear();
+        RemoveFromArchetype(component.typeUID);
     }
 }
 
@@ -142,5 +146,23 @@ void GameEntity::ClearItemDependencies()
         {
             GameData::Instance().ClearComponent(compId);
         }
-    }
+    }   
+}
+
+bool GameEntity::MatchesArchetype(uint64_t toMatch) const
+{
+    return (archetypeMask & toMatch) == toMatch;
+}
+uint64_t GameEntity::GetArchetype() const
+{
+    return archetypeMask;
+}
+
+void GameEntity::AddToArchetype(uint64_t componentMask)
+{
+    archetypeMask |= componentMask;
+}
+void GameEntity::RemoveFromArchetype(uint64_t componentMask)
+{
+    archetypeMask &= ~componentMask;
 }

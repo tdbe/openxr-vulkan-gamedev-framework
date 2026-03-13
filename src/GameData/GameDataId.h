@@ -14,7 +14,7 @@ namespace Game
         static const uint32_t FREE = 0;
         /// [tdbe] Essentially used as a weak reference in the data spans in <see cref="GameData"/>.
         /// worldIndex:typeUID:chnukIndex:index:version and typeIndex
-        /// The ID is a little big/verbose but the aim is to not compromize real-world game-making convenience.
+        /// The ID is a little big/verbose but the aim is to not obfuscate or compromise real-world game-making convenience.
         struct ID 
         {
             /// [tdbe] index in owning vector/array. 2^32, +-2,147,483,647 -> the max number of items in an owning
@@ -29,14 +29,14 @@ namespace Game
             uint16_t chunkIndex = 0;
 
             /// [tdbe] the above entries make up an ID relative to the container<this item type>. 
-            /// This a custom uid of the type of element.
-            uint16_t typeUID = 0;
+            /// This a custom uid of the type of element, used for archetype masks, and sometimes scriptable name lookups.
+            uint64_t typeUID = 0;
             
             /// [tdbe] the above entries can be found in one of multiple game worlds.
             int worldIndex = 0;
 
-            /// [tdbe] Allows static cast find by type (but doesn't find your object if it's derived from this type.
-            /// (obv must set this to the topmost inheritor of this class e.g. a <see cref="GameEntityObject"/>)
+            /// [tdbe] Allows the convenience of static cast find by type (but doesn't find your object if it's derived from this type).
+            /// (you must set this to the topmost inheritor of this class e.g. a <see cref="GameEntityObject"/>)
             std::type_index typeIndex = std::type_index(typeid(int));
 
             /// [tdbe] counts as if deleted

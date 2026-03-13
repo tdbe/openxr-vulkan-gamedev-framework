@@ -1511,3 +1511,47 @@ GameData::~GameData()
     DeleteComponentPools();
     DeleteWorlds();
 }
+
+std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
+{
+    if(typeIndex == std::type_index(typeid(GameEntity)))
+    {
+        return GAME_ENTITIES;
+    }
+    else if(typeIndex == std::type_index(typeid(GameEntityObject)))
+    {
+        return GAME_ENTITY_OBJECTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Transform)))
+    {
+        return TRANSFORM_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Parent)))
+    {
+        return PARENT_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Children)))
+    {
+        return CHILDREN_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(ARoot)))
+    {
+        return ROOT_ATTRIBUTE_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Model)))
+    {
+        return MODEL_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Bounds)))
+    {
+        return BOUNDS_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Material)))
+    {
+        return MATERIAL_COMPONENTS;
+    }
+    else if(typeIndex == std::type_index(typeid(Light)))
+    {
+        return LIGHT_COMPONENTS;
+    }
+}
