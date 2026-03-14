@@ -153,7 +153,7 @@ void RenderProcess::AllocateDescriptorSetsUniformBuffers(size_t maxGameObjectCou
     const VkResult result = vkAllocateDescriptorSets(device, &descriptorSetAllocateInfo, &descriptorSet);
     if (result != VK_SUCCESS)
     {
-        util::DebugError("[RenderProcess] can't vkAllocateDescriptorSets!");
+        util::DebugError("[RenderProcess] can't vkAllocateDescriptorSets! result: "+ util::ToString((int)result));
         valid = false;
         return;
     }

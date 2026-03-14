@@ -16,6 +16,7 @@ namespace Scripting
     /// [tdbe] configure our e.g. game world items, object positions, colors etc.
 	bool SceneSetup(GameData& gameData)
     {
+        util::DebugLog("[Scripting][SceneSetup] Scripted and scene objects setup. ~~~~~~~~~~~~~~~~~~~ \n");
         // -------- [tdbe] edit any material properties here. --------
 #pragma region Materials
         // TODO: move these material property scripting blocks into something more compact.
@@ -363,7 +364,7 @@ namespace Scripting
         glm::mat4 worldRootMatr = glm::mat4(1.0f);
         worldRootTrans->SetWorldMatrix(worldRootMatr); // [tdbe] origin, render origin
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox"))
+        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_world"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
@@ -471,7 +472,7 @@ namespace Scripting
                                         { 0.75f, 0.75f, 0.75f }));
         
         // -------- [tdbe] set any non-default game VFX object props here.
-        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox"))
+        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_chaperone"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
@@ -536,7 +537,7 @@ namespace Scripting
 
 #pragma endregion Lights
         
-        util::DebugLog("[Scripting] Finished settup up startup scripted setups.\n");
+        util::DebugLog("[Scripting][SceneSetup] Done. ~~~~~~~~~~~~~~~~~~~ \n");
         return true;
 	}
 

@@ -106,7 +106,7 @@ namespace Game
         };
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
-        /// See <see cref="GameData::LoadGameWorld"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.
+        /// See <see cref="GameData::LoadGameWorlds"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.
         Transform(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner)
         {
         };

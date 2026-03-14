@@ -32,12 +32,12 @@ GameData& Game::GameData::operator=(GameData const& copy)
 }
 
 /// [tdbe] (deserialize, allocate, and basic init of the current scene/world)
-bool GameData::LoadGameWorld()
+bool GameData::LoadGameWorlds()
 {
     util::DebugLog(
-        "[Game][GameData][LoadGameWorld]\t .........................................................................................................................");
+        "[Game][GameData][LoadGameWorlds]\t .........................................................................................................................");
     util::DebugLog(
-        "[Game][GameData][LoadGameWorld]\t Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:");
+        "[Game][GameData][LoadGameWorlds]\t Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:");
 
     entityObjectsWorld = new GameWorld();
     vfxEntityObjectsWorld = new GameWorld();
@@ -50,8 +50,11 @@ bool GameData::LoadGameWorld()
 
     HookOnGameObjectEvents();
     success = success && LoadGameEntityObjects();
+    success = success && LoadVFXEntityObjects();
     success = success && LoadPlayers();
 
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t Loaded Game World(s).");
     return success;
 }
 
@@ -154,6 +157,8 @@ void GameData::ClearEntity(GameDataId::ID id, bool unsafe)
 
 bool GameData::LoadModels()
 {
+    util::DebugLog("\n[Game][GameData][LoadModels]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadModels]\t\t Loading Models");
     bool success = true;
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
     if(entityObjectsWorld->modelComponents != nullptr) { util::DebugError("[GameData][LoadModels]\t Somebody forgot to clear their pool (entityObjectsWorld)!"); entityObjectsWorld->modelComponents->ClearItems(false); }
@@ -298,6 +303,8 @@ bool GameData::LoadModels()
 // [tdbe] Note: the order in which you set up your materials is the order in which objects get rendered
 bool GameData::LoadMaterials()
 {
+    util::DebugLog("\n[Game][GameData][LoadMaterials]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadMaterials]\t\t Loading Materials");
     bool success = true;
     
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
@@ -421,6 +428,8 @@ bool GameData::LoadMaterials()
 
 bool GameData::LoadGameLights()
 {
+    util::DebugLog("\n[Game][GameData][LoadLights]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadLights]\t\t Loading Lights");
     bool success = true;
     
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
@@ -461,6 +470,8 @@ bool GameData::LoadGameLights()
 
 bool GameData::LoadGameEntityObjects()
 {
+    util::DebugLog("\n[Game][GameData][LoadGameEntityObjects]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadGameEntityObjects]\t\t Loading Game Entity Objects (main entityObjectsWorld)");
     bool success = true;
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
 
@@ -652,7 +663,7 @@ bool GameData::LoadGameEntityObjects()
     // [tdbe] world sky
 
     gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
-    gento->SetName("icosphereSkybox");
+    gento->SetName("icosphereSkybox_world");
     trans = entityObjectsWorld->transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
@@ -1172,20 +1183,16 @@ bool GameData::LoadGameEntityObjects()
 /// [tdbe] vfx objects are rendered at the end of the queue for the sake of the chaperone / depth etc.
 bool GameData::LoadVFXEntityObjects()
 {
+    util::DebugLog("\n[Game][GameData][LoadVFXEntityObjects]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadVFXEntityObjects]\t\t Loading Game VFX Objects (vfxEntityObjectsWorld)");
     bool success = true;
     int vfxEntityObjectsWorldIndex = GameWorldsIndexOf(vfxEntityObjectsWorld);
     
-    if(vfxEntityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld->gameEntityObjects)!"); vfxEntityObjectsWorld->gameEntityObjects->ClearItems(false); }
+    if (vfxEntityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld->gameEntityObjects)!"); vfxEntityObjectsWorld->gameEntityObjects->ClearItems(false); }
     vfxEntityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
                                                         vfxEntityObjectsWorldIndex,
                                                         TypeUIDs.GAME_ENTITY_OBJECTS,
                                                         TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
-    
-    if (vfxEntityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld)!"); vfxEntityObjectsWorld->gameEntityObjects->ClearItems(false); }
-    vfxEntityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
-                                                            vfxEntityObjectsWorldIndex,
-                                                            TypeUIDs.GAME_ENTITY_OBJECTS,
-                                                            TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
     if(vfxEntityObjectsWorld->transformComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!"); vfxEntityObjectsWorld->transformComponents->ClearItems(false); }
     vfxEntityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
                                                       vfxEntityObjectsWorldIndex,
@@ -1203,7 +1210,7 @@ bool GameData::LoadVFXEntityObjects()
                                                       TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
     
     if(vfxEntityObjectsWorld->boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!"); vfxEntityObjectsWorld->boundsComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(1, //just the hands
+    vfxEntityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(2, //just the hands
                                                       vfxEntityObjectsWorldIndex,
                                                       TypeUIDs.BOUNDS_COMPONENTS,
                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
@@ -1237,7 +1244,7 @@ bool GameData::LoadVFXEntityObjects()
     
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
-    gento->SetName("icosphereSkybox");
+    gento->SetName("icosphereSkybox_chaperone");
     trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
@@ -1292,7 +1299,6 @@ bool GameData::LoadVFXEntityObjects()
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
-    util::DebugLog("[Game][GameData][LoadGameWorld][GameEntityObject]\t Done configuring entities.\n");
 
     gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
     gento->SetName("handLeft");
@@ -1348,6 +1354,8 @@ bool GameData::LoadVFXEntityObjects()
 
 bool GameData::LoadPlayers()
 {
+    util::DebugLog("\n[Game][GameData][LoadPlayers]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][LoadPlayers]\t\t Loading Players");
     bool success = true;
     playerObjects.resize(AllocationMagicNumbers.MAX_PLAYER_OBJECTS);
     playerObjects.at(0) = new PlayerObject(namedGameObjectIDs.left.at("worldRoot"), 
@@ -1363,26 +1371,26 @@ bool GameData::LoadPlayers()
 #pragma region LoaderLogging
 void Game::GameData::ConfiguredGameObject(GameEntityObject* newObject)
 {
-    util::DebugLog("[Game][GameData][LoadGameWorld][GameEntityObject]\t Configured {name: \"" + newObject->GetName() + "\", id: \"" + 
+    util::DebugLog("[Game][GameData][LoadGameWorlds][GameEntityObject]\t Configured {name: \"" + newObject->GetName() + "\", id: \"" + 
                     newObject->id.PrintGlobalUID() + "\", is std::type_index(typeid(GameEntityObject)): " +
                     util::ToString(newObject->id.typeIndex == std::type_index(typeid(GameEntityObject))) + ".");
 }
 
 void Game::GameData::ConfiguredGameModel(Model* newObject)
 {
-    util::DebugLog("[Game][GameData][LoadGameWorld][Component][Model]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() +
+    util::DebugLog("[Game][GameData][LoadGameWorlds][Component][Model]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() +
                    "\", is std::type_index(typeid(Model)): " + util::ToString(newObject->id.typeIndex == std::type_index(typeid(Model))) + ".");
 }
 
 void Game::GameData::ConfiguredGameMaterial(Material* newObject)
 {
-    util::DebugLog("[Game][GameData][LoadGameWorld][Component][Material]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() + 
+    util::DebugLog("[Game][GameData][LoadGameWorlds][Component][Material]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() + 
                     "\", is std::type_index(typeid(Material)): " + util::ToString(newObject->id.typeIndex == std::type_index(typeid(Material))) + ".");
 }
 
 void GameData::ConfiguredGameLight(Light* newObject)
 {
-    util::DebugLog("[Game][GameData][LoadGameWorld][Component][Light]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() +
+    util::DebugLog("[Game][GameData][LoadGameWorlds][Component][Light]\t Configured component with id: \"" + newObject->id.PrintGlobalUID() +
                    "\", is std::type_index(typeid(Light)): " + util::ToString(newObject->id.typeIndex == std::type_index(typeid(Light))) + ".");
 }
 #pragma endregion LoaderLogging
@@ -1427,7 +1435,7 @@ void GameData::DeleteAllMeshData()
 
 bool Game::GameData::UnLoadGameWorld(bool fast)
 {
-    util::DebugLog("[Game][GameData][UnLoadGameWorld]\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorld]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     util::DebugLog("[Game][GameData][UnLoadGameWorld]\t Unloading entities and components, unhooking events, clearing any maps:");
     
     namedModelComponentIDs.clear();

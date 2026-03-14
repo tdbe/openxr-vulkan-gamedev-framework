@@ -45,12 +45,13 @@ Renderer::Renderer(const Context* context,
     std::array<VkDescriptorPoolSize, 2u> descriptorPoolSizes;
 
     descriptorPoolSizes.at(0u).type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-    descriptorPoolSizes.at(0u).descriptorCount = static_cast<uint32_t>(framesInFlight);
+    descriptorPoolSizes.at(0u).descriptorCount = static_cast<uint32_t>(framesInFlight * 2u);
 
     descriptorPoolSizes.at(1u).type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     descriptorPoolSizes.at(1u).descriptorCount = static_cast<uint32_t>(framesInFlight * 2u);
 
     VkDescriptorPoolCreateInfo descriptorPoolCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
+    descriptorPoolCreateInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     descriptorPoolCreateInfo.poolSizeCount = static_cast<uint32_t>(descriptorPoolSizes.size());
     descriptorPoolCreateInfo.pPoolSizes = descriptorPoolSizes.data();
     descriptorPoolCreateInfo.maxSets = static_cast<uint32_t>(framesInFlight);
@@ -158,30 +159,34 @@ Renderer::Renderer(const Context* context,
     }
 }
 
-/// [tdbe] we need a circular buffer of descriptorset data, to cover more than 1 frame in flight,
+/// [tdbe] We need a circular buffer of descriptorset data, to cover more than 1 frame in flight,
 /// so the gpu can read one while the cpu is writing another.
-/// The aim should always be to set up gpu bufferas once, with the max number of items you'll use in this game
+/// [tdbe] Note: a descriptor set is just a binding instruction for which buffers to use and their location (it's not -the- uniform data).
+/// [tdbe] The aim should always be to set up gpu uniform buffers once, with the max number of items you'll use in this game
 /// world, the same idea as with the <see cref="GameDataPool"/>. (It doesn't cost gpu power to just have it there.)
 void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
                                     const Game::GameData& gameData)
 {
+    util::DebugLog("\n[Game][Renderer][SetUpRenderProcesses]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t Setting up circular buffer of descriptor set pipeline data.");
     std::vector<GameData::GameWorld*> gameWorlds = gameData.gameWorlds;
     int maxPossibleNumEntities = 0;
     int maxPossibleNumMaterials = 0;
     for(size_t w = 0; w < gameWorlds.size(); w++)
     {
         maxPossibleNumEntities += gameWorlds[w]->gameEntityObjects->MaxSize();
-        maxPossibleNumEntities += gameWorlds[w]->materialComponents->MaxSize();
+        maxPossibleNumMaterials += gameWorlds[w]->materialComponents->MaxSize();
     }
+    util::DebugLog("\n[Game][Renderer][SetUpRenderProcesses] maxPossibleNumEntities: "+util::ToString(maxPossibleNumEntities)+"; maxPossibleNumMaterials: "+util::ToString(maxPossibleNumMaterials));
     
     for (RenderProcess* renderProcess : renderProcessesCircularBuffer)
     {
-        renderProcess->AllocateDescriptorSetsUniformBuffers(maxPossibleNumEntities, maxPossibleNumEntities);
+        renderProcess->AllocateDescriptorSetsUniformBuffers(maxPossibleNumEntities, maxPossibleNumMaterials);
         if (!renderProcess->IsValid())
         {
             util::DebugError("[Renderer] can't AllocateDescriptorSetsUniformBuffers! entities: " +
                              util::ToString(maxPossibleNumEntities) +
-                             "; materials: " + util::ToString(maxPossibleNumEntities));
+                             "; materials: " + util::ToString(maxPossibleNumMaterials));
             valid = false;
             return;
         }
@@ -328,6 +333,8 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
     }
 
     indexOffset = meshData->GetIndexOffset();
+    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t done.");
+    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
 // returns i of pipeline vectors, or -1 if a pipeline for these shaders hasn't been created yet.
@@ -399,10 +406,13 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
             for (size_t i = 0; i < gameWorlds[w]->gameEntityObjects->Size(); i++)
             {
                 const GameEntity* gameEntity = gameWorlds[w]->gameEntityObjects->items[i];
+                size_t maxEntitiesSoFar = 0;
+                for(size_t k=0; k < gameEntity->id.worldIndex; k++)
+                    maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
                 // [tdbe] this index needs to match a gpu-friendly global entity index of all entity buffers concatenated.
                 const size_t globalIndex = gameEntity->id.index + 
                                     /*gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->chunkSize +*/
-                                    gameEntity->id.worldIndex * gameWorlds.max_size();
+                                    maxEntitiesSoFar;
 
                 if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
                     continue;
@@ -410,7 +420,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                 auto mats = gameEntity->GetComponentsByTypeIndex<Material>();
                 if (mats.size() == 0)
                     continue;
-                    
+                
                 // [tdbe] Note: / future todo: although we don't want to multiple materials on the same entity, 
                 // there's currently an exception on the transparent materials (we render all the backfaces of 
                 // all transparents first, and then all the frontfaces). And the sky also has 2 materials.
@@ -470,10 +480,10 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                 renderProcess->staticVertexUniformData.viewProjectionMatrixes.at(eyeIndex) =
                     headset->getEyeProjectionMatrix(eyeIndex) * headset->getEyeViewMatrix(eyeIndex) * invCameraMatrix;
             }
-            
-            for(size_t w = 0; w < gameWorlds.size(); w++)
+
+            // Game::GameData::AllocationMagicNumbers::LIGHTS_COUNT
+            if(gameWorlds[w]->lightComponents != nullptr)
             {
-                // Game::GameData::AllocationMagicNumbers::LIGHTS_COUNT
                 for (size_t i = 0; i < gameWorlds[w]->lightComponents->Size(); i++)
                 {
                     Light* light = gameWorlds[w]->lightComponents->items[i];
@@ -585,11 +595,14 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                 if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
                     continue;
 
+                size_t maxEntitiesSoFar = 0;
+                for(size_t k=0; k < gameEntity->id.worldIndex; k++)
+                    maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
                 // [tdbe] this index needs to match a gpu-friendly global entity index of all entity
                 // buffers concatenated as we did when we updated the uniform buffer data above.
                 const size_t globalIndex = gameEntity->id.index + 
                             /*gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->chunkSize +*/
-                            gameEntity->id.worldIndex * gameWorlds.max_size();
+                            maxEntitiesSoFar;
 
                 // Bind the uniform buffer for per model/mesh dynamic, vertex
                 // [tdbe] count for multiple dynamic buffers and offsets,

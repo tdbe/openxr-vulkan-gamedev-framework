@@ -92,7 +92,7 @@ namespace Game
         uint64_t GetArchetype() const;
         
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
-        /// See <see cref="GameData::LoadGameWorld"/>. And remember you can add components.
+        /// See <see cref="GameData::LoadGameWorlds"/>. And remember you can add components.
         GameEntity(GameDataId::ID id = {});
         virtual ~GameEntity() {};
 

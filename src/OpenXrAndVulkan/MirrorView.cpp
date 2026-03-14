@@ -111,6 +111,8 @@ void MirrorView::onWindowResize()
 
 bool MirrorView::connect(const Headset* headset, const Renderer* renderer, bool highQualityMirrorView, bool forceNoScaleDown)
 {
+  util::DebugLog("\n[Game][MirrorView][Connect]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  util::DebugLog("[Game][MirrorView][Connect]\t setting up game window");
   this->headset = headset;
   this->renderer = renderer;
 
@@ -132,6 +134,9 @@ bool MirrorView::connect(const Headset* headset, const Renderer* renderer, bool 
       glfwSetWindowSizeLimits(window, 128, 128, monitorWidth, monitorHeight);
       glfwSetWindowSize(window, eyeRes.width, eyeRes.height);
   }
+
+  util::DebugLog("[Game][MirrorView][Connect]\t\t done.");
+  util::DebugLog("[Game][MirrorView][Connect]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
   if (!recreateSwapchain())
   {

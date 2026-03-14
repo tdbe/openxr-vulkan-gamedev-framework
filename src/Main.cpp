@@ -68,7 +68,7 @@ int main()
     }
 
     GameData& gameData = GameData::Instance();
-    bool success = gameData.LoadGameWorld();
+    bool success = gameData.LoadGameWorlds();
     /*                      (deserialize, allocate, basic init)
                             bool LoadModels();
                             bool LoadMaterials();
@@ -119,8 +119,8 @@ int main()
         new LocomotionBehaviour(*gameData.playerObjects[0], 
                                 gameData.namedGameObjectIDs.left.at("floorGrid"),
                                 gameData.namedGameObjectIDs.left.at("ceilingGrid"), 
-                                gameData.namedGameObjectIDs.left.at("icosphereSkybox"),
-                                gameData.namedGameObjectIDs.left.at("icosphereSkybox"),
+                                gameData.namedGameObjectIDs.left.at("icosphereSkybox_world"),
+                                gameData.namedGameObjectIDs.left.at("icosphereSkybox_chaperone"),
                                 gameData.namedMaterialComponentIDs.left.at("handsMaterialComp"), 
                                 1.0f, 
                                 3.1f, 
@@ -149,6 +149,8 @@ int main()
     
     static float gameTime = 0.0f;
     // Main loop
+    util::DebugLog("\n[Game][Main]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][Main]\t\t Starting Game Loop");
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     while (!headset.isExitRequested() && !mirrorView.isExitRequested())
     {
@@ -164,6 +166,7 @@ int main()
         const Headset::BeginFrameResult frameResult = headset.beginFrame(swapchainImageIndex);
         if (frameResult == Headset::BeginFrameResult::Error)
         {
+            util::DebugLog("[Game][Main]\t\t Headset::BeginFrameResult::Error");
             return EXIT_FAILURE;
         }
         else if (frameResult == Headset::BeginFrameResult::SkipFully)
@@ -175,6 +178,7 @@ int main()
             if (!inputSystem.Sync(headset.getXrSpace(), headset.getEyePoses(),
                                   headset.getXrFrameState().predictedDisplayTime, headset.getSessionState()))
             {
+                util::DebugLog("[Game][Main]\t\t inputSystem Sync failure.");
                 return EXIT_FAILURE;
             }
             const Inputspace::InputData& inputData = inputSystem.GetInputData();
@@ -209,6 +213,7 @@ int main()
             const MirrorView::RenderResult mirrorResult = mirrorView.Render(swapchainImageIndex);
             if (mirrorResult == MirrorView::RenderResult::Error)
             {
+                util::DebugLog("[Game][Main]\t\t mirrorView.Render failure.");
                 return EXIT_FAILURE;
             }
 
@@ -226,7 +231,8 @@ int main()
             headset.endFrame();
         }
     }
-    
+    util::DebugLog("\n[Game][Main]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][Main]\t\t Game Loop ended. Cleaning up.");
     for (size_t i = 0; i < gameBehaviours.size(); i++)
     {
         delete (gameBehaviours[i]);
@@ -237,7 +243,7 @@ int main()
 
     context.sync(); // Sync before destroying so that resources are free
 
-    util::DebugLog("[Game][Main][EXIT_SUCCESS]\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][Main][EXIT_SUCCESS]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
     return EXIT_SUCCESS;
 }

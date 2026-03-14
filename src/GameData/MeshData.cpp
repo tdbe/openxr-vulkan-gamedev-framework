@@ -92,7 +92,7 @@ bool MeshData::LoadModel(const std::string& filename,
 
 /// [tdbe] This is mostly here to draw attention to the <see cref="Model"/> --> <see cref="MeshData"/> --> <see cref="DataBuffer"/> relationship.
 /// Not very useful: 
-/// 1). We move all possible 3d models to the gpu on <see cref="LoadGameWorld"/>, and then never replace any parts of those vertex buffers (unless we unload/reload). 
+/// 1). We move all possible 3d models to the gpu on <see cref="LoadGameWorlds"/>, and then never replace any parts of those vertex buffers (unless we unload/reload). 
 /// 2). We'd need a better data streaming strategy than arbitrary recreation of the whole buffer.
 bool Game::MeshData::UnLoadModelMesh(const Model* model)
 {

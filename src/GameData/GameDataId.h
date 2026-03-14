@@ -133,7 +133,7 @@ namespace std
             size_t h1 = hash<int32_t>{}(id.index);
             size_t h2 = hash<uint32_t>{}(id.version);
             size_t h3 = hash<uint32_t>{}(id.chunkIndex);
-            size_t h4 = hash<uint16_t>{}(id.typeUID);
+            size_t h4 = hash<uint64_t>{}(id.typeUID);
             size_t h5 = hash<uint16_t>{}(id.worldIndex);
             return h1 ^ (h2 << 1) ^ (h3 << 2) ^ (h4 << 3) ^ (h5 << 4);
         }

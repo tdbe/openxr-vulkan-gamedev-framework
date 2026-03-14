@@ -43,7 +43,7 @@ namespace Game
         virtual void NotifyItemVersionChanged() override;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
-        /// See <see cref="GameData::LoadGameWorld"/>. And remember you can add components.
+        /// See <see cref="GameData::LoadGameWorlds"/>. And remember you can add components.
         GameEntityObject(GameDataId::ID id = {},
                          void (*runExtensions)(GameEntityObject* owner) = nullptr);
         ~GameEntityObject();

@@ -510,6 +510,7 @@ Context::~Context()
 // [tdbe] So you could just replace this whole function.
 bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface param only used to check compatibility
 {
+  util::DebugLog("\n[Context][createDevice] ~~~~~~~~~~~~~~~~~~~");
   // Retrieve the physical device from OpenXR
   XrVulkanGraphicsDeviceGetInfoKHR vulkanGraphicsDeviceGetInfo{ XR_TYPE_VULKAN_GRAPHICS_DEVICE_GET_INFO_KHR };
   vulkanGraphicsDeviceGetInfo.systemId = systemId;
@@ -669,7 +670,26 @@ bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface pa
     {
       multisampleCount = VK_SAMPLE_COUNT_2_BIT;
     }
-
+    
+    /*
+    
+    // Provided by VK_VERSION_1_0
+    typedef enum VkPhysicalDeviceType {
+        VK_PHYSICAL_DEVICE_TYPE_OTHER = 0,
+        VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU = 1,
+        VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU = 2,
+        VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU = 3,
+        VK_PHYSICAL_DEVICE_TYPE_CPU = 4,
+    } VkPhysicalDeviceType;
+    
+    */
+    util::DebugLog("[Context][createDevice] physicalDeviceProperties.deviceName: " + util::ToString(physicalDeviceProperties.deviceName) + 
+                   "; physicalDeviceProperties.deviceType: " + util::ToString((int)physicalDeviceProperties.deviceType) +
+                   "; physicalDeviceProperties.limits.maxViewports:" + util::ToString(physicalDeviceProperties.limits.maxViewports) +
+                   "; physicalDeviceProperties.limits.maxViewportDimensions[0]:" + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[0]) +
+                   "; physicalDeviceProperties.limits.maxViewportDimensions[1]:" + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[1])
+                   );
+    
     // Verify that the required physical device features are supported
     VkPhysicalDeviceFeatures physicalDeviceFeatures;
     vkGetPhysicalDeviceFeatures(physicalDevice, &physicalDeviceFeatures);
