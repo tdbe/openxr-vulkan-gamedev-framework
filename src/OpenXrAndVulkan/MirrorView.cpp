@@ -18,7 +18,8 @@ namespace
 constexpr const char* windowTitle = "OpenXR Vulkan Framework";
 constexpr VkFormat COLOR_FORMAT = VK_FORMAT_B8G8R8A8_SRGB;
 constexpr VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
-constexpr size_t mirrorEyeIndex = 1u; // Eye index to mirror, 0 = left, 1 = right
+// [tdbe] note: eyes beyond index 0 might not display anyhting on certain hardware / setups. For me it would be black with AetherVR on a nvidia mobile gpu but worked for a amd gpu.
+constexpr size_t mirrorEyeIndex = 0u; // Eye index to mirror, 0 = left, 1 = right
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -44,10 +45,9 @@ MirrorView::MirrorView(const Context* context, bool fullscreen) : context(contex
   glfwGetMonitorWorkarea(monitor, nullptr, nullptr, &width, &height);
 
 #ifdef DEBUG
-  // Create a quarter-sized window in debug mode instead
   //width /= 2;
   //height /= 2;
-  monitor = nullptr;
+  //monitor = nullptr;
 #endif
 
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
