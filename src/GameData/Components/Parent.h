@@ -5,7 +5,7 @@
 namespace Game
 {
 	/// [tdbe] Parent component for entity hierarchy. 
-	/// Related to <see cref="ARoot"/>, <see cref="Transform"/>, <see cref="Children"/> and <see cref="SystemTRSParentingPropagation"/>".
+	/// Related to <see cref="Transform"/>, <see cref="SystemTRSParentingPropagation"/>", and maybe <see cref="Children"/>.
 	/// [RequireOwnerRestriction(1)]
 	struct Parent : public GameComponent
 	{

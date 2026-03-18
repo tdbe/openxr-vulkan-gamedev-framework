@@ -17,7 +17,6 @@ namespace Game
     struct Transform;
     struct Parent;
     struct Children;
-    struct ARoot;
     struct Model;
     struct Bounds;
     struct Material;
@@ -116,7 +115,6 @@ namespace Game
             GameDataPool<Transform>* transformComponents = nullptr;
             GameDataPool<Parent>* parentComponents = nullptr;
             GameDataPool<Children>* childrenComponents = nullptr;
-            GameDataPool<ARoot>* rootAttributeComponents = nullptr;
             /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
             /// Bounds (AABB) - technically is created per model, and is free if you don't have a model, and it's stored per entity.
             GameDataPool<Bounds>* boundsComponents = nullptr;

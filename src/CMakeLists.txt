@@ -91,7 +91,6 @@ set(SRC
 	GameData/Components/Parent.cpp
 	GameData/Components/Children.h
 	GameData/Components/Children.cpp
-	GameData/Components/ARoot.h
 
 	GameData/Components/Light.h
 	GameData/Components/Light.cpp

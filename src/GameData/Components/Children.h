@@ -6,11 +6,11 @@
 
 namespace Game
 {
-	/// [tdbe] Children component for entity hierarchy. TODO: replace with a good entity query (e.g. "get entities with parent").
-    /// Related to <see cref="ARoot"/>, <see cref="Transform"/>, <see cref="Parent"/> and <see cref="SystemTRSParentingPropagation"/>".
-    /// [tdbe] Note: this is mainly for conveniently knowing relationships, legacy OOP. If you want performance,
-    /// you need to run a job over a queried entity pool (e.g. find all entities with parent) or look entity up in a Parents array,
-    /// otherwse you just iterate through 100% cache-miss children of children.
+	/// [tdbe] Children component for entity hierarchy. 
+    /// Instead of this, use an entity query (e.g. "get entities with parent"), otherwse you just iterate through 100% cache-miss children of children.
+    /// Related to <see cref="Parent"/>.
+    /// [tdbe] Note: this is mainly for crawling animated character hierarchies, conveniently knowing relationships, legacy OOP. 
+    /// 
 	/// [RequireOwnerRestriction(1)]
 	struct Children : public GameComponent
 	{
@@ -109,9 +109,6 @@ namespace Game
         /// [tdbe] ecs performance & racing warning: This is an immediate way to jump to 
 		/// the children entity's' Parent components and remove itself.
         void RemoveOwnerFromParentOfChildren();
-        
-        /// [tdbe] we remove the <see cref="ARoot"/> attribute component if we don't hold any children.
-        void ClearRootAttributeComponent();
 
         /// [tdbe] Note: this is for knowing relationships. If you want performance,
         /// you need to run a job over the entity pool with a command buffer, 

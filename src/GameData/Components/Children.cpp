@@ -1,7 +1,6 @@
 #include "../../Utils/Util.h"
 #include "Children.h"
 #include "Parent.h"
-#include "ARoot.h"
 #include "../Entities/GameEntityObject.h"
 
 using namespace Game;
@@ -46,18 +45,6 @@ void Children::RemoveOwnerFromParentOfChildren()
         // [tdbe] no, we are not clearing children while iterating.
         RemoveOwnerFromParentOfChild(childId);
     }
-}
-
-void Children::ClearRootAttributeComponent()
-{
-    auto owner = GameData::Instance().GetEntity(GetOwner()->id);
-    ARoot* rootAttrib = owner->GetComponentByTypeIndex<ARoot>();
-    if(rootAttrib != nullptr) 
-    {
-        owner->ClearComponentId(rootAttrib->id);
-        rootAttrib->ClearOwnerId(owner->id);
-        GameData::Instance().ClearComponent(rootAttrib->id, true);
-    }    
 }
 
 Children::~Children()

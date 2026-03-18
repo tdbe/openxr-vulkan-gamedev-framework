@@ -3,7 +3,6 @@
 #include "Parent.h"
 #include "Children.h"
 #include "Transform.h"
-#include "ARoot.h"
 #include "../Entities/GameEntityObject.h"
 
 using namespace Game;
@@ -43,15 +42,6 @@ void Parent::SetParent(GameDataId::ID newParentId, bool ripple)
     auto myTransform = owner->GetComponentByTypeIndex<Transform>();
     auto parentTransform = GameData::Instance().GetEntity(parentId)->GetComponentByTypeIndex<Transform>();
     myTransform->ParentTo(parentTransform->GetWorldPose());
-    
-    // [tdbe] if it has a parent, it can't be a root object
-    ARoot* rootAttrib = owner->GetComponentByTypeIndex<ARoot>();
-    if(rootAttrib != nullptr) 
-    {
-        owner->ClearComponentId(rootAttrib->id);
-        rootAttrib->ClearOwnerId(owner->id);
-        GameData::Instance().ClearComponent(rootAttrib->id, true);
-    }
 }
 
 void Parent::ClearParent(bool ripple)
@@ -64,16 +54,6 @@ void Parent::ClearParent(bool ripple)
     auto owner = GameData::Instance().GetEntity(GetOwner()->id);
     auto myTransform = owner->GetComponentByTypeIndex<Transform>();
     myTransform->Unparent();
-    
-    // [tdbe] if it doesn't have a parent and does have childen, it is a root object
-    auto children = owner->GetComponentByTypeIndex<Children>();
-    ARoot* rootAttrib = owner->GetComponentByTypeIndex<ARoot>();
-    if(rootAttrib == nullptr && children->HasChildren())
-    {
-        rootAttrib = GameData::Instance().entityObjectsWorld->rootAttributeComponents->GetFreeItem();
-        rootAttrib->AddOwnerId(owner->id);
-        owner->AddComponentId(rootAttrib->id);
-    }
 }
 
 

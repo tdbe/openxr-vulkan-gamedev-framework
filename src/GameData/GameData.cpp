@@ -6,7 +6,6 @@
 #include "Components/Transform.h"
 #include "Components/Parent.h"
 #include "Components/Children.h"
-#include "Components/ARoot.h"
 #include "Components/Model.h"
 #include "Components/Bounds.h"
 #include "Components/Material.h"
@@ -501,13 +500,6 @@ bool GameData::LoadGameEntityObjects()
                                                       entityObjectsWorldIndex,
                                                       TypeUIDs.BOUNDS_COMPONENTS,
                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
-    
-    // [tdbe] these are added or removed automatically
-    if(entityObjectsWorld->rootAttributeComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (rootAttributeComponents)!"); entityObjectsWorld->rootAttributeComponents->ClearItems(false); }
-    entityObjectsWorld->rootAttributeComponents = new GameDataPool<ARoot>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS/2+1, 
-                                                      entityObjectsWorldIndex,
-                                                      TypeUIDs.ROOT_ATTRIBUTE_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.ROOT_ATTRIBUTE_COMPONENTS));
     
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
@@ -1214,14 +1206,7 @@ bool GameData::LoadVFXEntityObjects()
                                                       vfxEntityObjectsWorldIndex,
                                                       TypeUIDs.BOUNDS_COMPONENTS,
                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
-    
-    // [tdbe] these are added or removed automatically
-    if(vfxEntityObjectsWorld->rootAttributeComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (rootAttributeComponents)!"); vfxEntityObjectsWorld->rootAttributeComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->rootAttributeComponents = new GameDataPool<ARoot>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS/2+1, 
-                                                      vfxEntityObjectsWorldIndex,
-                                                      TypeUIDs.ROOT_ATTRIBUTE_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.ROOT_ATTRIBUTE_COMPONENTS));
-    
+
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
     Transform* trans = nullptr;
@@ -1541,10 +1526,6 @@ std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
     else if(typeIndex == std::type_index(typeid(Children)))
     {
         return CHILDREN_COMPONENTS;
-    }
-    else if(typeIndex == std::type_index(typeid(ARoot)))
-    {
-        return ROOT_ATTRIBUTE_COMPONENTS;
     }
     else if(typeIndex == std::type_index(typeid(Model)))
     {
