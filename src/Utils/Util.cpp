@@ -1,6 +1,7 @@
 
 #include <boxer/boxer.h>
 #include <cstring>
+#include <direct.h>
 #include <fstream>
 #include <sstream>
 #include "Util.h"
@@ -183,12 +184,29 @@ std::string util::ToString(const double& number, bool clean)
 void util::DebugError(const std::string& details)
 {
     printf((details + "\n").c_str());
+    PrintToLogFile(details + "\n", true);
     std::throw_with_nested(std::exception((details + "\n").c_str()));
 }
 
 void util::DebugLog(const std::string& details)
 {
     printf((details + "\n").c_str());
+    PrintToLogFile(details + "\n", true);
+}
+
+void util::PrintToLogFile(const std::string& message, const bool append)
+{
+    std::ios_base::openmode mode = append ? std::ios::app : std::ios::trunc;
+    
+    std::string logDir = "Log";
+    _mkdir(logDir.c_str());
+    
+    std::ofstream file("Log/LastRunLog.txt", mode);
+    if (file.is_open())
+    {
+        file << message;
+        file.close();
+    }
 }
 
 void util::LogError(Error error, const std::string& details)

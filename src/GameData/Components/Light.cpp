@@ -24,7 +24,8 @@ GameEntity* Light::GetOwner() const
 void Light::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
 {
     #ifdef DEBUG_VERBOSE
-    util::DebugLog("[Component][Light]\t clearing this item: " + this->id.PrintGlobalUID());
+    if(!unsafe)
+        util::DebugLog("[Component][Light]\t clearing this item: " + this->id.PrintGlobalUID());
     #endif
     GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
     shaderMatrix = glm::mat4(1.0f);

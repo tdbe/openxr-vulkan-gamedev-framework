@@ -34,7 +34,8 @@ GameData& Game::GameData::operator=(GameData const& copy)
 bool GameData::LoadGameWorlds()
 {
     util::DebugLog(
-        "[Game][GameData][LoadGameWorlds]\t .........................................................................................................................");
+        "[Game][GameData][LoadGameWorlds]\t.........................................................................................................................");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t Loading Game World(s).");
     util::DebugLog(
         "[Game][GameData][LoadGameWorlds]\t Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:");
 
@@ -52,7 +53,8 @@ bool GameData::LoadGameWorlds()
     success = success && LoadVFXEntityObjects();
     success = success && LoadPlayers();
 
-    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog(
+        "[Game][GameData][LoadGameWorlds]\t .........................................................................................................................");
     util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t Loaded Game World(s).");
     return success;
 }
@@ -1417,7 +1419,8 @@ void GameData::DeleteAllMeshData()
 
 bool Game::GameData::UnLoadGameWorlds(bool fast)
 {
-    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t.........................................................................................................................");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloading Game World(s).");
     util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t Unloading entities and components, unhooking events, clearing any maps:");
     
     namedModelComponentIDs.clear();
@@ -1514,8 +1517,8 @@ bool Game::GameData::UnLoadGameWorlds(bool fast)
     entityObjectsWorld = nullptr;
     vfxEntityObjectsWorld = nullptr;
     
-    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloaded Game Worlds.");
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t.........................................................................................................................");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloaded Game World(s).");
     
     //std::exception("NotImplementedException");
     return true;

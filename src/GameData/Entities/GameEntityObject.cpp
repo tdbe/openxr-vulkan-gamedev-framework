@@ -24,7 +24,8 @@ GameEntityObject::GameEntityObject(GameDataId::ID id,
 void GameEntityObject::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
 {
     #ifdef DEBUG_VERBOSE
-    util::DebugLog("[GameEntityObject]\t clearing this item: " + GetName() + "; id: " + id.PrintGlobalUID());
+    if(!unsafe)
+        util::DebugLog("[GameEntityObject]\t clearing this item: " + GetName() + "; id: " + id.PrintGlobalUID());
     #endif
     RaiseGameEntityObjectRemoved();
     GameEntity::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);

@@ -124,8 +124,8 @@ namespace util
     std::string ToString(const double& number, bool clean = false);
 
     void DebugError(const std::string& details = "");
-
     void DebugLog(const std::string& details = "");
+    void PrintToLogFile(const std::string& message, const bool append = true);
 
     // Reports an error with optional details through a system-native message box
     void LogError(Error error, const std::string& details = "");

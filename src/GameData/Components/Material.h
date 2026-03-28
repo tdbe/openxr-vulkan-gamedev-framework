@@ -59,7 +59,8 @@ namespace Game
         virtual void NotifyItemCleared(bool unsafe = false, bool clearDataLoadedFromStorage = false) override
         {
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[Component][Material]\t clearing this item: " + this->id.PrintGlobalUID());
+            if(!unsafe)
+                util::DebugLog("[Component][Material]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             dynamicUniformData = {};

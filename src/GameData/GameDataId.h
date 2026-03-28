@@ -87,7 +87,8 @@ namespace Game
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false)
         {
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[Game][GameDataId]\t Id Cleared: " + this->id.PrintGlobalUID());
+            if(!unsafe)
+                util::DebugLog("[Game][GameDataId]\t Id Cleared: " + this->id.PrintGlobalUID());
             #endif
             id.Clear();
         };

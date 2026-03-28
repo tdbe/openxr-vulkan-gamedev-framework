@@ -78,7 +78,8 @@ namespace Game
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[Component][Parent]\t clearing this item: " + this->id.PrintGlobalUID());
+            if(!unsafe)
+                util::DebugLog("[Component][Parent]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             ClearChildren(!unsafe);
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);

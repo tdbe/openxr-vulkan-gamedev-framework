@@ -40,7 +40,8 @@ namespace Game
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[Component][Model]\t clearing this item: " + this->id.PrintGlobalUID());
+            if(!unsafe)
+                util::DebugLog("[Component][Model]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             firstIndex = 0u;

@@ -153,7 +153,8 @@ struct Bounds final : public GameComponent
     virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
     {
         #ifdef DEBUG_VERBOSE
-        util::DebugLog("[Component][Bounds]\t clearing this item: " + this->id.PrintGlobalUID());
+        if(!unsafe)
+            util::DebugLog("[Component][Bounds]\t clearing this item: " + this->id.PrintGlobalUID());
         #endif
         GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
         aabb.SetVals(glm::vec3(0.0f), glm::vec3(0.0f));

@@ -201,12 +201,14 @@ namespace Game
                                util::ToString(items.size() * tileSize) + "\" <= maxUsedIndex: \"" + util::ToString(maxUsedIndex) +"\"!? Did you resize the pool?");
                 max = (uint32_t)items.size() * tileSize;
             }
-
             for (uint32_t i = 0; i < max; i++)
             {
                 uint32_t tileIndex = (uint32_t)((double)i / (double)tileSize);
                 uint32_t indexInTile = i % tileSize;
-                GameDataId* gid = static_cast<GameDataId*>(items[tileIndex][indexInTile]);
+                auto item = items[tileIndex][indexInTile];
+                if(item == nullptr)
+                    continue;
+                GameDataId* gid = static_cast<GameDataId*>(item);
                 if (!gid->id.IsCleared())
                 {
                     gid->NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
@@ -269,7 +271,10 @@ namespace Game
         /// [tdbe] Actually dispose of the allocated data
         ~GameDataPool()
         {
-            for (uint32_t tileIdx = 0; tileIdx < tileCount; tileIdx++)
+            #ifdef DEBUG_VERBOSE
+            util::DebugLog("[~GameDataPool][Destructing<" + topTypeStr + ">] and all its heap items.");
+            #endif
+            for (uint32_t tileIdx = 0; tileIdx < items.size(); tileIdx++)
             {
                 for (uint32_t i = 0; i < items[tileIdx].size(); i++)
                 {
@@ -280,22 +285,24 @@ namespace Game
                 }
             }
             items.clear();
+            #ifdef DEBUG_VERBOSE
             util::DebugLog("[~GameDataPool][Destructed<" + topTypeStr + ">] and all its heap items.\n");
+            #endif
         };
 
         GameDataPool(GameDataPool const& copy)
         {
-            util::DebugError("\n[GameDataPool] NotImplementedException. Don't copy this / pass by value.");
+            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't copy this / pass by value.");
         };
         GameDataPool& operator=(GameDataPool const& copy) 
         {
-            util::DebugError("\n[GameDataPool] NotImplementedException. Don't copy this / pass by value.");
+            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't copy this / pass by value.");
             return *this;
         };
 
         GameDataPool(GameDataPool&& rcOther)
         {
-            util::DebugError("\n[GameDataPool] NotImplementedException. Don't move this.");
+            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't move this.");
         }
 
        private:
@@ -310,9 +317,10 @@ namespace Game
             USED,
             FREE
         };
-        /// a Version is a number of how many items were ever created in total in this <see cref="GameDataPool"/>
+        /// [tdbe] a Version is a number of how many items were ever created in total in this <see cref="GameDataPool"/>
         /// it is the latest (largest) <see cref="GameDataId.version"/> and ensures the <see cref="GameDataId"/>'s
         /// are unique.
+        /// [tdbe] note: a newly allocated pool will still have incremental versions across positions e.g. items[0].v == 1, items[1].v == 2 etc. (instead of 0 and 0)
         uint32_t currentVersion = 0u;
         /// [tdbe] max size of the array, unless you declare it with a smaller size.
         uint32_t maxPossiblePoolSize = std::numeric_limits<uint32_t>::max();

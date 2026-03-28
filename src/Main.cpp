@@ -33,6 +33,19 @@ using namespace Scripting;
 /// </summary>
 int main()
 {
+    util::PrintToLogFile("", false);// clear the previous log file
+    util::DebugLog("\n[Game][Main][Starting]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    #ifdef DEBUG
+        util::DebugLog("\n[Game][Main][Starting]\t DEBUG flag enabled from CMakeLists.txt");
+    #endif
+    #ifdef DEBUG_VERBOSE
+        util::DebugLog("\n[Game][Main][Starting]\t DEBUG_VERBOSE flag enabled from CMakeLists.txt");
+    #endif
+    #ifdef DEBUG_RELEASE
+        util::DebugLog("\n[Game][Main][Starting]\t DEBUG_RELEASE flag enabled from CMakeLists.txt");
+    #endif
+    util::DebugLog("\n");
+    
     Context context;
     if (!context.IsValid())
     {
@@ -238,10 +251,10 @@ int main()
         delete (gameBehaviours[i]);
     }
     
-    gameData.UnLoadGameWorld(true);
-    gameData.~GameData();
-
     context.sync(); // Sync before destroying so that resources are free
+    
+    gameData.UnLoadGameWorlds(true);
+    gameData.~GameData();
 
     util::DebugLog("\n[Game][Main][EXIT_SUCCESS]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
