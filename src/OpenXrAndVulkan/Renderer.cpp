@@ -237,46 +237,49 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
     for(size_t w = 0; w < gameWorlds.size(); w++)
     {
         auto materials = gameWorlds[w]->materialComponents;
-        for (size_t i = 0; i < materials->Size(); i++)
+        for (size_t t = 0; t < materials->items.size(); t++)
         {
-            Material* mat = materials->items[i];
-            if (mat->id.IsCleared())
-                continue;
-            // [tdbe] inefficient checking, but there aren't (ever) that many materials
-            int pipelineExistsAt = findExistingPipeline(mat->vertShaderName, mat->fragShaderName, mat->pipelineData);
-            // std::printf("[Renderer][log] pipelining materials: index: {%d}, shader.name: {%s}, exists: {%d}\n", i,
-            // materials[i]->fragShaderName.c_str(), pipelineExistsAt );
-
-            // [tdbe] specific pipeline:
-            // if(i == 0){
-            //  materials[i]->pipeline = pipelines[0];
-            //} else
-
-            if (pipelineExistsAt > -1)
+            for (size_t i = 0; i < materials->items[t].size(); i++)
             {
-                mat->pipeline = pipelines[pipelineExistsAt];
-            } // [tdbe] create a new pipeline from material shader name, with default parameters
-            else
-            {
-                pipelines.emplace_back(
-                    new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), 
-                                mat->vertShaderName,
-                                mat->fragShaderName, 
-                                { vertexInputBindingDescription },
-                                {   vertexInputAttributePosition, 
-                                    vertexInputAttributeNormal, 
-                                    vertexInputAttributeColor, 
-                                    vertexInputAttributeUv },                             
-                                mat->pipelineData));
-                                mat->pipeline = pipelines[pipelines.size() - 1];
-            }
+                Material* mat = materials->items[t][i];
+                if (mat->id.IsCleared())
+                    continue;
+                // [tdbe] inefficient checking, but there aren't (ever) that many materials
+                int pipelineExistsAt = findExistingPipeline(mat->vertShaderName, mat->fragShaderName, mat->pipelineData);
+                // std::printf("[Renderer][log] pipelining materials: index: {%d}, shader.name: {%s}, exists: {%d}\n", i,
+                // materials[i]->fragShaderName.c_str(), pipelineExistsAt );
 
-            if (!mat->pipeline->IsValid())
-            {
-                util::DebugError("[Renderer] can't create vk pipeline for material! pipelines.size(): " +
-                                util::ToString(pipelines.size()) + "; mat->id: " + mat->id.PrintGlobalUID());
-                valid = false;
-                return;
+                // [tdbe] specific pipeline:
+                // if(i == 0){
+                //  materials[i]->pipeline = pipelines[0];
+                //} else
+
+                if (pipelineExistsAt > -1)
+                {
+                    mat->pipeline = pipelines[pipelineExistsAt];
+                } // [tdbe] create a new pipeline from material shader name, with default parameters
+                else
+                {
+                    pipelines.emplace_back(
+                        new Pipeline(context, pipelineLayout, headset->getVkRenderPass(), 
+                                    mat->vertShaderName,
+                                    mat->fragShaderName, 
+                                    { vertexInputBindingDescription },
+                                    {   vertexInputAttributePosition, 
+                                        vertexInputAttributeNormal, 
+                                        vertexInputAttributeColor, 
+                                        vertexInputAttributeUv },                             
+                                    mat->pipelineData));
+                                    mat->pipeline = pipelines[pipelines.size() - 1];
+                }
+
+                if (!mat->pipeline->IsValid())
+                {
+                    util::DebugError("[Renderer] can't create vk pipeline for material! pipelines.size(): " +
+                                    util::ToString(pipelines.size()) + "; mat->id: " + mat->id.PrintGlobalUID());
+                    valid = false;
+                    return;
+                }
             }
         }
     }
@@ -403,55 +406,58 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
     {
         for(size_t w = 0; w < gameWorlds.size(); w++)
         {
-            for (size_t i = 0; i < gameWorlds[w]->gameEntityObjects->Size(); i++)
+            for (size_t t = 0; t < gameWorlds[w]->gameEntityObjects->items.size(); t++)
             {
-                const GameEntity* gameEntity = gameWorlds[w]->gameEntityObjects->items[i];
-                size_t maxEntitiesSoFar = 0;
-                for(size_t k=0; k < gameEntity->id.worldIndex; k++)
-                    maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
-                // [tdbe] this index needs to match a gpu-friendly global entity index of all entity buffers concatenated.
-                const size_t globalIndex = gameEntity->id.index + 
-                                    /*gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->chunkSize +*/
-                                    maxEntitiesSoFar;
-
-                if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
-                    continue;
-                
-                auto mats = gameEntity->GetComponentsByTypeIndex<Material>();
-                if (mats.size() == 0)
-                    continue;
-                
-                // [tdbe] Note: / future todo: although we don't want to multiple materials on the same entity, 
-                // there's currently an exception on the transparent materials (we render all the backfaces of 
-                // all transparents first, and then all the frontfaces). And the sky also has 2 materials.
-
-                // [tdbe] We only save the non-pipeline data of the first available & visible material.
-                // (as in we only push to the gpu, one slot per material-component-vector of the owner-entity).
-                for(auto mat : mats)
+                for (size_t i = 0; i < gameWorlds[w]->gameEntityObjects->items[t].size(); i++)
                 {
-                    // [tdbe] fine because some entities might not (yet) have a material component.
-                    // and if we just clear something, it won't get a drwacall so it's ok we keep the old gpu data.
-                    if (mat == nullptr) 
-                        continue;
-                    if (!mat->IsVisible()) 
-                        continue;
-                    // [tdbe] protip: broadly speaking it's okay to skip^ pool elements, it's also part of best average case performance.
+                    const GameEntity* gameEntity = gameWorlds[w]->gameEntityObjects->items[t][i];
+                    size_t maxEntitiesSoFar = 0;
+                    for(size_t k=0; k < gameEntity->id.worldIndex; k++)
+                        maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
+                    // [tdbe] this index needs to match a gpu-friendly global entity index of all entity buffers concatenated.
+                    const size_t globalIndex = gameEntity->id.indexInChunk + 
+                                            gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->TileSize() +
+                                            maxEntitiesSoFar;
 
-                    Transform* trans = gameEntity->GetComponentByTypeIndex<Transform>();
-                    renderProcess->dynamicVertexUniformData[globalIndex].worldMatrix = trans->GetWorldMatrix();
-                    renderProcess->dynamicVertexUniformData[globalIndex].colorMultiplier =
-                        mat->dynamicUniformData.colorMultiplier;
-                    renderProcess->dynamicVertexUniformData[globalIndex].instanceCount = (int)mat->instanceCount;
-                    renderProcess->dynamicVertexUniformData[globalIndex].perMaterialFlags =
-                        mat->dynamicUniformData.perMaterialVertexFlags;
-                    // [tdbe] TODO: create a per-material buffer for e.g. brdf, colors, textures etc
-                    mat->dynamicUniformData.brdfData.y =
-                        glm::clamp(mat->dynamicUniformData.brdfData.y, FROSTBITE_MIN_ROUGHNESS, 1.0f);
-                    renderProcess->dynamicFragmentUniformData[globalIndex].brdfData = mat->dynamicUniformData.brdfData;
-                    renderProcess->dynamicFragmentUniformData[globalIndex].ior = mat->dynamicUniformData.ior;
-                    renderProcess->dynamicFragmentUniformData[globalIndex].perMaterialFlags =
-                        mat->dynamicUniformData.perMaterialFragmentFlags;
-                    break;
+                    if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
+                        continue;
+                    
+                    auto mats = gameEntity->GetComponentsByTypeIndex<Material>();
+                    if (mats.size() == 0)
+                        continue;
+                    
+                    // [tdbe] Note: / future todo: although we don't want to multiple materials on the same entity, 
+                    // there's currently an exception on the transparent materials (we render all the backfaces of 
+                    // all transparents first, and then all the frontfaces). And the sky also has 2 materials.
+
+                    // [tdbe] We only save the non-pipeline data of the first available & visible material.
+                    // (as in we only push to the gpu, one slot per material-component-vector of the owner-entity).
+                    for(auto mat : mats)
+                    {
+                        // [tdbe] fine because some entities might not (yet) have a material component.
+                        // and if we just clear something, it won't get a drwacall so it's ok we keep the old gpu data.
+                        if (mat == nullptr) 
+                            continue;
+                        if (!mat->IsVisible()) 
+                            continue;
+                        // [tdbe] protip: broadly speaking it's okay to skip^ pool elements, it's also part of best average case performance.
+
+                        Transform* trans = gameEntity->GetComponentByTypeIndex<Transform>();
+                        renderProcess->dynamicVertexUniformData[globalIndex].worldMatrix = trans->GetWorldMatrix();
+                        renderProcess->dynamicVertexUniformData[globalIndex].colorMultiplier =
+                            mat->dynamicUniformData.colorMultiplier;
+                        renderProcess->dynamicVertexUniformData[globalIndex].instanceCount = (int)mat->instanceCount;
+                        renderProcess->dynamicVertexUniformData[globalIndex].perMaterialFlags =
+                            mat->dynamicUniformData.perMaterialVertexFlags;
+                        // [tdbe] TODO: create a per-material buffer for e.g. brdf, colors, textures etc
+                        mat->dynamicUniformData.brdfData.y =
+                            glm::clamp(mat->dynamicUniformData.brdfData.y, FROSTBITE_MIN_ROUGHNESS, 1.0f);
+                        renderProcess->dynamicFragmentUniformData[globalIndex].brdfData = mat->dynamicUniformData.brdfData;
+                        renderProcess->dynamicFragmentUniformData[globalIndex].ior = mat->dynamicUniformData.ior;
+                        renderProcess->dynamicFragmentUniformData[globalIndex].perMaterialFlags =
+                            mat->dynamicUniformData.perMaterialFragmentFlags;
+                        break;
+                    }
                 }
             }
 
@@ -484,15 +490,18 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
             // Game::GameData::AllocationMagicNumbers::LIGHTS_COUNT
             if(gameWorlds[w]->lightComponents != nullptr)
             {
-                for (size_t i = 0; i < gameWorlds[w]->lightComponents->Size(); i++)
+                for (size_t t = 0; t < gameWorlds[w]->lightComponents->items.size(); t++)
                 {
-                    Light* light = gameWorlds[w]->lightComponents->items[i];
-                    //if (light->id.IsCleared()) 
-                    //    continue;
-                    glm::mat4 matr = light->GetShaderMatrix();
-                    if (!light->IsVisible() || !light->GetOwner()->IsEnabled())
-                        matr[0].w = 0.0f;
-                    renderProcess->staticFragmentUniformData.lights[i] = matr;
+                    for (size_t i = 0; i < gameWorlds[w]->lightComponents->items[t].size(); i++)
+                    {
+                        Light* light = gameWorlds[w]->lightComponents->items[t][i];
+                        //if (light->id.IsCleared()) 
+                        //    continue;
+                        glm::mat4 matr = light->GetShaderMatrix();
+                        if (!light->IsVisible() || !light->GetOwner()->IsEnabled())
+                            matr[0].w = 0.0f;
+                        renderProcess->staticFragmentUniformData.lights[i] = matr;
+                    }
                 }
             }
 
@@ -569,73 +578,76 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
     Pipeline* lastpip = nullptr;
     for(size_t w = 0; w < gameWorlds.size(); w++)
     {
-        for (size_t i = 0; i < gameWorlds[w]->materialComponents->Size(); i++)
+        for (size_t t = 0; t < gameWorlds[w]->materialComponents->items.size(); t++)
         {
-            Material* mat = gameWorlds[w]->materialComponents->items[i];
-            if (mat->id.IsCleared() || !mat->IsVisible())
-                continue;
-
-            Pipeline* pip = mat->pipeline;
-            if (lastpip != pip)
+            for (size_t i = 0; i < gameWorlds[w]->materialComponents->items[t].size(); i++)
             {
-                // khronos: "Once bound, a pipeline binding affects subsequent commands that interact with the given
-                // pipeline type in the command buffer until a different pipeline of the same type is bound to the bind
-                // point, or until the pipeline bind point is disturbed by binding a shader object"
-                mat->pipeline->bindPipeline(commandBuffer);
-            }
-            lastpip = pip;
-
-            // [tdbe] TODO: create a per-material buffer for e.g. brdf, colors, textures etc.
-
-            // [tdbe] now per entity object & model:
-            auto entityOwnersOfMat = mat->GetOwners();
-            for (int j = 0; j < entityOwnersOfMat.size(); j++)
-            {
-                GameEntity* gameEntity = entityOwnersOfMat[j];
-                if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
+                Material* mat = gameWorlds[w]->materialComponents->items[t][i];
+                if (mat->id.IsCleared() || !mat->IsVisible())
                     continue;
 
-                size_t maxEntitiesSoFar = 0;
-                for(size_t k=0; k < gameEntity->id.worldIndex; k++)
-                    maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
-                // [tdbe] this index needs to match a gpu-friendly global entity index of all entity
-                // buffers concatenated as we did when we updated the uniform buffer data above.
-                const size_t globalIndex = gameEntity->id.index + 
-                            /*gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->chunkSize +*/
-                            maxEntitiesSoFar;
+                Pipeline* pip = mat->pipeline;
+                if (lastpip != pip)
+                {
+                    // khronos: "Once bound, a pipeline binding affects subsequent commands that interact with the given
+                    // pipeline type in the command buffer until a different pipeline of the same type is bound to the bind
+                    // point, or until the pipeline bind point is disturbed by binding a shader object"
+                    mat->pipeline->bindPipeline(commandBuffer);
+                }
+                lastpip = pip;
 
-                // Bind the uniform buffer for per model/mesh dynamic, vertex
-                // [tdbe] count for multiple dynamic buffers and offsets,
-                // because we made e.g. a dynamic buffer for vertex * objects, and one for fragment * objects
-                const uint32_t dynamicOffsetsCount = 2u;
-                uint32_t uniformBufferDynamicOffsets[2];
-                uniformBufferDynamicOffsets[0] = static_cast<uint32_t>(
-                    util::align(static_cast<VkDeviceSize>(sizeof(RenderProcess::DynamicVertexUniformData)),
-                                context->getUniformBufferOffsetAlignment()) *
-                    static_cast<VkDeviceSize>(globalIndex));
-                uniformBufferDynamicOffsets[1] = static_cast<uint32_t>(
-                    util::align(static_cast<VkDeviceSize>(sizeof(RenderProcess::DynamicFragmentUniformData)),
-                                context->getUniformBufferOffsetAlignment()) *
-                    static_cast<VkDeviceSize>(globalIndex));
-                // [tdbe] khronos: "Once bound, a descriptor set affects rendering of subsequent commands that interact
-                // with the given pipeline type in the command buffer until either a different set is bound to the same set
-                // number, or the set is disturbed"
-                // TODO: Shouldn't the descriptorSet be optimized / split so we bind only the actual per-object dynamic descriptor/offsets 
-                // here, and the more global ones further up e.g. per material?
-                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0u, 1u,
-                                        &descriptorSet, dynamicOffsetsCount, uniformBufferDynamicOffsets);
+                // [tdbe] TODO: create a per-material buffer for e.g. brdf, colors, textures etc.
 
-                Model* model = gameEntity->GetComponentByTypeIndex<Game::Model>();
-                // [tdbe] the instance ID of the first instance to draw. (fed into gl_InstanceIndex in the vertex shader)
-                uint32_t firstInstance;
-                if (mat->instanceCount > 1)
-                    firstInstance = mat->firstInstance;
-                else
-                    firstInstance = (uint32_t)j;// [tdbe] a nice hack to know in the shader the #'th mesh rendered with this material.
+                // [tdbe] now per entity object & model:
+                auto entityOwnersOfMat = mat->GetOwners();
+                for (int j = 0; j < entityOwnersOfMat.size(); j++)
+                {
+                    GameEntity* gameEntity = entityOwnersOfMat[j];
+                    if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
+                        continue;
 
-                // [tdbe] drawcall
-                vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(model->indexCount), mat->instanceCount,
-                                static_cast<uint32_t>(model->firstIndex), 0u, firstInstance);
+                    size_t maxEntitiesSoFar = 0;
+                    for(size_t k=0; k < gameEntity->id.worldIndex; k++)
+                        maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
+                    // [tdbe] this index needs to match a gpu-friendly global entity index of all entity
+                    // buffers concatenated as we did when we updated the uniform buffer data above.
+                    const size_t globalIndex = gameEntity->id.indexInChunk + 
+                                                gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->TileSize() +
+                                                maxEntitiesSoFar;
+
+                    // Bind the uniform buffer for per model/mesh dynamic, vertex
+                    // [tdbe] count for multiple dynamic buffers and offsets,
+                    // because we made e.g. a dynamic buffer for vertex * objects, and one for fragment * objects
+                    const uint32_t dynamicOffsetsCount = 2u;
+                    uint32_t uniformBufferDynamicOffsets[2];
+                    uniformBufferDynamicOffsets[0] = static_cast<uint32_t>(
+                        util::align(static_cast<VkDeviceSize>(sizeof(RenderProcess::DynamicVertexUniformData)),
+                                    context->getUniformBufferOffsetAlignment()) *
+                        static_cast<VkDeviceSize>(globalIndex));
+                    uniformBufferDynamicOffsets[1] = static_cast<uint32_t>(
+                        util::align(static_cast<VkDeviceSize>(sizeof(RenderProcess::DynamicFragmentUniformData)),
+                                    context->getUniformBufferOffsetAlignment()) *
+                        static_cast<VkDeviceSize>(globalIndex));
+                    // [tdbe] khronos: "Once bound, a descriptor set affects rendering of subsequent commands that interact
+                    // with the given pipeline type in the command buffer until either a different set is bound to the same set
+                    // number, or the set is disturbed"
+                    // TODO: Shouldn't the descriptorSet be optimized / split so we bind only the actual per-object dynamic descriptor/offsets 
+                    // here, and the more global ones further up e.g. per material?
+                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0u, 1u,
+                                            &descriptorSet, dynamicOffsetsCount, uniformBufferDynamicOffsets);
+
+                    Model* model = gameEntity->GetComponentByTypeIndex<Game::Model>();
+                    // [tdbe] the instance ID of the first instance to draw. (fed into gl_InstanceIndex in the vertex shader)
+                    uint32_t firstInstance;
+                    if (mat->instanceCount > 1)
+                        firstInstance = mat->firstInstance;
+                    else
+                        firstInstance = (uint32_t)j;// [tdbe] a nice hack to know in the shader the #'th mesh rendered with this material.
+
+                    // [tdbe] drawcall
+                    vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(model->indexCount), mat->instanceCount,
+                                    static_cast<uint32_t>(model->firstIndex), 0u, firstInstance);
+                }
             }
         }
     }

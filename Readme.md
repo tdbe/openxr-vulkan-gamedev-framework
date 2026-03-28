@@ -73,7 +73,7 @@ In any case, thanks to open-source you can now build something pretty good the r
   - (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; customizable e.g. build order)
   - TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
   - The chunky Tiles are kept in `GameWorld`s (e.g. main, enemies, bullets, vfx). Each world has many Tiles each with e.g. 128 of every non-shared component and entity pools.
-  - Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][chunkIndex][index][version]` and a cached `[typeIndex]` of the top level type for convenience.
+  - Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][tileIndex][index][version]` and a cached `[typeIndex]` of the top level type for convenience.
   - Entity Parenting support with automatic (or manual) management, and a builtin Transform Propagation System.
   - Everything is easy to request and keep track of through various means, even by name in hash maps for manual light scripting purposes.
   - Cleanup is either manual (and cache coherent) or automated via (cache-missing) awareness of component dependencies.

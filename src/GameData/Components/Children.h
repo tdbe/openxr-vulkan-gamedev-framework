@@ -64,8 +64,6 @@ namespace Game
             if(ripple)
                 RemoveOwnerFromParentOfChild(childId);
 			children->erase(childId);
-            if(!HasChildren())
-                ClearRootAttributeComponent();
 		};
 
         /// [tdbe] ecs performance & racing warning: <param name="ripple"> also calls <see cref="RemoveOwnerFromParentOfChildren"/></param>
@@ -74,7 +72,6 @@ namespace Game
             if(ripple)
                 RemoveOwnerFromParentOfChildren();
 			children->clear();
-            ClearRootAttributeComponent();
 		};
         
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).

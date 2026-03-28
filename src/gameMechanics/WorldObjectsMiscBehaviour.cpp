@@ -116,7 +116,7 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
             customAngle = 2.5f;
             customPos = glm::vec3(0.0f, -0.15f, 0.0f);
         }
-        GameData::Instance().entityObjectsWorld->gameEntityObjects->items[id01.index + i - 1]
+        GameData::Instance().entityObjectsWorld->gameEntityObjects->items[id01.chunkIndex][id01.indexInChunk + i - 1]
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(
                 glm::rotate(

@@ -64,6 +64,8 @@ namespace Game
 
         /// [tdbe] Note: you create a component via its corresponding <see cref="GameDataPool"/>,
         /// here we just mark that component X is (also) attributed to game entity E.
+        /// [tdbe] The component needs to be requested from the same chunk as this entity (unless it's a shared component);
+        /// but the <see cref="TiledDefaultArchetypeGameDataPool"/> should already take care of that.
         void AddComponentId(GameDataId::ID component);
         /// [tdbe] Note: this does not destroy or affect the actual components,
         /// here we just mark that component X was disassociated from game entity E.

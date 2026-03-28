@@ -10,9 +10,11 @@ namespace Game
     struct GameComponent;
 
     /// <summary>
-    /// [tdbe] This is a contiguous (but fragmentable (mark items as reusable)) heap array (vector) pool of entity style objects,
-    /// allocated once, with the <see cref="maxPossibleSize"/>, and never resized.
-    /// It has best� average-case performance, cache-coherency, no deletions, no garbage, and great UX via detailed ID handles.
+    /// [tdbe] This is a ECS "chunked" (split into tiles of equal <see cref="tileSize"/> count), 
+    /// contiguous (but fragmentable (mark items as reusable)) heap array (vector) pool,
+    /// of entity or component style objects,
+    /// allocated once, with the <see cref="maxPossiblePoolSize"/>, and never resized.
+    /// It has best™ average-case performance, cache-coherency, no deletions, no garbage, and great UX via detailed ID handles.
     /// Ted talk inside.
     /// </summary>
     /// <typeparam name="T"> "where T : derived from GameDataId" </typeparam>
@@ -57,33 +59,45 @@ namespace Game
         */
 
         /// [tdbe] this marks the end of the used items so we don't have to iterate past it.
-        int32_t maxUsedIndex = 0;
+        uint32_t maxUsedIndex = 0;
 
-        /// [tdbe] contains both active and "deleted" (marked free) items
-        std::vector<T*> items;
-        /// [tdbe] Number of items which are valid (in use) (are not free/cleared).
+        /// [tdbe] contains both active and "deleted" (marked free) items, split into [tile][item] to fit in cache and be thread friendy.
+        // [tdbe] newb-friendly-note: the constructor of the pool needs to make sure the actual data the vectors are pointing to, is constructed sequentially or otherwise tries to guarantee a contiguous distribution per tile in the heap memory.
+        std::vector<std::vector<T*>> items;
+        
+        /// [tdbe] Global number of items which are valid (in use) (are not free/cleared) (including all tiles).
         /// NOTE: the pool can be fragmented, so use <see cref="Size()"/> to get the iteratable "count".
-        int32_t ValidSize() const
+        uint32_t ValidSize() const
         {
-            return (int32_t)validSize;
+            return validSize;
         };
         /// [tdbe] Number of items which are free/cleared (are not in use).
-        int32_t FreeSize() const
+        uint32_t FreeSize() const
         {
-            return (int32_t)(maxPossibleSize - validSize);
+            return maxPossiblePoolSize - validSize;
         };
-        /// [tdbe] Size for actual iteration. It's actually the <see cref="maxUsedIndex"/> + 1.
-        int32_t Size() const
+        /// [tdbe] Flattened size for iteration. It's actually the <see cref="maxUsedIndex"/> + 1.
+        uint32_t Size() const
         {
             return maxUsedIndex + 1;
         };
-        int32_t MaxSize() const
+        uint32_t MaxSize() const
         {
-            return maxPossibleSize;
+            return maxPossiblePoolSize;
+        };
+        /// [tdbe] All tiles are the same size. It's items[0].size().
+        uint32_t TileSize() const
+        {
+            return tileSize;
+        };
+        /// [tdbe] All tiles are the same size. It's items[0].size().
+        uint32_t NumTiles() const
+        {
+            return items.size();
         };
 
         /// [tdbe] Returns an item if it exists and it's valid, else a nullptr.
-        /// Note: this pointer might point to a reused or free item. So use handles (IDs), <see cref="GameDataId::IsCleared"/>.
+        /// Note: this pointer is to a reusable slot in the pool. So use use and track handles (IDs), see version and <see cref="GameDataId::IsCleared"/> etc.
         // [tdbe] newb-friendly-note: you'll get linker errors if you declare but don't define template
         // functimons in the header file. (the compiler won't read the definition and won't know if/how to handle the various types, 
         // (and of course won't explain this to you in hoo-man terms or any terms))
@@ -91,7 +105,7 @@ namespace Game
         {
             if (IsIdValidItem(id))
             {
-                return items[id.index];
+                return items[id.chunkIndex][id.indexInChunk];
             }
             else
             {
@@ -131,8 +145,8 @@ namespace Game
                 return nullptr;
             }
 
-            items[id.index]->NotifyItemVersionChanged();
-            return items[id.index];
+            items[id.chunkIndex][id.indexInChunk]->NotifyItemVersionChanged();
+            return items[id.chunkIndex][id.indexInChunk];
         };
 
         /// [tdbe] Marks the pool item as empty without clearing memory, and update <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
@@ -148,15 +162,16 @@ namespace Game
             if (!IsIdValidItem(gid->id))
             {
                 util::DebugError("[GameDataPool][ClearItem<" + topTypeStr +">]\t There's a mistake: you're trying to clear id \"" +
-                                 util::ToString(gid->id.index) + "\", which is already empty! This should never happen!");
+                                gid->id.PrintGlobalUID()
+                                + "\", which is already empty! This should never happen!");
             }
             else
             {
-                if (firstEmptyIndex > gid->id.index)
-                    firstEmptyIndex = gid->id.index;
+                if (firstEmptyIndex > (uint32_t)gid->id.indexInChunk + gid->id.chunkIndex * tileSize)
+                    firstEmptyIndex = gid->id.indexInChunk + gid->id.chunkIndex * tileSize;
 
-                if (maxUsedIndex < gid->id.index)
-                    maxUsedIndex = gid->id.index;
+                if (maxUsedIndex < (uint32_t)gid->id.indexInChunk + gid->id.chunkIndex * tileSize)
+                    maxUsedIndex = gid->id.indexInChunk + gid->id.chunkIndex * tileSize;
             }
 
             gid->NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
@@ -180,17 +195,19 @@ namespace Game
                 util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr + ">]\t Also clearDataLoadedFromStorage: "+util::ToString(clearDataLoadedFromStorage)+"; for example a model will delete the serialized mesh data, or a texture its image. You don't want this unless you're not using it again in the currently loaded game world.");
             uint32_t max = maxUsedIndex + 1;
 
-            if (items.size() <= maxUsedIndex)
+            if (items.size() * tileSize <= maxUsedIndex)
             {
-                util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr + ">]\t Clearing anyway, but items.size(): \"" +
-                               util::ToString(items.size()) + "\" <= maxUsedIndex: \"" + util::ToString(maxUsedIndex) +"\"!? Did you resize the pool?");
-                max = (uint32_t)items.size();
+                util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr + ">]\t Clearing anyway, but items.size() * tileSize: \"" +
+                               util::ToString(items.size() * tileSize) + "\" <= maxUsedIndex: \"" + util::ToString(maxUsedIndex) +"\"!? Did you resize the pool?");
+                max = (uint32_t)items.size() * tileSize;
             }
 
             for (uint32_t i = 0; i < max; i++)
             {
-                GameDataId* gid = static_cast<GameDataId*>(items[i]);
-                if (!gid->id.IsCleared())// silent version of IsIdValidItem(gid->id)
+                uint32_t tileIndex = (uint32_t)((double)i / (double)tileSize);
+                uint32_t indexInTile = i % tileSize;
+                GameDataId* gid = static_cast<GameDataId*>(items[tileIndex][indexInTile]);
+                if (!gid->id.IsCleared())
                 {
                     gid->NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
                 }
@@ -211,49 +228,59 @@ namespace Game
             maxUsedIndex = 0;
             validSize = 0;
 
-            // [tdbe] the destructor will actually delete all the items
             if (alsoDestroy)
                 delete this;
         };
 
-        GameDataPool(int maxPossibleSize = 0, int worldIndex = 0, uint16_t typeUID = 0, std::string topTypeStr = "T")
-        : maxPossibleSize(maxPossibleSize), worldIndex(worldIndex), typeUID(typeUID), topTypeStr(topTypeStr)
+        GameDataPool(uint16_t tileSize, uint32_t maxPossiblePoolSize = 0, int16_t worldIndex = 0, uint64_t typeUID = 0, std::string topTypeStr = "T")
+        : tileSize(tileSize), maxPossiblePoolSize(maxPossiblePoolSize), worldIndex(worldIndex), typeUID(typeUID), topTypeStr(topTypeStr)
         {
             this->maxUsedIndex = 0;
             this->firstEmptyIndex = 0;
             this->currentVersion = GameDataId::FREE;
+            
+            tileCount = (uint32_t)((double)maxPossiblePoolSize / (double)tileSize);
+            if(tileCount == 0u)
+                tileCount = 1u;
             // [tdbe] Construct the whole span. That's what we want for best-average-case gamedev/memory.
-            items.resize(maxPossibleSize, nullptr);
-            for (int32_t i = 0; i < items.size(); i++)
+            items.resize(tileCount);
+            for (uint32_t tileIdx = 0; tileIdx < tileCount; tileIdx++)
             {
-                items[i] = new T();
-                GameDataId* gid = static_cast<GameDataId*>(items[i]);
-                gid->id.worldIndex = worldIndex;
-                gid->id.typeUID = typeUID;
-                gid->id.chunkIndex = 0;// TODO:
-                gid->id.index = i;
-                gid->id.version = GameDataId::FREE;
-                gid->id.typeIndex = std::type_index(typeid(T));
+                items[tileIdx].resize(tileSize, nullptr);
+                
+                for (uint32_t i = 0; i < tileSize; i++)
+                {
+                    items[tileIdx][i] = new T();
+                    GameDataId* gid = static_cast<GameDataId*>(items[tileIdx][i]);
+                    gid->id.worldIndex = worldIndex;
+                    gid->id.typeUID = typeUID;
+                    gid->id.chunkIndex = tileIdx;
+                    gid->id.indexInChunk = i;
+                    gid->id.version = GameDataId::FREE;
+                    gid->id.typeIndex = std::type_index(typeid(T));
+                }
             }
-            util::DebugLog("\n[GameDataPool][Constructed<" + topTypeStr + ">] maxPossibleSize: \"" + 
-                            util::ToString(maxPossibleSize) + "\", world: " + util::ToString(worldIndex) + ", typeUID: \"" + util::ToString(typeUID) + "_" + topTypeStr +
+            util::DebugLog("\n[GameDataPool][Constructed<" + topTypeStr + ">] maxPossiblePoolSize: \"" + 
+                            util::ToString(maxPossiblePoolSize) + "\", world: " + util::ToString(worldIndex) + ", typeUID: \"" + util::ToString(typeUID) + "_" + topTypeStr +
                             "\", firstEmptyIndex: " + util::ToString(firstEmptyIndex) +", T: " +
-                            typeid(T).name() + ".");// [tdbe] typeid(T)::name() is only human-readable in Visual C++ :(
+                            typeid(T).name() + ", tiles: " + util::ToString(tileCount) + ", tileSize: " + util::ToString(tileSize) + ", items.size(): "+util::ToString(items.size()));
         };
 
         /// [tdbe] Actually dispose of the allocated data
         ~GameDataPool()
         {
-            // (clears the allocated heap memory)
-            for (int32_t i = 0; i < items.size(); i++)
+            for (uint32_t tileIdx = 0; tileIdx < tileCount; tileIdx++)
             {
-                if (items[i] != nullptr)
+                for (uint32_t i = 0; i < items[tileIdx].size(); i++)
                 {
-                    delete items[i]; // [tdbe] calls the destructor of T, (GameDataId, GameComponent / GameEntity etc).
+                    if (items[tileIdx][i] != nullptr)
+                    {
+                        delete items[tileIdx][i];
+                    }
                 }
             }
             items.clear();
-            util::DebugLog("[GameDataPool][Destructed<" + topTypeStr + ">] and all its heap items.\n");
+            util::DebugLog("[~GameDataPool][Destructed<" + topTypeStr + ">] and all its heap items.\n");
         };
 
         GameDataPool(GameDataPool const& copy)
@@ -271,7 +298,11 @@ namespace Game
             util::DebugError("\n[GameDataPool] NotImplementedException. Don't move this.");
         }
 
-      private:
+       private:
+        /// [tdbe] 1 means no split. Splits the pool into "chunks" of fixed element count size.
+        uint32_t tileSize = 1u;// 128 is a good average case number to flexibly fit in cache with any contents and amongst everything else.
+        uint32_t tileCount = 0u;
+        
         enum SpotInPool
         {
             FAIL = 0,// depends on context; couldn't get a spot; could be full.
@@ -279,18 +310,18 @@ namespace Game
             USED,
             FREE
         };
-        /// a Version is a global number of how many items were created in total in this <see cref="GameDataPool"/>
+        /// a Version is a number of how many items were ever created in total in this <see cref="GameDataPool"/>
         /// it is the latest (largest) <see cref="GameDataId.version"/> and ensures the <see cref="GameDataId"/>'s
         /// are unique.
-        uint32_t currentVersion = 0;
+        uint32_t currentVersion = 0u;
         /// [tdbe] max size of the array, unless you declare it with a smaller size.
-        int32_t maxPossibleSize = std::numeric_limits<int32_t>::max();
-        /// [tdbe] item in the array that is empty or is marked as empty as far as we're concerned
-        int32_t firstEmptyIndex = 0;
-        uint16_t typeUID = 0;
-        uint16_t worldIndex = 0;
+        uint32_t maxPossiblePoolSize = std::numeric_limits<uint32_t>::max();
+        /// [tdbe] item in the array (global across all tiles) that is empty or is marked as empty as far as we're concerned
+        uint32_t firstEmptyIndex = 0u;
+        uint64_t typeUID = 0u;
+        int worldIndex = 0;
         std::string topTypeStr = "T";
-        int32_t validSize = 0;
+        uint32_t validSize = 0u;
 
         bool ScanForNextEmptyIndex(uint32_t startFrom = 0)
         {
@@ -300,26 +331,30 @@ namespace Game
                 return true;
             }
 
-            for (uint32_t i = startFrom; i < (uint32_t)maxPossibleSize; i++)
+            for (uint32_t i = startFrom; i < maxPossiblePoolSize; i++)
             {
-                if (items[i]->id.IsCleared())
+                uint32_t tileIndex = (uint32_t)((double)i / (double)tileSize);
+                uint32_t indexInTile = i % tileSize;
+                if (items[tileIndex][indexInTile]->id.IsCleared())
                 {
-                    firstEmptyIndex = items[i]->id.index;
+                    
+                    firstEmptyIndex = i;
                     return true;
                 }
             }
 
-            // [tdbe] start from 0, maybe there's some free items we skipped (on purpose)
             for (uint32_t i = 0; i < startFrom; i++)
             {
-                if (items[i]->id.IsCleared())
+                uint32_t tileIndex = (uint32_t)((double)i / (double)tileSize);
+                uint32_t indexInTile = i % tileSize;
+                if (items[tileIndex][indexInTile]->id.IsCleared())
                 {
-                    firstEmptyIndex = items[i]->id.index;
+                    firstEmptyIndex = i;
                     return true;
                 }
             }
 
-            firstEmptyIndex = maxPossibleSize;
+            firstEmptyIndex = maxPossiblePoolSize;
             return false;
         };
 
@@ -328,51 +363,53 @@ namespace Game
         SpotInPool GetFirstFree(GameDataId::ID& itemId, uint32_t skipThisManyFreeSlots = 0)
         {
             SpotInPool success;
-            int firstEmptyIndexPlus = skipThisManyFreeSlots + firstEmptyIndex;
-            if (firstEmptyIndexPlus == maxPossibleSize)
+            uint32_t firstEmptyIndexPlus = skipThisManyFreeSlots + firstEmptyIndex;
+            if (firstEmptyIndexPlus == maxPossiblePoolSize)
             {
                 util::DebugLog("[GameDataPool][GetFirstFree<" + topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
-                               "\", == maxPossibleSize! This pool is full!");
+                               "\", == maxPossiblePoolSize! This pool is full!");
                 success = SpotInPool::FAIL;
                 itemId = {};
                 return success;
             }
-
+            uint32_t tileIndex = (uint32_t)((double)firstEmptyIndexPlus / (double)tileSize);
+            uint32_t indexInTile = firstEmptyIndexPlus % tileSize;
             // [tdbe] reserved to capacity() but not yet constructed at the current index.
-            if (items.size() <= firstEmptyIndexPlus || items[firstEmptyIndexPlus] == nullptr)
+            if (items.size() <= tileIndex || items[tileIndex].size() <= indexInTile || items[tileIndex][indexInTile] == nullptr)
             {
                 success = SpotInPool::UNINITIALIZED;
                 itemId.version = ++currentVersion;
                 validSize++;
-                itemId.index = firstEmptyIndexPlus;
+                itemId.indexInChunk = tileIndex;
                 itemId.typeUID = typeUID;
                 itemId.worldIndex = worldIndex;
+                itemId.chunkIndex = tileIndex;
                 itemId.typeIndex = std::type_index(typeid(T));
-                if (maxUsedIndex < itemId.index)
-                    maxUsedIndex = itemId.index;
+                if (maxUsedIndex < firstEmptyIndexPlus)
+                    maxUsedIndex = firstEmptyIndexPlus;
                 util::DebugLog("[GameDataPool][GetFirstFree<" + topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
-                               "\", BUT the vector('s item) is not yet constructed at the current index");
+                               "\", BUT the vector('s item) is not yet constructed at the current index ["+util::ToString(tileIndex)+"]["+util::ToString(indexInTile)+"], items.size(): "+util::ToString(items.size()));
             }
             else
             {
-                if (items[firstEmptyIndexPlus]->id.version != GameDataId::FREE)
+                if (items[tileIndex][indexInTile]->id.version != GameDataId::FREE)
                 {
                     success = SpotInPool::USED;
                     itemId = {};
                     if (skipThisManyFreeSlots != 0)
                         util::DebugError("[GameDataPool][GetFirstFree<" + topTypeStr +
                                          ">]\t the version of firstEmptyIndexPlus: " + util::ToString(firstEmptyIndexPlus) +
-                                         ", with id \"" + items[firstEmptyIndexPlus]->id.PrintGlobalUID() +
+                                         ", with id \"" + items[tileIndex][indexInTile]->id.PrintGlobalUID() +
                                          "\", was not empty! This should never happen!");
                 }
                 else
                 {
                     success = SpotInPool::FREE;
-                    items[firstEmptyIndexPlus]->id.version = ++currentVersion;
+                    items[tileIndex][indexInTile]->id.version = ++currentVersion;
                     validSize++;
-                    if (maxUsedIndex < items[firstEmptyIndexPlus]->id.index)
-                        maxUsedIndex = items[firstEmptyIndexPlus]->id.index;
-                    itemId = items[firstEmptyIndexPlus]->id;
+                    if (maxUsedIndex < firstEmptyIndexPlus)
+                        maxUsedIndex = firstEmptyIndexPlus;
+                    itemId = items[tileIndex][indexInTile]->id;
                     #ifdef DEBUG_VERBOSE
                     util::DebugLog("[GameDataPool][GetFirstFree<" + topTypeStr + ">]\t Found free item at index: " + util::ToString(firstEmptyIndexPlus) + ", with id: " + itemId.PrintGlobalUID() +
                                    ", validSize: " + util::ToString(validSize) + ", currentVersion: " + util::ToString(currentVersion));
@@ -381,14 +418,17 @@ namespace Game
             }
 
             if ((success == SpotInPool::FREE || success == SpotInPool::UNINITIALIZED))// && skipThisManyFreeSlots == 0
-                ScanForNextEmptyIndex(items[firstEmptyIndexPlus]->id.index + 1);// firstEmptyIndex
+                ScanForNextEmptyIndex(firstEmptyIndexPlus + 1);// firstEmptyIndex
 
             return success;
         };
 
         bool IsIdValidItem(GameDataId::ID id) const
         {
-            if (items.size() <= id.index)
+            uint32_t tileIndex = (uint32_t)((double)id.indexInChunk / (double)tileSize);
+            uint32_t indexInTile = id.indexInChunk % tileSize;
+            if (items.size() <= tileIndex || 
+                items[tileIndex].size() <= indexInTile)
             {
                 return false;
             }

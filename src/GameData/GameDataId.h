@@ -13,27 +13,27 @@ namespace Game
 	{
         static const uint32_t FREE = 0;
         /// [tdbe] Essentially used as a weak reference in the data spans in <see cref="GameData"/>.
-        /// worldIndex:typeUID:chnukIndex:index:version and typeIndex
+        /// worldIndex:typeUID:chunkIndex:indexInChunk:version and typeIndex
         /// The ID is a little big/verbose but the aim is to not obfuscate or compromise real-world game-making convenience.
         struct ID 
         {
-            /// [tdbe] index in owning vector/array. 2^32, +-2,147,483,647 -> the max number of items in an owning
+            /// [tdbe] indexInChunk in owning vector/array. 2^32, +-2,147,483,647 -> the max number of items in an owning
             /// vector/array is 2,147,483,647.
-            int32_t index = 0;
+            int32_t indexInChunk = 0;
             /// [tdbe] Version 0 means deleted/free/clear/unused.
             /// u2^32, 0 to 4,294,967,295 -> the total max number of times you can change items in the owning
             /// vector/array while still maintaining unique IDs.
             uint32_t version = 0;
             
-            /// [tdbe] We don't have advanced chunking but we have Tiled pools. Chunky Tiles.
-            uint16_t chunkIndex = 0;
+            /// [tdbe] We don't have archetype enforcement chunking but we have Tiled multi component pools. Chunky Tiles.
+            int32_t chunkIndex = 0;
 
             /// [tdbe] the above entries make up an ID relative to the container<this item type>. 
             /// This a custom uid of the type of element, used for archetype masks, and sometimes scriptable name lookups.
             uint64_t typeUID = 0;
             
             /// [tdbe] the above entries can be found in one of multiple game worlds.
-            int worldIndex = 0;
+            int16_t worldIndex = 0;
 
             /// [tdbe] Allows the convenience of static cast find by type (but doesn't find your object if it's derived from this type).
             /// (you must set this to the topmost inheritor of this class e.g. a <see cref="GameEntityObject"/>)
@@ -54,12 +54,12 @@ namespace Game
 
             std::string PrintGlobalUID() const
             {
-                return util::ToString(worldIndex) + ":" + util::ToString(typeUID) + ":" + util::ToString(chunkIndex) + ":" + util::ToString(index) + ":" + util::ToString(version);
+                return util::ToString(worldIndex) + ":" + std::format("{:#08b}", typeUID) + ":" + util::ToString(chunkIndex) + ":" + util::ToString(indexInChunk) + ":" + util::ToString(version);
             }
 
             bool Equals(GameDataId::ID other) const
             {
-                return index == other.index && version == other.version && chunkIndex == other.chunkIndex &&
+                return indexInChunk == other.indexInChunk && version == other.version && chunkIndex == other.chunkIndex &&
                        typeUID == other.typeUID && worldIndex == other.worldIndex;
             }
 
@@ -78,7 +78,7 @@ namespace Game
                 if(worldIndex != other.worldIndex) return worldIndex < other.worldIndex;
                 if(typeUID != other.typeUID) return typeUID < other.typeUID;
                 if(chunkIndex != other.chunkIndex) return chunkIndex < other.chunkIndex;
-                if(index != other.index) return index < other.index;
+                if(indexInChunk != other.indexInChunk) return indexInChunk < other.indexInChunk;
                 return version < other.version;
             }
         } id;
@@ -103,7 +103,7 @@ namespace Game
 
         GameDataId(GameDataId::ID id = { 0, 0, 0, 0, 0, std::type_index(typeid(int)) })
         {
-            this->id.index = id.index;
+            this->id.indexInChunk = id.indexInChunk;
             this->id.version = id.version;
             this->id.chunkIndex = id.chunkIndex;
             this->id.typeIndex = id.typeIndex;
@@ -130,11 +130,11 @@ namespace std
     {
         size_t operator()(const Game::GameDataId::ID& id) const noexcept
         {
-            size_t h1 = hash<int32_t>{}(id.index);
+            size_t h1 = hash<int32_t>{}(id.indexInChunk);
             size_t h2 = hash<uint32_t>{}(id.version);
-            size_t h3 = hash<uint32_t>{}(id.chunkIndex);
+            size_t h3 = hash<int32_t>{}(id.chunkIndex);
             size_t h4 = hash<uint64_t>{}(id.typeUID);
-            size_t h5 = hash<uint16_t>{}(id.worldIndex);
+            size_t h5 = hash<int16_t>{}(id.worldIndex);
             return h1 ^ (h2 << 1) ^ (h3 << 2) ^ (h4 << 3) ^ (h5 << 4);
         }
     };

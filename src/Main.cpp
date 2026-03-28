@@ -27,7 +27,7 @@ using namespace Scripting;
 
 /// <summary>
 /// [tdbe] Hello intrepid heroes! This repo will be heavily (& redundantly) commented, as if it's a blog post.
-/// Purpose of the project is to be performant, useful, with wisdom and good programmer ux; do gamedev The Right Way™️.
+/// Purpose of the project is to be performant, useful, with wisdom and good programmer ux; do gamedev The Right Way™.
 /// But it's also 1-person-no-budget, and you got it for free on the internet, so expect a bit of shortcuts, WIP, and no warranty.
 /// Cutting edge poor-man's "game engine": ECS, PBR, single pass, OpenXR.
 /// </summary>

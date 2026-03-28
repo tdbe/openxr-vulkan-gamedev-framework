@@ -527,7 +527,7 @@ namespace Scripting
         auto id01 = GameData::Instance().namedLightComponentIDs.left.at("tentacleLightComp01");
         for (int i = 1; i < 7; i++)
         {
-            Light* tentacleLightComp = gameData.entityObjectsWorld->lightComponents->items[id01.index + i - 1];
+            Light* tentacleLightComp = gameData.entityObjectsWorld->lightComponents->items[id01.chunkIndex][id01.indexInChunk + i - 1];
             // [tdbe] z: tube length, x (and/or) y: tube radius
             tentacleLightComp->SetRenderProperties(tentacleColors[i-1], 1.0, 
                                                    Light::LightTypes::LIGHT_TYPE_TENTACLE);

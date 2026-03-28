@@ -71,10 +71,6 @@ GameComponent* GameData::GetComponent(GameDataId::ID id)
     {
         return gameWorlds[id.worldIndex]->childrenComponents->GetItem(id);
     }
-    else if (id.typeUID == TypeUIDs.ROOT_ATTRIBUTE_COMPONENTS)
-    {
-        return gameWorlds[id.worldIndex]->rootAttributeComponents->GetItem(id);
-    }
     else if (id.typeUID == TypeUIDs.MODEL_COMPONENTS)
     {
         return gameWorlds[id.worldIndex]->modelComponents->GetItem(id);
@@ -161,7 +157,7 @@ bool GameData::LoadModels()
     bool success = true;
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
     if(entityObjectsWorld->modelComponents != nullptr) { util::DebugError("[GameData][LoadModels]\t Somebody forgot to clear their pool (entityObjectsWorld)!"); entityObjectsWorld->modelComponents->ClearItems(false); }
-    entityObjectsWorld->modelComponents = new GameDataPool<Model>(AllocationMagicNumbers::MAX_MODELS, entityObjectsWorldIndex,
+    entityObjectsWorld->modelComponents = new GameDataPool<Model>(AllocationMagicNumbers::MAX_MODELS, AllocationMagicNumbers::MAX_MODELS, entityObjectsWorldIndex,
                                               TypeUIDs.MODEL_COMPONENTS,
                                               TypeUIDs.ToString(TypeUIDs.MODEL_COMPONENTS));
     
@@ -310,11 +306,11 @@ bool GameData::LoadMaterials()
     int vfxEntityObjectsWorldIndex = GameWorldsIndexOf(vfxEntityObjectsWorld);
     
     if(entityObjectsWorld->materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their pool!"); entityObjectsWorld->materialComponents->ClearItems(false); }
-    entityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_MATERIALS, entityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
+    entityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_MATERIALS, AllocationMagicNumbers::MAX_MATERIALS, entityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
                                                     TypeUIDs.ToString(TypeUIDs.MATERIAL_COMPONENTS));
     
     if(vfxEntityObjectsWorld->materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their pool (vfx entities)!"); vfxEntityObjectsWorld->materialComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_VFX_MATERIALS, vfxEntityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
+    vfxEntityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_VFX_MATERIALS, AllocationMagicNumbers::MAX_VFX_MATERIALS, vfxEntityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
                                                     TypeUIDs.ToString(TypeUIDs.MATERIAL_COMPONENTS));
 
     Material* gco = entityObjectsWorld->materialComponents->GetFreeItem();
@@ -355,7 +351,7 @@ bool GameData::LoadMaterials()
     // [tdbe] customization / hack: we skip <see cref="skip"/> free slots in case we want to 
     // add more materials with the same pipeline as above, during runtime, that we want batched.
     uint32_t skip = 20;
-    uint32_t lastDiffuseMaterialAt = gco->id.index;// we'd have to share this with whoever adds new mats at runtime
+    std::tuple<uint32_t, uint32_t> lastDiffuseMaterialAt(0u, gco->id.indexInChunk);// we'd have to share this with whoever adds new mats at runtime
     
     gco = entityObjectsWorld->materialComponents->GetFreeItem(skip);
     namedMaterialComponentIDs.insert({"squidMaterialComp", gco->id});
@@ -435,9 +431,10 @@ bool GameData::LoadGameLights()
     
     if(entityObjectsWorld->lightComponents != nullptr) { util::DebugError("[GameData][LoadGameLights]\t Somebody forgot to clear their pool!"); entityObjectsWorld->lightComponents->ClearItems(false); }
     entityObjectsWorld->lightComponents = new GameDataPool<Light>(AllocationMagicNumbers::LIGHTS_COUNT, 
-                                              entityObjectsWorldIndex,
-                                              TypeUIDs.LIGHT_COMPONENTS, 
-                                              TypeUIDs.ToString(TypeUIDs.LIGHT_COMPONENTS));
+                                                AllocationMagicNumbers::LIGHTS_COUNT, 
+                                                entityObjectsWorldIndex,
+                                                TypeUIDs.LIGHT_COMPONENTS, 
+                                                TypeUIDs.ToString(TypeUIDs.LIGHT_COMPONENTS));
 
     Light* gco = entityObjectsWorld->lightComponents->GetFreeItem();
     namedLightComponentIDs.insert({"mainDirectionalLightComp", gco->id});
@@ -475,31 +472,31 @@ bool GameData::LoadGameEntityObjects()
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
 
     if (entityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (gameEntityObjects)!"); entityObjectsWorld->gameEntityObjects->ClearItems(false); }
-    entityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS,
+    entityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS,
                                                            entityObjectsWorldIndex,
                                                            TypeUIDs.GAME_ENTITY_OBJECTS,
                                                            TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
     if(entityObjectsWorld->transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!"); entityObjectsWorld->transformComponents->ClearItems(false); }
-    entityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                      entityObjectsWorldIndex,
-                                                      TypeUIDs.TRANSFORM_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
+    entityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
+                                                       entityObjectsWorldIndex,
+                                                       TypeUIDs.TRANSFORM_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
     if(entityObjectsWorld->parentComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (parentComponents)!"); entityObjectsWorld->parentComponents->ClearItems(false); }
-    entityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                      entityObjectsWorldIndex,
-                                                      TypeUIDs.PARENT_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
+    entityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
+                                                       entityObjectsWorldIndex,
+                                                       TypeUIDs.PARENT_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
     if(entityObjectsWorld->childrenComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (childrenComponents)!"); entityObjectsWorld->childrenComponents->ClearItems(false); }
-    entityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                      entityObjectsWorldIndex,
-                                                      TypeUIDs.CHILDREN_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
+    entityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
+                                                       entityObjectsWorldIndex,
+                                                       TypeUIDs.CHILDREN_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
     
     if(entityObjectsWorld->boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!"); entityObjectsWorld->boundsComponents->ClearItems(false); }
-    entityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::MAX_MODELS, 
-                                                      entityObjectsWorldIndex,
-                                                      TypeUIDs.BOUNDS_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
+    entityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers::MAX_MODELS, 
+                                                       entityObjectsWorldIndex,
+                                                       TypeUIDs.BOUNDS_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
     
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
@@ -1181,31 +1178,31 @@ bool GameData::LoadVFXEntityObjects()
     int vfxEntityObjectsWorldIndex = GameWorldsIndexOf(vfxEntityObjectsWorld);
     
     if (vfxEntityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld->gameEntityObjects)!"); vfxEntityObjectsWorld->gameEntityObjects->ClearItems(false); }
-    vfxEntityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
-                                                        vfxEntityObjectsWorldIndex,
-                                                        TypeUIDs.GAME_ENTITY_OBJECTS,
-                                                        TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
+     vfxEntityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
+                                                         vfxEntityObjectsWorldIndex,
+                                                         TypeUIDs.GAME_ENTITY_OBJECTS,
+                                                         TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
     if(vfxEntityObjectsWorld->transformComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!"); vfxEntityObjectsWorld->transformComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                      vfxEntityObjectsWorldIndex,
-                                                      TypeUIDs.TRANSFORM_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
+     vfxEntityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
+                                                       vfxEntityObjectsWorldIndex,
+                                                       TypeUIDs.TRANSFORM_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
     if(vfxEntityObjectsWorld->parentComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (parentComponents)!"); vfxEntityObjectsWorld->parentComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                      vfxEntityObjectsWorldIndex,
-                                                      TypeUIDs.PARENT_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
+     vfxEntityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
+                                                       vfxEntityObjectsWorldIndex,
+                                                       TypeUIDs.PARENT_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
     if(vfxEntityObjectsWorld->childrenComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (childrenComponents)!"); vfxEntityObjectsWorld->childrenComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                      vfxEntityObjectsWorldIndex,
-                                                      TypeUIDs.CHILDREN_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
+     vfxEntityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
+                                                       vfxEntityObjectsWorldIndex,
+                                                       TypeUIDs.CHILDREN_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
     
     if(vfxEntityObjectsWorld->boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!"); vfxEntityObjectsWorld->boundsComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(2, //just the hands
-                                                      vfxEntityObjectsWorldIndex,
-                                                      TypeUIDs.BOUNDS_COMPONENTS,
-                                                      TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
+     vfxEntityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, 2, //just the hands
+                                                       vfxEntityObjectsWorldIndex,
+                                                       TypeUIDs.BOUNDS_COMPONENTS,
+                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
 
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
@@ -1418,10 +1415,10 @@ void GameData::DeleteAllMeshData()
     delete meshData;
 }
 
-bool Game::GameData::UnLoadGameWorld(bool fast)
+bool Game::GameData::UnLoadGameWorlds(bool fast)
 {
-    util::DebugLog("\n[Game][GameData][UnLoadGameWorld]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    util::DebugLog("[Game][GameData][UnLoadGameWorld]\t Unloading entities and components, unhooking events, clearing any maps:");
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t Unloading entities and components, unhooking events, clearing any maps:");
     
     namedModelComponentIDs.clear();
     namedMaterialComponentIDs.clear();
@@ -1431,27 +1428,95 @@ bool Game::GameData::UnLoadGameWorld(bool fast)
     
     
     UnhookOnGameObjectEvents();
-    entityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
-    vfxEntityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
+    if(entityObjectsWorld->gameEntityObjects != nullptr)
+    {
+        entityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
+        entityObjectsWorld->gameEntityObjects = nullptr;
+    }
+    if(vfxEntityObjectsWorld->gameEntityObjects != nullptr)
+    {
+        vfxEntityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
+        vfxEntityObjectsWorld->gameEntityObjects = nullptr;
+    }
 
-    entityObjectsWorld->transformComponents->ClearItems(true, fast);
-    entityObjectsWorld->parentComponents->ClearItems(true, fast);
-    entityObjectsWorld->childrenComponents->ClearItems(true, fast);
-    entityObjectsWorld->rootAttributeComponents->ClearItems(true, fast);
-    entityObjectsWorld->modelComponents->ClearItems(true, fast);
-    entityObjectsWorld->boundsComponents->ClearItems(true, fast);
-    entityObjectsWorld->materialComponents->ClearItems(true, fast);
-    entityObjectsWorld->lightComponents->ClearItems(true, fast);
+    if(entityObjectsWorld->transformComponents != nullptr)
+    {
+        entityObjectsWorld->transformComponents->ClearItems(true, fast);
+        entityObjectsWorld->transformComponents = nullptr;
+    }
+    if(entityObjectsWorld->parentComponents != nullptr)
+    {
+        entityObjectsWorld->parentComponents->ClearItems(true, fast);
+        entityObjectsWorld->parentComponents = nullptr;
+    }
+    if(entityObjectsWorld->childrenComponents != nullptr)
+    {
+        entityObjectsWorld->childrenComponents->ClearItems(true, fast);
+        entityObjectsWorld->childrenComponents = nullptr;
+    }
+    if(entityObjectsWorld->modelComponents != nullptr)
+    {
+        entityObjectsWorld->modelComponents->ClearItems(true, fast);
+        entityObjectsWorld->modelComponents = nullptr;
+    }
+    if(entityObjectsWorld->boundsComponents != nullptr)
+    {
+        entityObjectsWorld->boundsComponents->ClearItems(true, fast);
+        entityObjectsWorld->boundsComponents = nullptr;
+    }
+    if(entityObjectsWorld->materialComponents != nullptr)
+    {
+        entityObjectsWorld->materialComponents->ClearItems(true, fast);
+        entityObjectsWorld->materialComponents = nullptr;
+    }
+    if(entityObjectsWorld->lightComponents != nullptr)
+    {
+        entityObjectsWorld->lightComponents->ClearItems(true, fast);
+        entityObjectsWorld->lightComponents = nullptr;
+    }
     
-    vfxEntityObjectsWorld->transformComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->parentComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->childrenComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->rootAttributeComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->modelComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->boundsComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->materialComponents->ClearItems(true, fast);
-    vfxEntityObjectsWorld->lightComponents->ClearItems(true, fast);
-        
+    if(vfxEntityObjectsWorld->transformComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->transformComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->transformComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->parentComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->parentComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->parentComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->childrenComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->childrenComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->childrenComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->modelComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->modelComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->modelComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->boundsComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->boundsComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->boundsComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->materialComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->materialComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->materialComponents = nullptr;
+    }
+    if(vfxEntityObjectsWorld->lightComponents != nullptr)
+    {
+        vfxEntityObjectsWorld->lightComponents->ClearItems(true, fast);
+        vfxEntityObjectsWorld->lightComponents = nullptr;
+    }
+    
+    entityObjectsWorld = nullptr;
+    vfxEntityObjectsWorld = nullptr;
+    
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloaded Game Worlds.");
+    
     //std::exception("NotImplementedException");
     return true;
 }
@@ -1461,48 +1526,128 @@ void Game::GameData::DeletePlayers()
     for (PlayerObject* player : playerObjects)
         delete player;
     playerObjects.clear();
+    util::DebugLog("[Game][GameData][GameData]\t Deleted Players.");
 }
 
 void Game::GameData::DeleteEntityPools()
 {
-    entityObjectsWorld->gameEntityObjects->~GameDataPool();
-    vfxEntityObjectsWorld->gameEntityObjects->~GameDataPool();
+    if(entityObjectsWorld != nullptr && entityObjectsWorld->gameEntityObjects != nullptr)
+    {
+        entityObjectsWorld->gameEntityObjects->~GameDataPool();
+        entityObjectsWorld->gameEntityObjects = nullptr;
+    }
+    if(vfxEntityObjectsWorld != nullptr && vfxEntityObjectsWorld->gameEntityObjects != nullptr)
+    {
+        vfxEntityObjectsWorld->gameEntityObjects->~GameDataPool();
+        vfxEntityObjectsWorld->gameEntityObjects = nullptr;
+    }
+    util::DebugLog("[Game][GameData][GameData]\t Deleted Entity Pools.");
 }
 
 void Game::GameData::DeleteComponentPools()
 {
-    entityObjectsWorld->transformComponents->~GameDataPool();
-    entityObjectsWorld->parentComponents->~GameDataPool();
-    entityObjectsWorld->childrenComponents->~GameDataPool();
-    entityObjectsWorld->rootAttributeComponents->~GameDataPool();
-    entityObjectsWorld->modelComponents->~GameDataPool();
-    entityObjectsWorld->boundsComponents->~GameDataPool();
-    entityObjectsWorld->materialComponents->~GameDataPool();
-    entityObjectsWorld->lightComponents->~GameDataPool();
+    if(entityObjectsWorld != nullptr)
+    {
+        if(entityObjectsWorld->transformComponents != nullptr)
+        {
+            entityObjectsWorld->transformComponents->~GameDataPool();
+            entityObjectsWorld->transformComponents = nullptr;
+        }
+        if(entityObjectsWorld->parentComponents != nullptr)
+        {
+            entityObjectsWorld->parentComponents->~GameDataPool();
+            entityObjectsWorld->parentComponents = nullptr;
+        }
+        if(entityObjectsWorld->childrenComponents != nullptr)
+        {
+            entityObjectsWorld->childrenComponents->~GameDataPool();
+            entityObjectsWorld->childrenComponents = nullptr;
+        }
+        if(entityObjectsWorld->modelComponents != nullptr)
+        {
+            entityObjectsWorld->modelComponents->~GameDataPool();
+            entityObjectsWorld->modelComponents = nullptr;
+        }
+        if(entityObjectsWorld->boundsComponents != nullptr)
+        {
+            entityObjectsWorld->boundsComponents->~GameDataPool();
+            entityObjectsWorld->boundsComponents = nullptr;
+        }
+        if(entityObjectsWorld->materialComponents != nullptr)
+        {
+            entityObjectsWorld->materialComponents->~GameDataPool();
+            entityObjectsWorld->materialComponents = nullptr;
+        }
+        if(entityObjectsWorld->lightComponents != nullptr)
+        {
+            entityObjectsWorld->lightComponents->~GameDataPool();
+            entityObjectsWorld->lightComponents = nullptr;
+        }
+    }
     
-    vfxEntityObjectsWorld->transformComponents->~GameDataPool();
-    vfxEntityObjectsWorld->parentComponents->~GameDataPool();
-    vfxEntityObjectsWorld->childrenComponents->~GameDataPool();
-    vfxEntityObjectsWorld->rootAttributeComponents->~GameDataPool();
-    vfxEntityObjectsWorld->modelComponents->~GameDataPool();
-    vfxEntityObjectsWorld->boundsComponents->~GameDataPool();
-    vfxEntityObjectsWorld->materialComponents->~GameDataPool();
-    vfxEntityObjectsWorld->lightComponents->~GameDataPool();
+    if(vfxEntityObjectsWorld != nullptr)
+    {
+        if(vfxEntityObjectsWorld->transformComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->transformComponents->~GameDataPool();
+            vfxEntityObjectsWorld->transformComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->parentComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->parentComponents->~GameDataPool();
+            vfxEntityObjectsWorld->parentComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->childrenComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->childrenComponents->~GameDataPool();
+            vfxEntityObjectsWorld->childrenComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->modelComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->modelComponents->~GameDataPool();
+            vfxEntityObjectsWorld->modelComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->boundsComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->boundsComponents->~GameDataPool();
+            vfxEntityObjectsWorld->boundsComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->materialComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->materialComponents->~GameDataPool();
+            vfxEntityObjectsWorld->materialComponents = nullptr;
+        }
+        if(vfxEntityObjectsWorld->lightComponents != nullptr)
+        {
+            vfxEntityObjectsWorld->lightComponents->~GameDataPool();
+            vfxEntityObjectsWorld->lightComponents = nullptr;
+        }
+    }
+    util::DebugLog("[Game][GameData][GameData]\t Deleted Component Pools.");
 }
 
 void Game::GameData::DeleteWorlds()
 {
      for (GameWorld* world : gameWorlds)
-        delete world;
+     {
+        if(world != nullptr)
+            delete world;
+     }
     gameWorlds.clear();
+    util::DebugLog("[Game][GameData][GameData]\t Deleted Worlds.");
 }
 
+/// [tdbe] TODO: At this point these have already been unloaded with the game world(s) <see cref="UnLoadGameWorlds"/>. When we have a clearer picture of loading/unloading/streaming worlds, we can refactor or remove these calls.
 GameData::~GameData()
 {
+    util::DebugLog("\n[Game][GameData][~GameData]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("[Game][GameData][~GameData]\t Deleting Game Data: players, entity pools, component pools, worlds. These all should have been unloaded already with the world(s).");
+    
     DeletePlayers();
     DeleteEntityPools();
     DeleteComponentPools();
     DeleteWorlds();
+    util::DebugLog("[Game][~GameData][GameData]\t Deleted Game Data.");
 }
 
 std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
@@ -1542,5 +1687,9 @@ std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
     else if(typeIndex == std::type_index(typeid(Light)))
     {
         return LIGHT_COMPONENTS;
+    }
+    else
+    {
+        return 0;    
     }
 }

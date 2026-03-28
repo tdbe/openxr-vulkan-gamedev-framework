@@ -98,6 +98,7 @@ namespace Game
             static const uint32_t LIGHTS_COUNT = 10;// [tdbe] remember to change LIGHT_COUNT in _Lighting.glsl, and maybe in Light.vert and LightTentacle.vert
             static const uint32_t DEFAULT_COMPONENTS_PER_GAME_ENTITY_OBJECT = 16;
             static const uint32_t MAX_PLAYER_OBJECTS = 1;
+            static const uint16_t POOL_TILE_DEFAULT_SIZE = 128;
         } AllocationMagicNumbers;
 
         /// [tdbe] GameWorlds are just a way to sort and conceptually chunk classes of entities + components.
@@ -206,13 +207,14 @@ namespace Game
         bool LoadGameWorlds();
         /// [tdbe] Run on all the buffers marking them as clear
         /// (contiguously if <param name="fast"/> is true (but then it doesn't detatch owners/children/components))
-        bool UnLoadGameWorld(bool fast = true);
+        bool UnLoadGameWorlds(bool fast = true);
 
         static GameData& Instance()
         {
             static GameData instance;
             return instance;
         }
+        /// [tdbe] You should have alreaady unloaded your game worlds at this point <see cref="UnLoadGameWorlds"/>
         ~GameData();
 
       private:
