@@ -359,19 +359,21 @@ namespace Scripting
 
         // -------- [tdbe] edit any "game object" properties here. --------
 #pragma region GameObjects
-        GameEntityObject* worldRoot = gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.playerObjects[0]->worldRootId);
+        auto& gameEntityObjects = gameData.entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+        auto& vfxGameEntityObjects = gameData.vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+        GameEntityObject* worldRoot = gameEntityObjects.GetItem(gameData.playerObjects[0]->worldRootId);
         Transform* worldRootTrans = worldRoot->GetComponentByTypeIndex<Transform>();
         glm::mat4 worldRootMatr = glm::mat4(1.0f);
         worldRootTrans->SetWorldMatrix(worldRootMatr); // [tdbe] origin, render origin
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_world"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_world"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
                                         { 500.12f, 500.12f, 500.12f }));
         
         util::DebugLog("~~~~[Scripting] setting ground size: ");
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("ground"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("ground"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(
                                 glm::translate(
@@ -380,21 +382,21 @@ namespace Scripting
                                     { 0.0f, 0.0f, 0.0f }),
                                 glm::radians(-45.0f), { 0.0f, 1.0f, 0.0f }));
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("ruins"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("ruins"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }),
                                          glm::radians(0.0f), { 0.0f, 1.0f, 0.0f }));
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("carLeft"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("carLeft"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, 
                                                         { -4.35f, 0.0f, -1.7f }),//{ -3.5f, 0.0f, -0.5f }),
                                          glm::radians(150.0f), { 0.0f, 1.0f, 0.0f }));//75.0f
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("carRight"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("carRight"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, { 8.4f, 0.0f, -14.5f }),
                                          glm::radians(-37.0f), { 0.0f, 1.0f, 0.0f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("beetle"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("beetle"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(
                                         glm::rotate(
@@ -402,88 +404,88 @@ namespace Scripting
                                                                   { -3.0f, 0.0f, -7.5f }),//{ -3.5f, 0.0f, -7.0f }),
                                                     glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 1.1f, 1.1f, 1.1f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("beetleGlass"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("beetleGlass"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, 
                                                                   { -3.0f, 0.0f, -7.5f }),
                                                     glm::radians(-125.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 1.1f, 1.1f, 1.1f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("logo1"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("logo1"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 3.0f, -10.0f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("logo2"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("logo2"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 3.0f, -10.0f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("bike"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("bike"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, 
                                                         { 0.0f, 0.0f, -4.5f }), 
                                          0.2f, { 0.0f, 1.0f, 0.0f }));
         // glm::scale(glm::translate(worldRoot.worldMatrix, { 4.0f, 2.0f, -2.5f }), { 0.5f, 0.5f, 0.5f });
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("cube"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("cube"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, 
                                                       { 0.0f, -0.45f, -4.5f }),
                                         { 0.5f, 0.5f, 0.5f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("textLocomotion"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("textLocomotion"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(
                 glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.835f, -1.7f }),
                                        -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                            { 0.25f, 0.25f, 0.25f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("textSudaBeam"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("textSudaBeam"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.2325f, -1.3f }),//2.825f, 0.23f, -1.7f
                                                     -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 0.225f, 0.225f, 0.225f }));
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("textSeeControlsMd"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("textSeeControlsMd"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 2.825f, 0.205f, -3.2f }),
                                                     -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 0.2f, 0.2f, 0.2f }));                  
         
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSmoothForInstancing"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("icosphereSmoothForInstancing"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { -2.25f, 1.25f, -14.5f }),
                                         { 0.5f, 0.5f, 0.5f }));
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSmoothTripInstancing"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("icosphereSmoothTripInstancing"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }),// { 2.0f, 2.0f, -2.5f }
                                         { 0.7f, 0.7f, 0.7f }));
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("monke"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("monke"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.5f }));// [tdbe] mesh is offset and baked from blender
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("monkeEye1"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("monkeEye1"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 9.87879f, 1.99395f, -10.586f + 0.5f }),
                                         { 0.283856f, 0.283856f, 0.283856f }));
 
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("monkeEye2"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("monkeEye2"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 10.3927f, 2.55881f, -9.76025f + 0.5f}),
                                         { 0.283856f, 0.283856f, 0.283856f }));
         
-        gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("squid"))
+        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("squid"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, { 3.62f, 2.5f, -9.95f }),//-10.125f
                                         { 0.75f, 0.75f, 0.75f }));
         
         // -------- [tdbe] set any non-default game VFX object props here.
-        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_chaperone"))
+        vfxGameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("icosphereSkybox_chaperone"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, { 0.0f, 0.0f, 0.0f }), 0.71f,
                                                     { 0.0f, 1.0f, 0.0f }),
                                         { 500.12f, 500.12f, 500.12f }));
 
         util::DebugLog("~~~~[Scripting] setting floorGrid. ");
-        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("floorGrid"))
+        vfxGameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("floorGrid"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
         util::DebugLog("~~~~[Scripting] setting ceilingGrid. ");
-        gameData.vfxEntityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("ceilingGrid"))
+        vfxGameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("ceilingGrid"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(worldRootMatr, { 256, 256, 256 }));
 #pragma endregion GameObjects
@@ -493,7 +495,7 @@ namespace Scripting
         // [tdbe] tube light: z: tube length, x (and/or) y: tube radius
 
         Light* dirLightComp = gameData.entityObjectsWorld->lightComponents->GetItem(gameData.namedLightComponentIDs.left.at("mainDirectionalLightComp"));
-        Transform* dirLightTrans = gameData.entityObjectsWorld->gameEntityObjects->GetItem(gameData.namedGameObjectIDs.left.at("mainDirectionalLight"))
+        Transform* dirLightTrans = gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("mainDirectionalLight"))
                 ->GetComponentByTypeIndex<Transform>();
         glm::mat4 dirLightMatr = dirLightTrans->GetWorldMatrix();
         dirLightMatr[3] = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f); // [tdbe] for directional light, set the direction only

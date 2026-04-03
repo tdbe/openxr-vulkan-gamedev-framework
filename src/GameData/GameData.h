@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "GameDataPool.h"
+#include "ArchetypedGameDataPool.h"
 #include "GameDataId.h"
 
 namespace Game
@@ -43,49 +44,28 @@ namespace Game
         /// create more here as you create components.
         static const struct TypeUIDs
         {
-            // [tdbe] Note: uint64_t means max component count of 64 - these 3
+            // [tdbe] Note: uint64_t means max count of 64
             static const uint64_t FREE = 0ULL;
+            static const uint64_t GAME_ENTITIES = 1ULL<<0;
             static const uint64_t GAME_ENTITY_OBJECTS = 1ULL<<1;
-            static const uint64_t GAME_ENTITIES = 1ULL<<2;
             
-            static const uint64_t TRANSFORM_COMPONENTS = 1ULL<<3;
-            static const uint64_t PARENT_COMPONENTS = 1ULL<<4;
-            static const uint64_t CHILDREN_COMPONENTS = 1ULL<<5;
-            static const uint64_t ROOT_ATTRIBUTE_COMPONENTS = 1ULL<<6;
-            static const uint64_t MODEL_COMPONENTS = 1ULL<<7;
-            static const uint64_t BOUNDS_COMPONENTS = 1ULL<<8;
-            static const uint64_t MATERIAL_COMPONENTS = 1ULL<<9;
-            static const uint64_t LIGHT_COMPONENTS = 1ULL<<10;
+            static const uint64_t TRANSFORM_COMPONENTS = 1ULL<<2;
+            static const uint64_t PARENT_COMPONENTS = 1ULL<<3;
+            static const uint64_t CHILDREN_COMPONENTS = 1ULL<<4;
+            static const uint64_t ROOT_ATTRIBUTE_COMPONENTS = 1ULL<<5;
+            static const uint64_t MODEL_COMPONENTS = 1ULL<<6;
+            static const uint64_t BOUNDS_COMPONENTS = 1ULL<<7;
+            static const uint64_t MATERIAL_COMPONENTS = 1ULL<<8;
+            static const uint64_t LIGHT_COMPONENTS = 1ULL<<9;
             
             static std::uint64_t FromTypeIndex(std::type_index typeIndex);
+            static std::type_index ToTypeIndex(uint64_t typeUID);
+            static std::string ToString(const uint64_t typeUID);
             
-            static std::string ToString(const uint64_t id)
+            static bool IsTypeUIDEntity(uint64_t uid)
             {
-                if (id == FREE)
-                    return "FREE";
-                else if (id == GAME_ENTITY_OBJECTS)
-                    return "GAME_ENTITY_OBJECTS";
-                else if (id == GAME_ENTITIES)
-                    return "GAME_ENTITIES";
-                else if (id == TRANSFORM_COMPONENTS)
-                    return "TRANSFORM_COMPONENTS";
-                else if (id == PARENT_COMPONENTS)
-                    return "PARENT_COMPONENTS";
-                else if (id == CHILDREN_COMPONENTS)
-                    return "CHILDREN_COMPONENTS";
-                else if (id == ROOT_ATTRIBUTE_COMPONENTS)
-                    return "ROOT_ATTRIBUTE_COMPONENTS";
-                else if (id == MODEL_COMPONENTS)
-                    return "MODEL_COMPONENTS";
-                else if (id == BOUNDS_COMPONENTS)
-                    return "BOUNDS_COMPONENTS";
-                else if (id == MATERIAL_COMPONENTS)
-                    return "MATERIAL_COMPONENTS";
-                else if (id == LIGHT_COMPONENTS)
-                    return "LIGHT_COMPONENTS";
-                else
-                    return "~~~PLEASE_DEFINE~~~";
-            };
+                return uid <= GameData::TypeUIDs::GAME_ENTITY_OBJECTS;
+            }
         } TypeUIDs; 
 
         static const struct AllocationMagicNumbers
@@ -101,7 +81,7 @@ namespace Game
             static const uint16_t POOL_TILE_DEFAULT_SIZE = 128;
         } AllocationMagicNumbers;
 
-        /// [tdbe] GameWorlds are just a way to sort and conceptually chunk classes of entities + components.
+        /// [tdbe] GameWorlds are just a way to sort and conceptually group classes of entities + components.
         /// You might want a "bullets entity world", a "game entity object world", a "vfx world" etc.
         /// [tdbe] Tiles: elements don't have to be in order "index per column" but they have to all belong to each other in the current tile.
         /// (Because of pool reuse + tiling, (re)adding a component asks for the tile of the owner entity (stored in entity ID).)
@@ -110,16 +90,15 @@ namespace Game
         /// [tdbe] TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
         struct GameWorld
         {
-          #pragma region Regular Components
+            /// [tdbe] Note: ie [RequireOwnerRestriction(1)]. To support multiple of the same component on the same entity, we need a heap buffer component like <see cref="Children"/>.
+          #pragma region Entities and Unique Components
+            /// [tdbe] <see cref="GameEntity"/> or <see cref="GameEntityObject"/>: entities with ids and versions ((weak) "references"); and know their components. 
+            /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable).
             /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-            /// The transform is one per game entity.
-            GameDataPool<Transform>* transformComponents = nullptr;
-            GameDataPool<Parent>* parentComponents = nullptr;
-            GameDataPool<Children>* childrenComponents = nullptr;
-            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-            /// Bounds (AABB) - technically is created per model, and is free if you don't have a model, and it's stored per entity.
-            GameDataPool<Bounds>* boundsComponents = nullptr;
-          #pragma endregion Regular Components
+            /// [tdbe] Bounds (AABB) - technically is created per model, and is free if you don't have a model, but it's stored per entity and editable.
+            ArchetypedGameDataPool<GameEntityObject, Transform, Parent, Children, Bounds>* entityArchetypePool = nullptr;
+            
+          #pragma endregion Entities And Unique Components
             
           #pragma region Shared Components
             /// [tdbe] entities with ids and versions ((weak) "references"); and know their owner(s).
@@ -134,14 +113,14 @@ namespace Game
         
           #pragma region Sparse Components  
             /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-            /// The first light is directional (the main directional light)
+            /// [tdbe] The first light is directional (the main directional light)
             GameDataPool<Light>* lightComponents = nullptr;
-          #pragma region Sparse Components
+          #pragma endregion Sparse Components
           
-            /// [tdbe] entities with ids and versions ((weak) "references"); and know their components. 
-            /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable).
-            /// <see cref="GameEntity"/> or <see cref="GameEntityObject"/>-- TODO: we can't solve this with std:any and Templates unfortunately. So for now just using the heavier semi oop derived type: <see cref="GameEntityObject"/>.
-            GameDataPool<GameEntityObject>* gameEntityObjects = nullptr;
+          #pragma region Buffer Components  
+            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
+            /// [tdbe] This is for large components that would break the cache-coherency of a chunked or tiled pool. For example components that store arrays of data.
+          #pragma endregion Buffer Components
         };
         
 #pragma region StorageData

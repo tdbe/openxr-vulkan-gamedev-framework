@@ -21,7 +21,7 @@ uint32_t GameData::instanceIdSeed = 0;
 GameData::GameData()
 {    
     const_cast<std::string&>(instanceId) = "GameData_" + util::ToString(instanceIdSeed++);  
-    util::DebugLog("[Game][GameData][Singleton]\t All data pools are here. instanceId: \"" + instanceId + "\".");
+    util::DebugLog("[Game][GameData][Singleton]\t This is the source of all data pools. Singleton instanceId: \"" + instanceId + "\".");
 }
 
 GameData& Game::GameData::operator=(GameData const& copy)
@@ -63,15 +63,15 @@ GameComponent* GameData::GetComponent(GameDataId::ID id)
 {
     if (id.typeUID == TypeUIDs.TRANSFORM_COMPONENTS)
     {
-        return gameWorlds[id.worldIndex]->transformComponents->GetItem(id);
+        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Transform>().GetItem(id);
     }
     else if (id.typeUID == TypeUIDs.PARENT_COMPONENTS)
     {
-        return gameWorlds[id.worldIndex]->parentComponents->GetItem(id);
+        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Parent>().GetItem(id);
     }
     else if (id.typeUID == TypeUIDs.CHILDREN_COMPONENTS)
     {
-        return gameWorlds[id.worldIndex]->childrenComponents->GetItem(id);
+        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Children>().GetItem(id);
     }
     else if (id.typeUID == TypeUIDs.MODEL_COMPONENTS)
     {
@@ -79,7 +79,7 @@ GameComponent* GameData::GetComponent(GameDataId::ID id)
     }
     else if (id.typeUID == TypeUIDs.BOUNDS_COMPONENTS)
     {
-        return gameWorlds[id.worldIndex]->boundsComponents->GetItem(id);
+        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Bounds>().GetItem(id);
     }
     else if (id.typeUID == TypeUIDs.MATERIAL_COMPONENTS)
     {
@@ -99,7 +99,7 @@ GameEntity* GameData::GetEntity(GameDataId::ID id)
 {
     if (id.typeUID == TypeUIDs.GAME_ENTITY_OBJECTS)
     {
-        return gameWorlds[id.worldIndex]->gameEntityObjects->GetItem(id);
+        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(id);
     }
     else if (id.typeUID == TypeUIDs.GAME_ENTITIES)
     {
@@ -118,7 +118,7 @@ void GameData::ClearComponent(GameDataId::ID id, bool unsafe)
 {
     if (id.typeUID == TypeUIDs.TRANSFORM_COMPONENTS)
     {
-        gameWorlds[id.worldIndex]->transformComponents->ClearItem(entityObjectsWorld->transformComponents->GetItem(id), unsafe);
+        gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Transform>().ClearItem(gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Transform>().GetItem(id), unsafe);
     }
     else if (id.typeUID == TypeUIDs.MODEL_COMPONENTS)
     {
@@ -126,7 +126,7 @@ void GameData::ClearComponent(GameDataId::ID id, bool unsafe)
     }
     else if (id.typeUID == TypeUIDs.BOUNDS_COMPONENTS)
     {
-        gameWorlds[id.worldIndex]->boundsComponents->ClearItem(gameWorlds[id.worldIndex]->boundsComponents->GetItem(id), unsafe);
+        gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Bounds>().ClearItem(gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<Bounds>().GetItem(id), unsafe);
     }
     else if (id.typeUID == TypeUIDs.MATERIAL_COMPONENTS)
     {
@@ -142,7 +142,7 @@ void GameData::ClearEntity(GameDataId::ID id, bool unsafe)
 {
     if (id.typeUID == TypeUIDs.GAME_ENTITY_OBJECTS)
     {
-        gameWorlds[id.worldIndex]->gameEntityObjects->ClearItem(gameWorlds[id.worldIndex]->gameEntityObjects->GetItem(id), unsafe);
+        gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().ClearItem(gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(id), unsafe);
     }
     else if (id.typeUID == TypeUIDs.GAME_ENTITIES)
     {
@@ -159,9 +159,9 @@ bool GameData::LoadModels()
     bool success = true;
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
     if(entityObjectsWorld->modelComponents != nullptr) { util::DebugError("[GameData][LoadModels]\t Somebody forgot to clear their pool (entityObjectsWorld)!"); entityObjectsWorld->modelComponents->ClearItems(false); }
-    entityObjectsWorld->modelComponents = new GameDataPool<Model>(AllocationMagicNumbers::MAX_MODELS, AllocationMagicNumbers::MAX_MODELS, entityObjectsWorldIndex,
-                                              TypeUIDs.MODEL_COMPONENTS,
-                                              TypeUIDs.ToString(TypeUIDs.MODEL_COMPONENTS));
+    entityObjectsWorld->modelComponents = new GameDataPool<Model>(AllocationMagicNumbers::MAX_MODELS, 
+                                                                    AllocationMagicNumbers::MAX_MODELS, entityObjectsWorldIndex,
+                                                                    TypeUIDs.MODEL_COMPONENTS);
     
     DeleteAllMeshData(); // [tdbe] (meshes are kept on the gpu)
     meshData = new MeshData();
@@ -308,12 +308,12 @@ bool GameData::LoadMaterials()
     int vfxEntityObjectsWorldIndex = GameWorldsIndexOf(vfxEntityObjectsWorld);
     
     if(entityObjectsWorld->materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their pool!"); entityObjectsWorld->materialComponents->ClearItems(false); }
-    entityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_MATERIALS, AllocationMagicNumbers::MAX_MATERIALS, entityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
-                                                    TypeUIDs.ToString(TypeUIDs.MATERIAL_COMPONENTS));
+    entityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_MATERIALS, AllocationMagicNumbers::MAX_MATERIALS, 
+                                                                        entityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS);
     
     if(vfxEntityObjectsWorld->materialComponents != nullptr) { util::DebugError("[GameData][LoadMaterials]\t Somebody forgot to clear their pool (vfx entities)!"); vfxEntityObjectsWorld->materialComponents->ClearItems(false); }
-    vfxEntityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_VFX_MATERIALS, AllocationMagicNumbers::MAX_VFX_MATERIALS, vfxEntityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS,
-                                                    TypeUIDs.ToString(TypeUIDs.MATERIAL_COMPONENTS));
+    vfxEntityObjectsWorld->materialComponents = new GameDataPool<Material>(AllocationMagicNumbers::MAX_VFX_MATERIALS, AllocationMagicNumbers::MAX_VFX_MATERIALS, 
+                                                                           vfxEntityObjectsWorldIndex, TypeUIDs.MATERIAL_COMPONENTS);
 
     Material* gco = entityObjectsWorld->materialComponents->GetFreeItem();
     namedMaterialComponentIDs.insert({"skyMaterialComp", gco->id});
@@ -435,8 +435,7 @@ bool GameData::LoadGameLights()
     entityObjectsWorld->lightComponents = new GameDataPool<Light>(AllocationMagicNumbers::LIGHTS_COUNT, 
                                                 AllocationMagicNumbers::LIGHTS_COUNT, 
                                                 entityObjectsWorldIndex,
-                                                TypeUIDs.LIGHT_COMPONENTS, 
-                                                TypeUIDs.ToString(TypeUIDs.LIGHT_COMPONENTS));
+                                                TypeUIDs.LIGHT_COMPONENTS);
 
     Light* gco = entityObjectsWorld->lightComponents->GetFreeItem();
     namedLightComponentIDs.insert({"mainDirectionalLightComp", gco->id});
@@ -473,32 +472,12 @@ bool GameData::LoadGameEntityObjects()
     bool success = true;
     int entityObjectsWorldIndex = GameWorldsIndexOf(entityObjectsWorld);
 
-    if (entityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (gameEntityObjects)!"); entityObjectsWorld->gameEntityObjects->ClearItems(false); }
-    entityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS,
-                                                           entityObjectsWorldIndex,
-                                                           TypeUIDs.GAME_ENTITY_OBJECTS,
-                                                           TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
-    if(entityObjectsWorld->transformComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!"); entityObjectsWorld->transformComponents->ClearItems(false); }
-    entityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                       entityObjectsWorldIndex,
-                                                       TypeUIDs.TRANSFORM_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
-    if(entityObjectsWorld->parentComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (parentComponents)!"); entityObjectsWorld->parentComponents->ClearItems(false); }
-    entityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                       entityObjectsWorldIndex,
-                                                       TypeUIDs.PARENT_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
-    if(entityObjectsWorld->childrenComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (childrenComponents)!"); entityObjectsWorld->childrenComponents->ClearItems(false); }
-    entityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_GAME_ENTITY_OBJECTS, 
-                                                       entityObjectsWorldIndex,
-                                                       TypeUIDs.CHILDREN_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
-    
-    if(entityObjectsWorld->boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!"); entityObjectsWorld->boundsComponents->ClearItems(false); }
-    entityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers::MAX_MODELS, 
-                                                       entityObjectsWorldIndex,
-                                                       TypeUIDs.BOUNDS_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
+    if (entityObjectsWorld->entityArchetypePool != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool (entityArchetypePool)!"); entityObjectsWorld->entityArchetypePool->ClearItems(false); }
+    entityObjectsWorld->entityArchetypePool = new ArchetypedGameDataPool<GameEntityObject, Transform, Parent, Children, Bounds>(
+                                                        {TypeUIDs.GAME_ENTITY_OBJECTS, TypeUIDs.TRANSFORM_COMPONENTS, TypeUIDs.PARENT_COMPONENTS, TypeUIDs.CHILDREN_COMPONENTS, TypeUIDs.BOUNDS_COMPONENTS},
+                                                        AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, 
+                                                        AllocationMagicNumbers::MAX_GAME_ENTITY_OBJECTS,
+                                                        entityObjectsWorldIndex);
     
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
@@ -507,15 +486,15 @@ bool GameData::LoadGameEntityObjects()
     Children* children = nullptr;
     Bounds* bounds = nullptr;
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
-    gento->SetName("worldRoot");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
+    gento->SetName("worldRoot");// [tdbe] don't worry the name is not stored on the entity, there's a separate bidirectional hash map for scriptable objects.
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);// [tdbe] we are specifying we want a spot in the same chunk as the entity we just requested.
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     namedGameObjectIDs.insert({"worldRoot", gento->id});
@@ -524,15 +503,15 @@ bool GameData::LoadGameEntityObjects()
     // [tdbe] (the following order does not affect render/batching order; that order's in the material pool)
 
     // [tdbe] entities with Lights
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("mainDirectionalLight");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs.left.at("mainDirectionalLightComp"));
@@ -543,15 +522,15 @@ bool GameData::LoadGameEntityObjects()
 
     for (int i = 1; i < 7; i++)
     {
-        gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+        gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
         gento->SetName("tentacle0" + util::ToString(i, true));
-        trans = entityObjectsWorld->transformComponents->GetFreeItem();
+        trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
         trans->AddOwnerId(gento->id);
         gento->AddComponentId(trans->id);
-        parent = entityObjectsWorld->parentComponents->GetFreeItem();
+        parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
         parent->AddOwnerId(gento->id);
         gento->AddComponentId(parent->id);
-        children = entityObjectsWorld->childrenComponents->GetFreeItem();
+        children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
         children->AddOwnerId(gento->id);
         gento->AddComponentId(children->id);
         comp = GetComponent(namedLightComponentIDs.left.at("tentacleLightComp0" + util::ToString(i, true)));
@@ -561,7 +540,7 @@ bool GameData::LoadGameEntityObjects()
         comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));
         comp->AddOwnerId(gento->id);
         gento->AddComponentId(comp->id);
-        bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+        bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
         bounds->SetBoundsAABB(static_cast<Model*>(comp));
         bounds->AddOwnerId(gento->id);
         gento->AddComponentId(bounds->id);
@@ -571,15 +550,15 @@ bool GameData::LoadGameEntityObjects()
         ConfiguredGameObject(gento);
     }    
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("handLight01");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs.left.at("handLight01Comp"));
@@ -589,7 +568,7 @@ bool GameData::LoadGameEntityObjects()
     comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -598,15 +577,15 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("handLight02");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs.left.at("handLight02Comp"));
@@ -616,7 +595,7 @@ bool GameData::LoadGameEntityObjects()
     comp = GetComponent(namedModelComponentIDs.left.at("tube_light_1_03"));// [tdbe] Todo: need a procedural capsule that can be squished while preserving hemispherical ends
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -625,15 +604,15 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("bikeLight");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedLightComponentIDs.left.at("bikeLightComp"));
@@ -642,7 +621,7 @@ bool GameData::LoadGameEntityObjects()
     static_cast<Light*>(comp)->SetVisible(false);
     // comp = GetComponent(namedModelComponentIDs["tube_light_1_03"]);// [tdbe] Todo: need a procedural capsule that can
     // be squished while preserving hemispherical ends comp->AddOwnerId(gento->id); gento->AddComponentId(comp->id);
-    // bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    // bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     // bounds->SetBoundsAABB(static_cast<Model*>(comp));
     // bounds->AddOwnerId(gento->id);
     // gento->AddComponentId(bounds->id);
@@ -653,15 +632,15 @@ bool GameData::LoadGameEntityObjects()
     
     // [tdbe] world sky
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("icosphereSkybox_world");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
@@ -674,21 +653,21 @@ bool GameData::LoadGameEntityObjects()
 
     // [tdbe] regular game entities
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("ground");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("groundModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -697,21 +676,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("ruins");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("ruinsModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -720,21 +699,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("carLeft");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("carModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -743,21 +722,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("carRight");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("carModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -766,21 +745,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("beetle");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("beetleModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -789,21 +768,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("beetleGlass");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("beetleGlassModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -815,21 +794,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("bike");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("bikeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -841,21 +820,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("logo1");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("logoModel1Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -864,21 +843,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("logo2");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("logoModel2Comp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -887,21 +866,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("textLocomotion");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("textLocomotionModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -910,21 +889,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("textSudaBeam");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("textSudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -933,21 +912,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("textSeeControlsMd");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("textSeeControlsMdModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -956,21 +935,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("cube");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("cubeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -979,21 +958,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("icosphereSmoothTripInstancing");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1002,21 +981,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("icosphereSmoothForInstancing");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1028,21 +1007,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("sudaBeam01");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("sudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1051,21 +1030,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("sudaBeam02");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("sudaBeamModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1074,21 +1053,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
     
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("squid");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("squidModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1097,21 +1076,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("monke");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("suzanneMonkeModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1120,21 +1099,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("monkeEye1");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("icosphereRoughModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1143,21 +1122,21 @@ bool GameData::LoadGameEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = entityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("monkeEye2");
-    trans = entityObjectsWorld->transformComponents->GetFreeItem();
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = entityObjectsWorld->parentComponents->GetFreeItem();
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = entityObjectsWorld->childrenComponents->GetFreeItem();
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = GetComponent(namedModelComponentIDs.left.at("icosphereRoughModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = entityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1179,32 +1158,12 @@ bool GameData::LoadVFXEntityObjects()
     bool success = true;
     int vfxEntityObjectsWorldIndex = GameWorldsIndexOf(vfxEntityObjectsWorld);
     
-    if (vfxEntityObjectsWorld->gameEntityObjects != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld->gameEntityObjects)!"); vfxEntityObjectsWorld->gameEntityObjects->ClearItems(false); }
-     vfxEntityObjectsWorld->gameEntityObjects = new GameDataPool<GameEntityObject>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS,
-                                                         vfxEntityObjectsWorldIndex,
-                                                         TypeUIDs.GAME_ENTITY_OBJECTS,
-                                                         TypeUIDs.ToString(TypeUIDs.GAME_ENTITY_OBJECTS));
-    if(vfxEntityObjectsWorld->transformComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (transformComponents)!"); vfxEntityObjectsWorld->transformComponents->ClearItems(false); }
-     vfxEntityObjectsWorld->transformComponents = new GameDataPool<Transform>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                       vfxEntityObjectsWorldIndex,
-                                                       TypeUIDs.TRANSFORM_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.TRANSFORM_COMPONENTS));
-    if(vfxEntityObjectsWorld->parentComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (parentComponents)!"); vfxEntityObjectsWorld->parentComponents->ClearItems(false); }
-     vfxEntityObjectsWorld->parentComponents = new GameDataPool<Parent>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                       vfxEntityObjectsWorldIndex,
-                                                       TypeUIDs.PARENT_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.PARENT_COMPONENTS));
-    if(vfxEntityObjectsWorld->childrenComponents != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (childrenComponents)!"); vfxEntityObjectsWorld->childrenComponents->ClearItems(false); }
-     vfxEntityObjectsWorld->childrenComponents = new GameDataPool<Children>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, AllocationMagicNumbers.MAX_VFX_GAME_ENTITY_OBJECTS, 
-                                                       vfxEntityObjectsWorldIndex,
-                                                       TypeUIDs.CHILDREN_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.CHILDREN_COMPONENTS));
-    
-    if(vfxEntityObjectsWorld->boundsComponents != nullptr) { util::DebugError("[GameData][LoadGameEntityObjects]\t Somebody forgot to clear their pool!"); vfxEntityObjectsWorld->boundsComponents->ClearItems(false); }
-     vfxEntityObjectsWorld->boundsComponents = new GameDataPool<Bounds>(AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, 2, //just the hands
-                                                       vfxEntityObjectsWorldIndex,
-                                                       TypeUIDs.BOUNDS_COMPONENTS,
-                                                       TypeUIDs.ToString(TypeUIDs.BOUNDS_COMPONENTS));
+    if (vfxEntityObjectsWorld->entityArchetypePool != nullptr) { util::DebugError("[GameData][LoadGameVFXEntityObjects]\t Somebody forgot to clear their pool (vfxEntityObjectsWorld->entityArchetypePool)!"); vfxEntityObjectsWorld->entityArchetypePool->ClearItems(false); }
+     vfxEntityObjectsWorld->entityArchetypePool = new ArchetypedGameDataPool<GameEntityObject, Transform, Parent, Children, Bounds>(
+                                                        {TypeUIDs.GAME_ENTITY_OBJECTS, TypeUIDs.TRANSFORM_COMPONENTS, TypeUIDs.PARENT_COMPONENTS, TypeUIDs.CHILDREN_COMPONENTS, TypeUIDs.BOUNDS_COMPONENTS},
+                                                        AllocationMagicNumbers::POOL_TILE_DEFAULT_SIZE, 
+                                                        AllocationMagicNumbers::MAX_VFX_GAME_ENTITY_OBJECTS,
+                                                        vfxEntityObjectsWorldIndex);
 
     GameEntityObject* gento = nullptr;
     GameComponent* comp = nullptr;
@@ -1213,29 +1172,29 @@ bool GameData::LoadVFXEntityObjects()
     Children* children = nullptr;
     Bounds* bounds = nullptr;
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("worldRoot");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     ConfiguredGameObject(gento);
     
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("icosphereSkybox_chaperone");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("icosphereModelComp"));// stole model from main world
@@ -1246,15 +1205,15 @@ bool GameData::LoadVFXEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("floorGrid");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("quadModelComp"));// stole model from main world
@@ -1265,15 +1224,15 @@ bool GameData::LoadVFXEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("ceilingGrid");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("quadModelComp"));// stole model from main world
@@ -1284,21 +1243,21 @@ bool GameData::LoadVFXEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("handLeft");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("handModelComp"));// stole model from main world
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = vfxEntityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1307,22 +1266,22 @@ bool GameData::LoadVFXEntityObjects()
     gento->AddComponentId(comp->id);
     ConfiguredGameObject(gento);
 
-    gento = vfxEntityObjectsWorld->gameEntityObjects->GetFreeItem();
+    gento = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("handRight");
-    trans = vfxEntityObjectsWorld->transformComponents->GetFreeItem();
+    trans = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);
-    parent = vfxEntityObjectsWorld->parentComponents->GetFreeItem();
+    parent = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
     parent->AddOwnerId(gento->id);
     gento->AddComponentId(parent->id);
-    children = vfxEntityObjectsWorld->childrenComponents->GetFreeItem();
+    children = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
     children->AddOwnerId(gento->id);
     gento->AddComponentId(children->id);
     comp = entityObjectsWorld->modelComponents->GetItem(namedModelComponentIDs.left.at("handModelComp"));// stole model from main world
     // comp = GetComponent(namedModelComponentIDs.left.at("icosphereSmoothModelComp"));
     comp->AddOwnerId(gento->id);
     gento->AddComponentId(comp->id);
-    bounds = vfxEntityObjectsWorld->boundsComponents->GetFreeItem();
+    bounds = vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
     bounds->SetBoundsAABB(static_cast<Model*>(comp));
     bounds->AddOwnerId(gento->id);
     gento->AddComponentId(bounds->id);
@@ -1431,41 +1390,21 @@ bool Game::GameData::UnLoadGameWorlds(bool fast)
     
     
     UnhookOnGameObjectEvents();
-    if(entityObjectsWorld->gameEntityObjects != nullptr)
+    if(entityObjectsWorld->entityArchetypePool != nullptr)
     {
-        entityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
-        entityObjectsWorld->gameEntityObjects = nullptr;
+        entityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+        entityObjectsWorld->entityArchetypePool = nullptr;
     }
-    if(vfxEntityObjectsWorld->gameEntityObjects != nullptr)
+    if(vfxEntityObjectsWorld->entityArchetypePool != nullptr)
     {
-        vfxEntityObjectsWorld->gameEntityObjects->ClearItems(true, fast);
-        vfxEntityObjectsWorld->gameEntityObjects = nullptr;
+        vfxEntityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+        vfxEntityObjectsWorld->entityArchetypePool = nullptr;
     }
 
-    if(entityObjectsWorld->transformComponents != nullptr)
-    {
-        entityObjectsWorld->transformComponents->ClearItems(true, fast);
-        entityObjectsWorld->transformComponents = nullptr;
-    }
-    if(entityObjectsWorld->parentComponents != nullptr)
-    {
-        entityObjectsWorld->parentComponents->ClearItems(true, fast);
-        entityObjectsWorld->parentComponents = nullptr;
-    }
-    if(entityObjectsWorld->childrenComponents != nullptr)
-    {
-        entityObjectsWorld->childrenComponents->ClearItems(true, fast);
-        entityObjectsWorld->childrenComponents = nullptr;
-    }
     if(entityObjectsWorld->modelComponents != nullptr)
     {
         entityObjectsWorld->modelComponents->ClearItems(true, fast);
         entityObjectsWorld->modelComponents = nullptr;
-    }
-    if(entityObjectsWorld->boundsComponents != nullptr)
-    {
-        entityObjectsWorld->boundsComponents->ClearItems(true, fast);
-        entityObjectsWorld->boundsComponents = nullptr;
     }
     if(entityObjectsWorld->materialComponents != nullptr)
     {
@@ -1478,30 +1417,10 @@ bool Game::GameData::UnLoadGameWorlds(bool fast)
         entityObjectsWorld->lightComponents = nullptr;
     }
     
-    if(vfxEntityObjectsWorld->transformComponents != nullptr)
-    {
-        vfxEntityObjectsWorld->transformComponents->ClearItems(true, fast);
-        vfxEntityObjectsWorld->transformComponents = nullptr;
-    }
-    if(vfxEntityObjectsWorld->parentComponents != nullptr)
-    {
-        vfxEntityObjectsWorld->parentComponents->ClearItems(true, fast);
-        vfxEntityObjectsWorld->parentComponents = nullptr;
-    }
-    if(vfxEntityObjectsWorld->childrenComponents != nullptr)
-    {
-        vfxEntityObjectsWorld->childrenComponents->ClearItems(true, fast);
-        vfxEntityObjectsWorld->childrenComponents = nullptr;
-    }
     if(vfxEntityObjectsWorld->modelComponents != nullptr)
     {
         vfxEntityObjectsWorld->modelComponents->ClearItems(true, fast);
         vfxEntityObjectsWorld->modelComponents = nullptr;
-    }
-    if(vfxEntityObjectsWorld->boundsComponents != nullptr)
-    {
-        vfxEntityObjectsWorld->boundsComponents->ClearItems(true, fast);
-        vfxEntityObjectsWorld->boundsComponents = nullptr;
     }
     if(vfxEntityObjectsWorld->materialComponents != nullptr)
     {
@@ -1534,55 +1453,48 @@ void Game::GameData::DeletePlayers()
 
 void Game::GameData::DeleteEntityPools()
 {
-    if(entityObjectsWorld != nullptr && entityObjectsWorld->gameEntityObjects != nullptr)
+    bool fast = true;
+    if(entityObjectsWorld != nullptr && entityObjectsWorld->entityArchetypePool != nullptr)
     {
-        entityObjectsWorld->gameEntityObjects->~GameDataPool();
-        entityObjectsWorld->gameEntityObjects = nullptr;
+        entityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+        entityObjectsWorld->entityArchetypePool->~ArchetypedGameDataPool();
+        entityObjectsWorld->entityArchetypePool = nullptr;
     }
-    if(vfxEntityObjectsWorld != nullptr && vfxEntityObjectsWorld->gameEntityObjects != nullptr)
+    if(vfxEntityObjectsWorld != nullptr && vfxEntityObjectsWorld->entityArchetypePool != nullptr)
     {
-        vfxEntityObjectsWorld->gameEntityObjects->~GameDataPool();
-        vfxEntityObjectsWorld->gameEntityObjects = nullptr;
+        vfxEntityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+        vfxEntityObjectsWorld->entityArchetypePool->~ArchetypedGameDataPool();
+        vfxEntityObjectsWorld->entityArchetypePool = nullptr;
     }
     util::DebugLog("[Game][GameData][GameData]\t Deleted Entity Pools.");
 }
 
 void Game::GameData::DeleteComponentPools()
 {
+    bool fast = true;
     if(entityObjectsWorld != nullptr)
     {
-        if(entityObjectsWorld->transformComponents != nullptr)
+        if(entityObjectsWorld->entityArchetypePool != nullptr)
         {
-            entityObjectsWorld->transformComponents->~GameDataPool();
-            entityObjectsWorld->transformComponents = nullptr;
-        }
-        if(entityObjectsWorld->parentComponents != nullptr)
-        {
-            entityObjectsWorld->parentComponents->~GameDataPool();
-            entityObjectsWorld->parentComponents = nullptr;
-        }
-        if(entityObjectsWorld->childrenComponents != nullptr)
-        {
-            entityObjectsWorld->childrenComponents->~GameDataPool();
-            entityObjectsWorld->childrenComponents = nullptr;
+            entityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+            entityObjectsWorld->entityArchetypePool->~ArchetypedGameDataPool();
+            entityObjectsWorld->entityArchetypePool = nullptr;
         }
         if(entityObjectsWorld->modelComponents != nullptr)
         {
+            entityObjectsWorld->modelComponents->ClearItems(true, fast);
             entityObjectsWorld->modelComponents->~GameDataPool();
             entityObjectsWorld->modelComponents = nullptr;
         }
-        if(entityObjectsWorld->boundsComponents != nullptr)
-        {
-            entityObjectsWorld->boundsComponents->~GameDataPool();
-            entityObjectsWorld->boundsComponents = nullptr;
-        }
         if(entityObjectsWorld->materialComponents != nullptr)
         {
+            entityObjectsWorld->materialComponents->ClearItems(true, fast);
             entityObjectsWorld->materialComponents->~GameDataPool();
             entityObjectsWorld->materialComponents = nullptr;
         }
         if(entityObjectsWorld->lightComponents != nullptr)
         {
+            entityObjectsWorld->lightComponents->ClearItems(true, fast);
             entityObjectsWorld->lightComponents->~GameDataPool();
             entityObjectsWorld->lightComponents = nullptr;
         }
@@ -1590,38 +1502,27 @@ void Game::GameData::DeleteComponentPools()
     
     if(vfxEntityObjectsWorld != nullptr)
     {
-        if(vfxEntityObjectsWorld->transformComponents != nullptr)
+        if(vfxEntityObjectsWorld->entityArchetypePool != nullptr)
         {
-            vfxEntityObjectsWorld->transformComponents->~GameDataPool();
-            vfxEntityObjectsWorld->transformComponents = nullptr;
-        }
-        if(vfxEntityObjectsWorld->parentComponents != nullptr)
-        {
-            vfxEntityObjectsWorld->parentComponents->~GameDataPool();
-            vfxEntityObjectsWorld->parentComponents = nullptr;
-        }
-        if(vfxEntityObjectsWorld->childrenComponents != nullptr)
-        {
-            vfxEntityObjectsWorld->childrenComponents->~GameDataPool();
-            vfxEntityObjectsWorld->childrenComponents = nullptr;
+            vfxEntityObjectsWorld->entityArchetypePool->ClearItems(true, fast);
+            vfxEntityObjectsWorld->entityArchetypePool->~ArchetypedGameDataPool();
+            vfxEntityObjectsWorld->entityArchetypePool = nullptr;
         }
         if(vfxEntityObjectsWorld->modelComponents != nullptr)
         {
+            vfxEntityObjectsWorld->modelComponents->ClearItems(true, fast);
             vfxEntityObjectsWorld->modelComponents->~GameDataPool();
             vfxEntityObjectsWorld->modelComponents = nullptr;
         }
-        if(vfxEntityObjectsWorld->boundsComponents != nullptr)
-        {
-            vfxEntityObjectsWorld->boundsComponents->~GameDataPool();
-            vfxEntityObjectsWorld->boundsComponents = nullptr;
-        }
         if(vfxEntityObjectsWorld->materialComponents != nullptr)
         {
+            vfxEntityObjectsWorld->materialComponents->ClearItems(true, fast);
             vfxEntityObjectsWorld->materialComponents->~GameDataPool();
             vfxEntityObjectsWorld->materialComponents = nullptr;
         }
         if(vfxEntityObjectsWorld->lightComponents != nullptr)
         {
+            vfxEntityObjectsWorld->lightComponents->ClearItems(true, fast);
             vfxEntityObjectsWorld->lightComponents->~GameDataPool();
             vfxEntityObjectsWorld->lightComponents = nullptr;
         }
@@ -1650,7 +1551,8 @@ GameData::~GameData()
     DeleteEntityPools();
     DeleteComponentPools();
     DeleteWorlds();
-    util::DebugLog("[Game][~GameData][GameData]\t Deleted Game Data.");
+    util::DebugLog("[Game][GameData][~GameData]\t Deleted Game Data.");
+    util::DebugLog("[Game][GameData][~GameData]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 }
 
 std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
@@ -1696,3 +1598,73 @@ std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
         return 0;    
     }
 }
+
+std::type_index GameData::TypeUIDs::ToTypeIndex(uint64_t typeUID)
+{
+    if(typeUID == GAME_ENTITIES)
+    {
+        return std::type_index(typeid(GameEntity));
+    }
+    else if(typeUID == GAME_ENTITY_OBJECTS)
+    {
+        return std::type_index(typeid(GameEntityObject));
+    }
+    else if(typeUID == TRANSFORM_COMPONENTS)
+    {
+        return std::type_index(typeid(Transform));
+    }
+    else if(typeUID == PARENT_COMPONENTS)
+    {
+        return std::type_index(typeid(Parent));
+    }
+    else if(typeUID == CHILDREN_COMPONENTS)
+    {
+        return std::type_index(typeid(Children));
+    }
+    else if(typeUID == MODEL_COMPONENTS)
+    {
+        return std::type_index(typeid(Model));
+    }
+    else if(typeUID == BOUNDS_COMPONENTS)
+    {
+        return std::type_index(typeid(Bounds));
+    }
+    else if(typeUID == MATERIAL_COMPONENTS)
+    {
+        return std::type_index(typeid(Material));
+    }
+    else if(typeUID == LIGHT_COMPONENTS)
+    {
+        return std::type_index(typeid(Light));
+    }
+    else
+    {
+        return std::type_index(typeid(void));
+    }
+}
+
+std::string GameData::TypeUIDs::ToString(const uint64_t typeUID)
+{
+    if (typeUID == FREE)
+        return "FREE";
+    else if (typeUID == GAME_ENTITY_OBJECTS)
+        return "struct Game::GameEntityObject";
+    else if (typeUID == GAME_ENTITIES)
+        return "struct Game::GameEntity";
+    else if (typeUID == TRANSFORM_COMPONENTS)
+        return "struct Game::Transform";
+    else if (typeUID == PARENT_COMPONENTS)
+        return "struct Game::Parent";
+    else if (typeUID == CHILDREN_COMPONENTS)
+        return "struct Game::Children";
+    else if (typeUID == MODEL_COMPONENTS)
+        return "struct Game::Bounds";
+    else if (typeUID == BOUNDS_COMPONENTS)
+        return "struct Game::Bounds";
+    else if (typeUID == MATERIAL_COMPONENTS)
+        return "struct Game::Material";
+    else if (typeUID == LIGHT_COMPONENTS)
+        return "struct Game::Light";
+    else
+        return "~~~PLEASE_DEFINE~~~";
+};

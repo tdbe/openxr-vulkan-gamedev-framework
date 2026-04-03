@@ -99,6 +99,8 @@ set(SRC
 
 	GameData/GameDataPool.h
 	GameData/GameDataPool.cpp
+	GameData/ArchetypedGameDataPool.h
+	GameData/ArchetypedGameDataPool.cpp
 	
 	GameData/MeshData.cpp
 	GameData/MeshData.h

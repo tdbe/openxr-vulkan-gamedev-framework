@@ -683,7 +683,8 @@ bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface pa
     } VkPhysicalDeviceType;
     
     */
-    util::DebugLog("[Context][createDevice] physicalDeviceProperties.deviceName: " + util::ToString(physicalDeviceProperties.deviceName) + 
+    std::string actualMFString(physicalDeviceProperties.deviceName);
+    util::DebugLog("[Context][createDevice] physicalDeviceProperties.deviceName: " + actualMFString + 
                    "; physicalDeviceProperties.deviceType: " + util::ToString((int)physicalDeviceProperties.deviceType) +
                    "; physicalDeviceProperties.limits.maxViewports:" + util::ToString(physicalDeviceProperties.limits.maxViewports) +
                    "; physicalDeviceProperties.limits.maxViewportDimensions[0]:" + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[0]) +

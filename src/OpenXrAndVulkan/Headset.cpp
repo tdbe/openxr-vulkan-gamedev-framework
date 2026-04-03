@@ -316,7 +316,7 @@ Headset::Headset(const Context* context) : context(context)
 
     // Retrieve the swapchain images
     // [tdbe] 1 for every openxr swapchain image / layer.
-    std::vector<XrSwapchainImageVulkanKHR> swapchainImages;
+    std::vector<XrSwapchainImageVulkan2KHR> swapchainImages;
     swapchainImages.resize(swapchainImageCount);
     for (XrSwapchainImageVulkan2KHR& swapchainImage : swapchainImages)
     {

@@ -26,7 +26,7 @@ void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
 {
     float radang = gameTime * 0.2f;
     Transform* bikeTrans = GameData::Instance().entityObjectsWorld->
-                               gameEntityObjects->GetItem(bikeObject)
+                               entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(bikeObject)
                                ->GetComponentByTypeIndex<Transform>();
     glm::mat4 bikeMatr = glm::mat4(1.0f);
     bikeMatr[3] = bikeTrans->GetWorldMatrix()[3];
@@ -35,7 +35,7 @@ void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
     
     bikeMatr[3].y += 1.0f;
     bikeMatr = glm::scale(bikeMatr, glm::vec3(8.448f, 8.448f, 3.25f));
-    GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(bikeLightObject)
+    GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(bikeLightObject)
                                ->GetComponentByTypeIndex<Transform>()
                                ->SetWorldMatrix(bikeMatr);
     
@@ -116,7 +116,7 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
             customAngle = 2.5f;
             customPos = glm::vec3(0.0f, -0.15f, 0.0f);
         }
-        GameData::Instance().entityObjectsWorld->gameEntityObjects->items[id01.chunkIndex][id01.indexInChunk + i - 1]
+        GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[id01.chunkIndex][id01.indexInChunk + i - 1]
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(
                 glm::rotate(

@@ -32,36 +32,34 @@ namespace Game
         (and track & reuse slots marked as empty)
 
             Structures, buffers, and access:
-            - Game Entity Objects hold only (mostly) pointers to entries in various Component contiguous heap
-        arrays.
-            - Each Game Component Object holds a pointer to the game entity object that owns it.
-            If something changes, these pointers are updated or nulled.
+            - Game Entity Objects hold the ID(s) of the components they own.
+            - Each Game Component Object holds the ID(s) to the owner(s).
+            If something changes, these ids are updated or expired.
+            - The pool is Tiled (chunked, but fixed size (number of elements) tiles)
+                - this means you can send a chunk to a thread and it fits comfortably in cpu cache.
 
-            Ideal strategy for many objects: each frame you go through everything ideally once, gather chunks of
-        what you want to work on multiple times, then run your jobs. You'd also probably want a list of heap arrays,
-        to store different kinds of game objects e.g. scenery, bullets etc. (maybe even swap & pop bullets to
-        compact that particular heap array)
+            - Use one pool per type, and a group of pools is called a <see cref="GameWorld"/>.
+            
+            Ideal strategy for many objects: each frame you go through everything ideally once, load into cache the chunks of
+        that you want to work on, then run your jobs (preferably pushing to a command buffer). You'd also probably want a list of heap arrays,
+        to store different kinds of game objects e.g. scenery, bullets etc.
 
             - <see cref="GameDataPool"/> of component Transform, Material, Model, Light etc.
             etc.
             - <see cref="GameDataPool"/> of entities (Game Entity Objects)
 
             Fetching:
-            - Getting component m of game entity n in the classic way is pretty standard without many clever
-        performance wins:
-            - iterate to / request n-th entity from entities array, then get its reference to the m-th component
-        from the components heap array. (a component also has an id of its owning entity)
+                - iterate entities array (in parallel) (via chunks (the chunk the entity is in also holds the components for that entity)):
+                    - do a "component query": each entity has a component archetype mask.
+                    - get the component id by type via the entity's components.
+                - iterate component array (in parallel) (via chunks) checking the owner(s).
+            Processing:
+                - since threading (jobs) are highly encouraged, you should from your jobs and queries, set up a queue of sync point / atomic operations (a "command buffer"), which you then run after the simulation step.
 
-            - Things aren't chunked, or queued via queries to minimise sync points (no feature (needed yet)), so
-        this isn't a performance win cache/memory wise. But you can iterate through (or delete/replace) objects in
-        their heap array, really fast, and in a ECS System style.
         </ [tdbe] GameDataPool Structure for entities/components/objects >
         */
 
-        /// [tdbe] this marks the end of the used items so we don't have to iterate past it.
-        uint32_t maxUsedIndex = 0;
-
-        /// [tdbe] contains both active and "deleted" (marked free) items, split into [tile][item] to fit in cache and be thread friendy.
+        /// [tdbe] std::vector<T*> contains both active and "deleted" (marked free) items, split into [tile][item] to fit in cache and be thread friendy.
         // [tdbe] newb-friendly-note: the constructor of the pool needs to make sure the actual data the vectors are pointing to, is constructed sequentially or otherwise tries to guarantee a contiguous distribution per tile in the heap memory.
         std::vector<std::vector<T*>> items;
         
@@ -234,12 +232,13 @@ namespace Game
                 delete this;
         };
 
-        GameDataPool(uint16_t tileSize, uint32_t maxPossiblePoolSize = 0, int16_t worldIndex = 0, uint64_t typeUID = 0, std::string topTypeStr = "T")
-        : tileSize(tileSize), maxPossiblePoolSize(maxPossiblePoolSize), worldIndex(worldIndex), typeUID(typeUID), topTypeStr(topTypeStr)
+        GameDataPool(uint16_t tileSize, uint32_t maxPossiblePoolSize = 0, int16_t worldIndex = 0, uint64_t typeUID = 0)
+        : tileSize(tileSize), maxPossiblePoolSize(maxPossiblePoolSize), worldIndex(worldIndex), typeUID(typeUID)
         {
             this->maxUsedIndex = 0;
             this->firstEmptyIndex = 0;
             this->currentVersion = GameDataId::FREE;
+            this->topTypeStr = typeid(T).name();
             
             tileCount = (uint32_t)((double)maxPossiblePoolSize / (double)tileSize);
             if(tileCount == 0u)
@@ -305,7 +304,10 @@ namespace Game
             util::DebugError("\n[~GameDataPool] NotImplementedException. Don't move this.");
         }
 
-       private:
+      // ----------------------------------------------------
+      private:
+        /// [tdbe] this marks the end of the used items so we don't have to iterate past it.
+        uint32_t maxUsedIndex = 0;
         /// [tdbe] 1 means no split. Splits the pool into "chunks" of fixed element count size.
         uint32_t tileSize = 1u;// 128 is a good average case number to flexibly fit in cache with any contents and amongst everything else.
         uint32_t tileCount = 0u;

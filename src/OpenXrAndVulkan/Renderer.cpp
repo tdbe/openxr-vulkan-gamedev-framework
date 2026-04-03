@@ -174,7 +174,7 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
     int maxPossibleNumMaterials = 0;
     for(size_t w = 0; w < gameWorlds.size(); w++)
     {
-        maxPossibleNumEntities += gameWorlds[w]->gameEntityObjects->MaxSize();
+        maxPossibleNumEntities += gameWorlds[w]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().MaxSize();
         maxPossibleNumMaterials += gameWorlds[w]->materialComponents->MaxSize();
     }
     util::DebugLog("\n[Game][Renderer][SetUpRenderProcesses] maxPossibleNumEntities: "+util::ToString(maxPossibleNumEntities)+"; maxPossibleNumMaterials: "+util::ToString(maxPossibleNumMaterials));
@@ -406,17 +406,17 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
     {
         for(size_t w = 0; w < gameWorlds.size(); w++)
         {
-            for (size_t t = 0; t < gameWorlds[w]->gameEntityObjects->items.size(); t++)
+            for (size_t t = 0; t < gameWorlds[w]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items.size(); t++)
             {
-                for (size_t i = 0; i < gameWorlds[w]->gameEntityObjects->items[t].size(); i++)
+                for (size_t i = 0; i < gameWorlds[w]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[t].size(); i++)
                 {
-                    const GameEntity* gameEntity = gameWorlds[w]->gameEntityObjects->items[t][i];
+                    const GameEntity* gameEntity = (GameEntity*)gameWorlds[w]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[t][i];
                     size_t maxEntitiesSoFar = 0;
                     for(size_t k=0; k < gameEntity->id.worldIndex; k++)
-                        maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
+                        maxEntitiesSoFar += gameWorlds[k]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().MaxSize();
                     // [tdbe] this index needs to match a gpu-friendly global entity index of all entity buffers concatenated.
                     const size_t globalIndex = gameEntity->id.indexInChunk + 
-                                            gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->TileSize() +
+                                            gameEntity->id.chunkIndex * gameWorlds[w]->entityArchetypePool->TileSize() +
                                             maxEntitiesSoFar;
 
                     if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
@@ -608,11 +608,11 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
 
                     size_t maxEntitiesSoFar = 0;
                     for(size_t k=0; k < gameEntity->id.worldIndex; k++)
-                        maxEntitiesSoFar += gameWorlds[k]->gameEntityObjects->MaxSize();
+                        maxEntitiesSoFar += gameWorlds[k]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().MaxSize();
                     // [tdbe] this index needs to match a gpu-friendly global entity index of all entity
                     // buffers concatenated as we did when we updated the uniform buffer data above.
                     const size_t globalIndex = gameEntity->id.indexInChunk + 
-                                                gameEntity->id.chunkIndex * gameWorlds[w]->gameEntityObjects->TileSize() +
+                                                gameEntity->id.chunkIndex * gameWorlds[w]->entityArchetypePool->TileSize() +
                                                 maxEntitiesSoFar;
 
                     // Bind the uniform buffer for per model/mesh dynamic, vertex

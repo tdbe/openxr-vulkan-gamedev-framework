@@ -19,10 +19,11 @@ HandsBehaviour::HandsBehaviour(PlayerObject& playerObject,
     this->handLight01 = handLight01;
     this->sudaBeam02 = sudaBeam02;
     this->handLight02 = handLight02;
-    GameEntityObject* sudaBeam01Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(sudaBeam01);
-    GameEntityObject* handLight01Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(handLight01);
-    GameEntityObject* sudaBeam02Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(sudaBeam02);
-    GameEntityObject* handLight02Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(handLight02);
+    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    GameEntityObject* sudaBeam01Geo = gameEntityObjects.GetItem(sudaBeam01);
+    GameEntityObject* handLight01Geo = gameEntityObjects.GetItem(handLight01);
+    GameEntityObject* sudaBeam02Geo = gameEntityObjects.GetItem(sudaBeam02);
+    GameEntityObject* handLight02Geo = gameEntityObjects.GetItem(handLight02);
     sudaBeam01Geo->SetEnabled(false);
     handLight01Geo->SetEnabled(false);
     sudaBeam02Geo->SetEnabled(false);
@@ -33,10 +34,12 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
                             const Inputspace::InputData &inputData,
                             Inputspace::InputHaptics &inputHaptics)
 {
-    Transform* worldRootTrans = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<Transform>();
-    GameEntityObject* handLeftGeo = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(playerObject.handLeftId);
+    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    Transform* worldRootTrans = gameEntityObjects.GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<Transform>();
+    GameEntityObject* handLeftGeo = vfxGameEntityObjects.GetItem(playerObject.handLeftId);
     Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();
-    GameEntityObject* handRightGeo = GameData::Instance().vfxEntityObjectsWorld->gameEntityObjects->GetItem(playerObject.handRightId);
+    GameEntityObject* handRightGeo = vfxGameEntityObjects.GetItem(playerObject.handRightId);
     Transform* handRightTrans = handRightGeo->GetComponentByTypeIndex<Transform>();
     glm::mat4 worldMatrix = worldRootTrans->GetWorldMatrix();
     glm::mat4 handLeftMatr = worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
@@ -104,10 +107,10 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
         rightAnalogTapDetected = true;
 
     // [tdbe] TODO: parenting (which requires a system with threads for updating matrixes)
-    GameEntityObject* sudaBeam01Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(sudaBeam01);
-    GameEntityObject* handLight01Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(handLight01);
-    GameEntityObject* sudaBeam02Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(sudaBeam02);
-    GameEntityObject* handLight02Geo = GameData::Instance().entityObjectsWorld->gameEntityObjects->GetItem(handLight02);
+    GameEntityObject* sudaBeam01Geo = gameEntityObjects.GetItem(sudaBeam01);
+    GameEntityObject* handLight01Geo = gameEntityObjects.GetItem(handLight01);
+    GameEntityObject* sudaBeam02Geo = gameEntityObjects.GetItem(sudaBeam02);
+    GameEntityObject* handLight02Geo = gameEntityObjects.GetItem(handLight02);
     if ((forceInventoryEquipped || leftAnalogTapDetected) && !sudaBeam01Geo->IsEnabled())
     {
         inventoryLeftInputCleared = false;

@@ -57,7 +57,7 @@ std::string GameEntityObject::GetName() const
     if(it != GameData::Instance().namedGameObjectIDs.right.end())
         return GameData::Instance().namedGameObjectIDs.right.at(id);
     else
-        return "NO_NAME_GAME_ENTITY_OBJECT";
+        return "EMPTY_NAME_GAME_ENTITY_OBJECT";
 }
 
 
