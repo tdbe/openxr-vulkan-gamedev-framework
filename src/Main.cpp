@@ -79,6 +79,14 @@ int main()
     {
         return EXIT_FAILURE;
     }
+    
+    // [tdbe] just getting some headset info
+    const XrInstance xrInstance = context.getXrInstance();
+    const XrSystemId xrSystemId = context.getXrSystemId();
+    XrSystemProperties systemProperties{XR_TYPE_SYSTEM_PROPERTIES};
+    XrResult xrResult = xrGetSystemProperties(xrInstance, xrSystemId, &systemProperties);
+    std::string headsetActualMFString(systemProperties.systemName);
+    util::DebugLog("[Game][Main]\t\t [OO] XR System Name: "+ headsetActualMFString + ". Note you can change your active xr system via each platform's apps' settings (e.g. steam or oculus).");
 
     GameData& gameData = GameData::Instance();
     bool success = gameData.LoadGameWorlds();
@@ -106,6 +114,14 @@ int main()
     if (!success)
     {
         return EXIT_FAILURE;
+    }
+    
+    if(util::StrContains(headsetActualMFString, "AetherVR"))
+    {
+        util::Posef firstPose = worldRootTrans->GetWorldPose();
+        firstPose.position.y = 1.7f;
+        worldRootTrans->SetWorldPose(firstPose);
+        util::DebugLog("[Game][Main]\t\t Offsetting initial world root because we're running a virtual headset. worldRootTrans: "+ util::ToString(worldRootTrans->GetWorldPose().position));
     }
 
     Renderer renderer = Renderer(&context, &headset);
@@ -162,7 +178,7 @@ int main()
     
     static float gameTime = 0.0f;
     // Main loop
-    util::DebugLog("\n[Game][Main]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][Main]\t\t/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|");
     util::DebugLog("[Game][Main]\t\t Starting Game Loop");
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     while (!headset.isExitRequested() && !mirrorView.isExitRequested())
@@ -244,7 +260,7 @@ int main()
             headset.endFrame();
         }
     }
-    util::DebugLog("\n[Game][Main]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][Main]\t\t/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|");
     util::DebugLog("[Game][Main]\t\t Game Loop ended. Cleaning up.");
     for (size_t i = 0; i < gameBehaviours.size(); i++)
     {
@@ -254,7 +270,6 @@ int main()
     context.sync(); // Sync before destroying so that resources are free
     
     gameData.UnLoadGameWorlds(true);
-    gameData.~GameData();
 
     util::DebugLog("\n[Game][Main][EXIT_SUCCESS]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 

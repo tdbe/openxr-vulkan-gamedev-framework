@@ -122,6 +122,9 @@ namespace util
     std::string ToString(const uint32_t& number, bool clean = false);
     std::string ToString(const float& number, bool clean = false);
     std::string ToString(const double& number, bool clean = false);
+    std::string BitMaskToString_64u(const uint64_t mask, bool compact = true);
+    
+    bool StrContains(const std::string& string, const std::string& contains, bool doToLower = false);
 
     void DebugError(const std::string& details = "");
     void DebugLog(const std::string& details = "");

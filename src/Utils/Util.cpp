@@ -4,6 +4,7 @@
 #include <direct.h>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include "Util.h"
 #include <vulkan/vulkan.h>
 #include <openxr/openxr.h>
@@ -181,6 +182,14 @@ std::string util::ToString(const double& number, bool clean)
         return "{ " + std::to_string(number) + " }";
 }
 
+std::string util::BitMaskToString_64u(const uint64_t mask, bool compact)
+{
+    if(compact)
+        return std::format("{:#01b}", mask);
+    else
+        return std::format("{:#064b}", mask);
+}
+
 void util::DebugError(const std::string& details)
 {
     printf((details + "\n").c_str());
@@ -257,6 +266,23 @@ void util::LogError(Error error, const std::string& details)
   }
 
   boxer::show(s.str().c_str(), "Error", boxer::Style::Error);
+}
+
+// [tdbe] c++ 23 has std:string::contains()
+bool util::StrContains(const std::string& string, const std::string& contains, bool doToLower)
+{
+    if(doToLower)
+    {
+        std::string stringCopy = string;
+        std::string containsCopy = contains;
+        std::transform(stringCopy.begin(), stringCopy.end(), stringCopy.begin(), ::tolower);
+        std::transform(containsCopy.begin(), containsCopy.end(), containsCopy.begin(), ::tolower);
+        return stringCopy.find(containsCopy) != std::string::npos;
+    }
+    else
+    {
+        return string.find(contains) != std::string::npos;
+    }
 }
 
 bool util::loadXrExtensionFunction(XrInstance instance, const std::string& name, PFN_xrVoidFunction* function)
