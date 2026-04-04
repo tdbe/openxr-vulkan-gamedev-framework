@@ -99,7 +99,7 @@ namespace Game
         // [tdbe] newb-friendly-note: you'll get linker errors if you declare but don't define template
         // functimons in the header file. (the compiler won't read the definition and won't know if/how to handle the various types, 
         // (and of course won't explain this to you in hoo-man terms or any terms))
-        T* GetItem(GameDataId::ID id) const
+        T* GetItem(const GameDataId::ID id) const
         {
             if (IsIdValidItem(id))
             {
@@ -115,7 +115,7 @@ namespace Game
         /// So use handles (IDs) instead of pool pointers, <see cref="GameDataId::IsCleared"/>.
         /// <param name="skipThisManyFreeSlots"> For advanced use e.g. you want to leave some free contiguous 
         /// space to place similar T items together later e.g. materials of the same type of pipeline.</param>
-        T* GetFreeItem(uint32_t skipThisManyFreeSlots = 0)
+        T* GetFreeItem(const uint32_t skipThisManyFreeSlots = 0)
         {
             GameDataId::ID id = {};
             SpotInPool status = GetFirstFree(id, skipThisManyFreeSlots);
@@ -125,20 +125,20 @@ namespace Game
             if (status == SpotInPool::FAIL)
             {
                 util::DebugError("[GameDataPool][GetFreeItem<" + topTypeStr +
-                                 ">]\t Somehow fetched a SpotInPool::FAIL?");
+                                ">]\t Somehow fetched a SpotInPool::FAIL?");
                 return nullptr;
             }
             else if (status == SpotInPool::UNINITIALIZED)
             {
                 util::DebugError("[GameDataPool][GetFreeItem<" + topTypeStr +
-                                 ">]\t Somehow fetched a SpotInPool::UNINITIALIZED.");
+                                ">]\t Somehow fetched a SpotInPool::UNINITIALIZED.");
                 return nullptr;
             }
             else if (status == SpotInPool::UNINITIALIZED)
             {
                 #ifdef DEBUG_VERBOSE
                 util::DebugLog("[GameDataPool][GetFreeItem<" + topTypeStr +
-                                 ">]\t Fetched a SpotInPool::UNINITIALIZED.");
+                                ">]\t Fetched a SpotInPool::UNINITIALIZED.");
                 #endif
                 return nullptr;
             }
@@ -151,7 +151,7 @@ namespace Game
         /// We also notify the item to reset its members. 
         /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
         /// (But if you set <param name="unsafe"/> to false, it won't clear anything cross-buffer, e.g. won't access its components or owners.)
-        void ClearItem(T* item, bool unsafe = false, bool clearDataLoadedFromStorage = false)
+        void ClearItem(T* item, const bool unsafe = false, const bool clearDataLoadedFromStorage = false)
         {
             GameDataId* gid = static_cast<GameDataId*>(item);
             #ifdef DEBUG_VERBOSE
@@ -180,7 +180,7 @@ namespace Game
         /// We also notify each item to reset its members. 
         /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
         /// (But if you set <param name="unsafe"/> to true, it won't clear any slow cross-buffer stuff, e.g. won't update its components or owners.)
-        void ClearItems(bool alsoDestroy = false, bool unsafe = false, bool clearDataLoadedFromStorage = false)
+        void ClearItems(const bool alsoDestroy = false, const bool unsafe = false, const bool clearDataLoadedFromStorage = false)
         {
             if (items.empty()) return;
             if (alsoDestroy)
@@ -216,10 +216,10 @@ namespace Game
                     #ifdef DEBUG_VERBOSE
                     if (alsoDestroy)
                         util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr +
-                                       ">]\t Delete item only: already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
+                                        ">]\t Delete item only: already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
                     else
                         util::DebugLog("[GameDataPool][ClearItems<" + topTypeStr +
-                                       ">]\t Skipping already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
+                                        ">]\t Skipping already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
                     #endif
                 }
             }
@@ -232,7 +232,7 @@ namespace Game
                 delete this;
         };
 
-        GameDataPool(uint16_t tileSize, uint32_t maxPossiblePoolSize = 0, int16_t worldIndex = 0, uint64_t typeUID = 0)
+        GameDataPool(const uint16_t tileSize, const uint32_t maxPossiblePoolSize = 0, const int16_t worldIndex = 0, uint64_t const typeUID = 0)
         : tileSize(tileSize), maxPossiblePoolSize(maxPossiblePoolSize), worldIndex(worldIndex), typeUID(typeUID)
         {
             this->maxUsedIndex = 0;
@@ -333,7 +333,7 @@ namespace Game
         std::string topTypeStr = "T";
         uint32_t validSize = 0u;
 
-        bool ScanForNextEmptyIndex(uint32_t startFrom = 0)
+        bool ScanForNextEmptyIndex(const uint32_t startFrom = 0)
         {
             if (currentVersion <= startFrom)
             {
@@ -370,7 +370,7 @@ namespace Game
 
         /// [tdbe] Get a new item ID set in the next available free slot in our items vector, and update <see
         /// cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>. You must emplace the item yourself.
-        SpotInPool GetFirstFree(GameDataId::ID& itemId, uint32_t skipThisManyFreeSlots = 0)
+        SpotInPool GetFirstFree(GameDataId::ID& itemId, const uint32_t skipThisManyFreeSlots = 0)
         {
             SpotInPool success;
             uint32_t firstEmptyIndexPlus = skipThisManyFreeSlots + firstEmptyIndex;
@@ -433,7 +433,7 @@ namespace Game
             return success;
         };
 
-        bool IsIdValidItem(GameDataId::ID id) const
+        bool IsIdValidItem(const GameDataId::ID id) const
         {
             uint32_t tileIndex = (uint32_t)((double)id.indexInChunk / (double)tileSize);
             uint32_t indexInTile = id.indexInChunk % tileSize;

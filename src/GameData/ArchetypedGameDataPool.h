@@ -9,7 +9,7 @@ namespace Game
 {
     struct GameEntity;
     struct GameComponent;
-    static struct UIDTypeCheckHelper
+    struct UIDTypeCheckHelper
     {
         static bool IsTypeUIDEntity(uint64_t uid);
     };
@@ -126,7 +126,7 @@ namespace Game
             // [tdbe] newb-friendly-note: you'll get linker errors if you declare but don't define template
             // functimons in the header file. (the compiler won't read the definition and won't know if/how to handle the various types, 
             // (and of course won't explain this to you in hoo-man terms or any terms))
-            SVT* GetItem(GameDataId::ID id) const
+            SVT* GetItem(const GameDataId::ID id) const
             {
                 if (IsIdValidItem(id))
                 {
@@ -148,14 +148,14 @@ namespace Game
             /// tile (chunk) as the owning entity of the same <see cref="ArchetypedGameDataPool"/>, so specify that entity here.
             /// TODO: this param is a bit awkward because this <see cref="ArchetypedGameDataPool"/> is meant to 
             /// hold entities alongside components (they are both <see cref="SVT"/>). </param>
-            SVT* GetFreeItem(uint32_t skipThisManyFreeSlots = 0, int32_t ownerEntityTileId = -1)
+            SVT* GetFreeItem(const uint32_t skipThisManyFreeSlots = 0, const int32_t ownerEntityTileId = -1)
             {
                 GameDataId::ID id = {};
                 SpotInPool status = ownerEntityTileId == -1 || UIDTypeCheckHelper::IsTypeUIDEntity(typeUID) ? 
                                     GetFirstFree(id, skipThisManyFreeSlots)
                                     : GetFirstFree(id, skipThisManyFreeSlots, ownerEntityTileId);
                 #ifdef DEBUG_VERBOSE
-                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr + ">]\t "+id.PrintGlobalUID());
+                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr + ">][owner chunk id: " + util::ToString(ownerEntityTileId) + "]\t " + id.PrintGlobalUID());
                 #endif
                 if (status == SpotInPool::FAIL)
                 {
@@ -186,7 +186,7 @@ namespace Game
             /// We also notify the item to reset its members. 
             /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
             /// (But if you set <param name="unsafe"/> to false, it won't clear anything cross-buffer, e.g. won't access its components or owners.)
-            void ClearItem(SVT* item, bool unsafe = false, bool clearDataLoadedFromStorage = false)
+            void ClearItem(SVT* item, const bool unsafe = false, const bool clearDataLoadedFromStorage = false)
             {
                 GameDataId* gid = static_cast<GameDataId*>(item);
                 #ifdef DEBUG_VERBOSE
@@ -215,7 +215,7 @@ namespace Game
             /// We also notify each item to reset its members. 
             /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
             /// (But if you set <param name="unsafe"/> to true, it won't clear any slow cross-buffer stuff, e.g. won't update its components or owners.)
-            void ClearItems(bool alsoDestroy = false, bool unsafe = false, bool clearDataLoadedFromStorage = false)
+            void ClearItems(const bool alsoDestroy = false, const bool unsafe = false, const bool clearDataLoadedFromStorage = false)
             {
                 if (this->items.empty()) return;
                 if (alsoDestroy)
@@ -267,7 +267,7 @@ namespace Game
                 //    delete this;
             };
             
-            void Init(uint32_t maxPossiblePoolSize, uint32_t tileSize, uint64_t typeUID, int16_t worldIndex)
+            void Init(const uint32_t maxPossiblePoolSize, const uint32_t tileSize, const uint64_t typeUID, const int16_t worldIndex)
             {
                 this->maxPossiblePoolSize = maxPossiblePoolSize;
                 this->tileSize = tileSize;
@@ -325,7 +325,7 @@ namespace Game
             uint32_t tileSize = 1u;
             int worldIndex = 0;
             
-            bool ScanForNextEmptyIndex(uint32_t& saveIndexTo, uint32_t startFrom = 0)
+            bool ScanForNextEmptyIndex(uint32_t& saveIndexTo, const uint32_t startFrom = 0)
             {
                 if (this->currentVersion <= startFrom)
                 {
@@ -362,7 +362,7 @@ namespace Game
             
             /// [tdbe] Get a new item ID set in the next available free slot in our items vector, and update <see
             /// cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>. You must emplace the item yourself.
-            SpotInPool GetFirstFree(GameDataId::ID& itemId, uint32_t skipThisManyFreeSlots = 0, int32_t forcedTile = -1)
+            SpotInPool GetFirstFree(GameDataId::ID& itemId, uint32_t const skipThisManyFreeSlots = 0, const int32_t forcedTile = -1)
             {
                 SpotInPool success;
                 uint32_t firstEmptyIndexPlus = skipThisManyFreeSlots;
@@ -439,7 +439,7 @@ namespace Game
                 return success;
             };
 
-            bool IsIdValidItem(GameDataId::ID id) const
+            bool IsIdValidItem(const GameDataId::ID id) const
             {
                 uint32_t tileIndex = (uint32_t)((double)id.indexInChunk / (double)this->tileSize);
                 uint32_t indexInTile = id.indexInChunk % this->tileSize;
@@ -501,7 +501,7 @@ namespace Game
             });
         }
         
-        ArchetypedGameDataPool(std::vector<uint64_t> typeUIDs, uint16_t tileSize, uint32_t maxPossiblePoolSize = 0, int16_t worldIndex = 0)
+        ArchetypedGameDataPool(std::vector<uint64_t> typeUIDs, const uint16_t tileSize, const uint32_t maxPossiblePoolSize = 0, const int16_t worldIndex = 0)
         : tileSize(tileSize), worldIndex(worldIndex)
         {
             std::size_t numTypes = sizeof...(Types);
@@ -588,14 +588,14 @@ namespace Game
 
             /// [tdbe] this ... business is an intermediary step to unpack over variadic type indices and loop,
             /// that helps us have a variadic tuple and also heap allocate in the specific chunk coherent order we need.
-            template <std::size_t... Is> void VariadicIndexedLoopForSubpoolConstructor(std::index_sequence<Is...>, uint32_t tileIdx)
+            template <std::size_t... Is> void VariadicIndexedLoopForSubpoolConstructor(std::index_sequence<Is...>, const uint32_t tileIdx)
             {
                 // For each index I in {0,1,2,...}, do:
                 (VariadicSubpoolConstructor<Is>(tileIdx), ...);  // C++17 fold expression
             }
 
             /// [tdbe] here we continue our constructor while having the I-th variadic type (we specifically know we're on vector<Types[I]*>)
-            template <std::size_t I> void VariadicSubpoolConstructor(uint32_t tileIdx)
+            template <std::size_t I> void VariadicSubpoolConstructor(const uint32_t tileIdx)
             {
                 using T = typename std::tuple_element<I, std::tuple<Types...>>::type;
                 auto& subpool = std::get<I>(items);// [tdbe] get the I-th subpool<T*>. I needs to be a compile time constant.

@@ -54,7 +54,7 @@ namespace Game
 
             std::string PrintGlobalUID() const
             {
-                return util::ToString(worldIndex) + ":" + util::BitMaskToString_64u(typeUID) + ":" + util::ToString(chunkIndex) + ":" + util::ToString(indexInChunk) + ":" + util::ToString(version);
+                return "world_"+util::ToString(worldIndex) + ":type_{ " + util::BitMaskToString_64u(typeUID) + " }:chunk_" + util::ToString(chunkIndex) + ":index_" + util::ToString(indexInChunk) + ":version_" + util::ToString(version);
             }
 
             bool Equals(GameDataId::ID other) const
