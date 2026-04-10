@@ -1,5 +1,8 @@
+Bonus: If you use this project in a non-private way, I want to hear about it! [Ping me](https://blog.deferredreality.com/about/).
+
 MIT License
 
+Copyright (c) 2023 Tudor Berechet (tdbe)
 Copyright (c) 2022 Jan Simon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
