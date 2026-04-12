@@ -26,10 +26,12 @@ using namespace Behaviours;
 using namespace Scripting;
 
 /// <summary>
-/// [tdbe] Hello intrepid heroes! This repo will be heavily (& redundantly) commented, as if it's a blog post.
-/// Purpose of the project is to be performant, useful, with wisdom and good programmer ux; do gamedev The Right Way™.
+/// [tdbe] "Say hello intrepid heroes!" This is a cutting edge poor-man's "game engine": ECS, PBR, single pass OpenXR.
+/// The repo will be heavily (even redundantly) commented, like a very accessible blog post. 
+/// Purpose of the project is to be performant, share gamedev wisdom and good programmer ux; do gamedev The Right Way™.
 /// But it's also 1-person-no-budget, and you got it for free on the internet, so expect a bit of shortcuts, WIP, and no warranty.
-/// Cutting edge poor-man's "game engine": ECS, PBR, single pass, OpenXR.
+/// See the github for open source licence, tl;dr: MIT: use it anywhere, but credit us in a traceable way, and if it's not private then please also let us know about it.
+/// https://github.com/tdbe/openxr-vulkan-gamedev-framework / https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate
 /// </summary>
 int main()
 {
@@ -178,8 +180,8 @@ int main()
     
     static float gameTime = 0.0f;
     // Main loop
-    util::DebugLog("\n[Game][Main]\t\t/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|");
-    util::DebugLog("[Game][Main]\t\t Starting Game Loop");
+    util::DebugLog("\n[Game][Main]\t\t『⛬』🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞");
+    util::DebugLog("[Game][Main]\t\t Starting Game Loop:");
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     while (!headset.isExitRequested() && !mirrorView.isExitRequested())
     {
@@ -260,7 +262,7 @@ int main()
             headset.endFrame();
         }
     }
-    util::DebugLog("\n[Game][Main]\t\t/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|/--\\|");
+    util::DebugLog("\n[Game][Main]\t\t🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞『⛬』");
     util::DebugLog("[Game][Main]\t\t Game Loop ended. Cleaning up.");
     for (size_t i = 0; i < gameBehaviours.size(); i++)
     {
@@ -271,7 +273,7 @@ int main()
     
     gameData.UnLoadGameWorlds(true);
 
-    util::DebugLog("\n[Game][Main][EXIT_SUCCESS]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][Main][EXIT_SUCCESS]\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
     return EXIT_SUCCESS;
 }

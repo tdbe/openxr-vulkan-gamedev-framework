@@ -16,7 +16,8 @@ namespace Scripting
     /// [tdbe] configure our e.g. game world items, object positions, colors etc.
 	bool SceneSetup(GameData& gameData)
     {
-        util::DebugLog("[Scripting][SceneSetup] Scripted and scene objects setup. ~~~~~~~~~~~~~~~~~~~ \n");
+        util::DebugLog("\n[Scripting][SceneSetup]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        util::DebugLog("[Scripting][SceneSetup]\t 🎥 Scripted / scene objects setup.");
         // -------- [tdbe] edit any material properties here. --------
 #pragma region Materials
         // TODO: move these material property scripting blocks into something more compact.
@@ -538,8 +539,8 @@ namespace Scripting
         }
 
 #pragma endregion Lights
-        
-        util::DebugLog("[Scripting][SceneSetup] Done. ~~~~~~~~~~~~~~~~~~~ \n");
+        util::DebugLog("[Scripting][SceneSetup]\t 🎥 Scripted / scene objects setup done.");
+        util::DebugLog("[Scripting][SceneSetup]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         return true;
 	}
 

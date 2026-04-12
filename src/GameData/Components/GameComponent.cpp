@@ -84,7 +84,7 @@ void GameComponent::ClearOwnerIDs()
 };
 
 /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
-/// todo: this should be restricted to <see cref"GameDataPool"/>
+/// todo: accessing this should be restricted to <see cref"GameDataPool"/>
 void GameComponent::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
 {
     if (!unsafe)

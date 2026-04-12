@@ -136,14 +136,16 @@ namespace Game
 #pragma endregion StorageData
 
 #pragma region GameComponent
-        /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
+        /// [tdbe] Normally you want to fetch a component pool from a game world to acquire cache-coherent chunks. Otherwise this is for convenience and iteration preparing renderer draw calls.
+        /// [tdbe] Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameComponent* GetComponent(GameDataId::ID id);
         /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
         void ClearComponent(GameDataId::ID id, bool unsafe = false);
 #pragma endregion GameComponent
 
 #pragma region GameEntity
-        /// Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
+        /// [tdbe] Normally you want to fetch an entity pool from a game world to acquire cache-coherent chunks. Otherwise this is for convenience and iteration preparing renderer draw calls.
+        /// [tdbe] Note: todo: might be nice to manage some kind of custom pointer that invalidates itself when the item version changes.
         GameEntity* GetEntity(GameDataId::ID id);
         /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
         void ClearEntity(GameDataId::ID id, bool unsafe = false);

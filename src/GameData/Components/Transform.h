@@ -1,5 +1,6 @@
 #pragma once
 #include "GameComponent.h"
+#include "../Entities/GameEntityObject.h"
 #include "../GameDataId.h"
 
 namespace Game
@@ -20,51 +21,83 @@ namespace Game
             return found;
         };
         
-        /// [tdbe] automatically updates localPose
+        /// [tdbe] Automatically updates the <see cref="localPose"/>. There is no stored worldPose. 
+        /// <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
         void SetWorldPose(util::Posef newWorldPose)
         {
-            UpdateLocalPoseFromDeltaWorldPose(newWorldPose);
-            worldPose = newWorldPose;
+            // [tdbe] I'm not defending against zero scale or number abuse
+            
+            glm::vec3 inverseScale = glm::vec3(1.0f) / cachedParentWorldPose.scale;
+            glm::quat inverseRotation = glm::inverse(cachedParentWorldPose.orientation);
+                                                            
+            localPose.position = inverseScale * inverseRotation * (newWorldPose.position - cachedParentWorldPose.position);
+            localPose.scale = inverseScale * newWorldPose.scale;
+            localPose.orientation = inverseRotation * newWorldPose.orientation;
+            // [tdbe] whenever you create quaternions from not-quaternions, make sure to normalize them to drift and distortions
         };
         
+        /// [tdbe] actually computes the world pose from the cachedParentWorldPose and our localPose
         util::Posef GetWorldPose() const
         {
+            util::Posef worldPose;
+            worldPose.position = cachedParentWorldPose.position + 
+                                cachedParentWorldPose.orientation * (cachedParentWorldPose.scale * localPose.position);
+            worldPose.scale = cachedParentWorldPose.scale * localPose.scale;
+            worldPose.orientation = cachedParentWorldPose.orientation * localPose.orientation;
+            // [tdbe] whenever you create quaternions from not-quaternions, make sure to normalize them to drift and distortions
             return worldPose;
         };
 
-        /// [tdbe] automatically updates worldPose and localPose on the spot
+        /// [tdbe] Automatically localPose. There is no stored worldMatrix. 
+        /// <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
         void SetWorldMatrix(glm::mat4 newWorldMatrix)
         {
             util::Posef newWorldPose = util::matrixToPose(newWorldMatrix);
-            UpdateLocalPoseFromDeltaWorldPose(newWorldPose);
-            worldPose = newWorldPose;
+            SetWorldPose(newWorldPose);
         };
 
-        /// [tdbe] automatically fetched from worldPose and localPose on the spot
+        /// [tdbe] Automatically fetched from  <see cref="localPose"/> and <see cref="cachedParentWorldPose"/> on the spot.
         glm::mat4 GetWorldMatrix()
         {
-            return GetWorldMatrixFromWorldPose();
+            return util::poseToMatrix(GetWorldPose());
         };
         
-        /// [tdbe] automatically updates worldPose
+        /// [tdbe] param to automatically update worldPose
         void SetLocalPose(util::Posef newLocalPose)
         {
-            UpdateWorldPoseFromDeltaLocalPose(newLocalPose);
             localPose = newLocalPose;
         };
         
-        /// [tdbe] sets the localPose without changing the worldPose
-        void ParentTo(util::Posef parentWorldPose)
+        /// [tdbe] Updates the localPose, but behaves as if the object wasn't parented. As if you "locked" the child object in place while moving the parent. 
+        /// There is no stored worldPose. <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
+        void LockOnParentWorldPoseUpdated(util::Posef newParentWorldPose)
         {
-            localPose.position = worldPose.position - parentWorldPose.position;
-            localPose.scale = worldPose.scale / parentWorldPose.scale;
-            localPose.orientation = worldPose.orientation * glm::inverse(parentWorldPose.orientation);
+            util::Posef currentWorldPose = GetWorldPose();
+            cachedParentWorldPose = newParentWorldPose;
+            SetWorldPose(currentWorldPose);
+        }
+        
+        /// [tdbe] Updates the localPose. There is no stored worldPose. 
+        /// <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
+        void OnParentWorldPoseUpdated(util::Posef newParentWorldPose)
+        {
+            cachedParentWorldPose = newParentWorldPose;
         };
         
         /// [tdbe] sets the localPose to worldPose
-        void Unparent()
+        void OnUnparent()
         {
-            localPose = worldPose;
+            localPose = GetWorldPose();
+            cachedParentWorldPose = util::makeIdentity();
+        };
+        
+        void DebugPrintTransformValues()
+        {
+            GameEntityObject* owner = (GameEntityObject*)GetOwner();
+            float angle;
+            glm::vec3 axis;
+            util::quaternionToAngleAxis(localPose.orientation, angle, axis);
+            util::DebugLog("[Transform]["+owner->GetName()+"] position: "+util::ToString(localPose.position)+"; scale: "+util::ToString(localPose.scale)+"; orientation: "+util::ToString(localPose.orientation)+"; angle: "+util::ToString(angle)+"; axis: "+util::ToString(axis));
         };
         
         util::Posef GetLocalPose() const
@@ -72,22 +105,22 @@ namespace Game
             return localPose;
         };
         
-        /// [tdbe] automatically updates localPose and worldPose on the spot
+        /// [tdbe] automatically updates localPose. There is no stored localMatrix. 
+        /// <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
         void SetLocalMatrix(glm::mat4 newLocalMatrix)
         {
             util::Posef newLocalPose = util::matrixToPose(newLocalMatrix);
-            UpdateWorldPoseFromDeltaLocalPose(newLocalPose);
             localPose = newLocalPose;
         };
 
         /// [tdbe] automatically updates localPose and worldPose on the spot
         glm::mat4 GetLocalMatrix()
         {
-            return GetLocalMatrixFromLocalPose();
+            return util::poseToMatrix(localPose);
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
             #ifdef DEBUG_VERBOSE
@@ -95,12 +128,12 @@ namespace Game
                 util::DebugLog("[Component][Transform]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
-            worldPose = util::makeIdentity();
+            cachedParentWorldPose = util::makeIdentity();
             localPose = util::makeIdentity();
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override 
         {
             GameComponent::NotifyItemVersionChanged();
@@ -114,49 +147,30 @@ namespace Game
         ~Transform(){};
 
 	  private:
-        glm::mat4 GetWorldMatrixFromWorldPose()
-        {
-            return util::poseToMatrix(worldPose);
-        }
+        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
+        /// [tdbe] coordinate system: Y is up, Z is forward
+        util::Posef cachedParentWorldPose = util::makeIdentity();
+                
+        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
+        /// [tdbe] coordinate system: Y is up, Z is forward
+        util::Posef localPose = util::makeIdentity();
         
-        void UpdateWorldPoseFromWorldMatrix(glm::mat4 worldMatrix)
-        {
-            worldPose = util::matrixToPose(worldMatrix);
-        }
-        
+        /*
         void UpdateLocalPoseFromDeltaWorldPose(util::Posef newWorldPose)
         {
-            localPose.position += worldPose.position - newWorldPose.position;
-            localPose.scale *= newWorldPose.scale / worldPose.scale;
-            glm::quat diff = worldPose.orientation * glm::inverse(newWorldPose.orientation);
+            localPose.position += cachedParentWorldPose.position - newWorldPose.position;
+            localPose.scale *= newWorldPose.scale / cachedParentWorldPose.scale;
+            glm::quat diff = glm::inverse(newWorldPose.orientation) * cachedParentWorldPose.orientation;
             localPose.orientation = diff * localPose.orientation;
         }
         
         void UpdateWorldPoseFromDeltaLocalPose(util::Posef newLocalPose)
         {
-            worldPose.position += localPose.position - newLocalPose.position;
-            worldPose.scale *= newLocalPose.scale / localPose.scale;
-            glm::quat diff = localPose.orientation * glm::inverse(newLocalPose.orientation);
-            worldPose.orientation = diff * worldPose.orientation;
-        }
-        
-        void UpdateLocalPoseFromLocalMatrix(glm::mat4 localMatrix)
-        {
-            localPose = util::matrixToPose(localMatrix);
-        }
-        
-        glm::mat4 GetLocalMatrixFromLocalPose()
-        {
-            return util::poseToMatrix(localPose);
-        }
-              
-        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
-        /// [tdbe] coordinate system: Y is up, Z is forward
-        util::Posef worldPose = util::makeIdentity();
-                
-        /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)
-        /// [tdbe] coordinate system: Y is up, Z is forward
-        util::Posef localPose = util::makeIdentity();
+            cachedParentWorldPose.position += localPose.position - newLocalPose.position;
+            cachedParentWorldPose.scale *= newLocalPose.scale / localPose.scale;
+            glm::quat diff = glm::inverse(newLocalPose.orientation) * localPose.orientation;
+            cachedParentWorldPose.orientation = diff * cachedParentWorldPose.orientation;
+        }*/
 	};
 
 } // namespace Game

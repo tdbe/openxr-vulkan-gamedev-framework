@@ -7,7 +7,8 @@
 namespace Game
 {
 	/// [tdbe] Children component for entity hierarchy. 
-    /// Instead of this, use an entity query (e.g. "get entities with parent"), otherwse you just iterate through 100% cache-miss children of children.
+    /// Instead of this, query entities (e.g. run jobs on chunks checking entities' archetypes for parent, get parent id"), 
+    /// otherwse you'd just iterate through 100% cache-miss children of children.
     /// Related to <see cref="Parent"/>.
     /// [tdbe] Note: this is mainly for crawling animated character hierarchies, conveniently knowing relationships, legacy OOP. 
     /// 

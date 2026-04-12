@@ -112,7 +112,7 @@ void MirrorView::onWindowResize()
 bool MirrorView::connect(const Headset* headset, const Renderer* renderer, bool highQualityMirrorView, bool forceNoScaleDown)
 {
   util::DebugLog("\n[Game][MirrorView][Connect]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-  util::DebugLog("[Game][MirrorView][Connect]\t setting up game window");
+  util::DebugLog("[Game][MirrorView][Connect]\t\t setting up game window");
   this->headset = headset;
   this->renderer = renderer;
 

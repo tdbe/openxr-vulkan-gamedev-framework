@@ -510,7 +510,7 @@ Context::~Context()
 // [tdbe] So you could just replace this whole function.
 bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface param only used to check compatibility
 {
-  util::DebugLog("\n[Context][createDevice] ~~~~~~~~~~~~~~~~~~~");
+  util::DebugLog("\n[Context][createDevice]\t~~~~~~~~~~~~~~~~~~~");
   // Retrieve the physical device from OpenXR
   XrVulkanGraphicsDeviceGetInfoKHR vulkanGraphicsDeviceGetInfo{ XR_TYPE_VULKAN_GRAPHICS_DEVICE_GET_INFO_KHR };
   vulkanGraphicsDeviceGetInfo.systemId = systemId;
@@ -684,11 +684,11 @@ bool Context::createDevice(VkSurfaceKHR mirrorSurface)// [tdbe] mirrorSurface pa
     
     */
     std::string actualMFString(physicalDeviceProperties.deviceName);
-    util::DebugLog("[Context][createDevice] physicalDeviceProperties.deviceName: " + actualMFString + 
-                   "; physicalDeviceProperties.deviceType: " + util::ToString((int)physicalDeviceProperties.deviceType) +
-                   "; physicalDeviceProperties.limits.maxViewports:" + util::ToString(physicalDeviceProperties.limits.maxViewports) +
-                   "; physicalDeviceProperties.limits.maxViewportDimensions[0]:" + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[0]) +
-                   "; physicalDeviceProperties.limits.maxViewportDimensions[1]:" + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[1])
+    util::DebugLog("[Context][createDevice]\t DeviceName: " + actualMFString + 
+                   "; DeviceType: " + util::ToString((int)physicalDeviceProperties.deviceType) +
+                   "; MaxViewports: " + util::ToString(physicalDeviceProperties.limits.maxViewports) +
+                   "; MaxViewportDimensions[0]: " + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[0]) +
+                   "; MaxViewportDimensions[1]: " + util::ToString(physicalDeviceProperties.limits.maxViewportDimensions[1])
                    );
     
     // Verify that the required physical device features are supported

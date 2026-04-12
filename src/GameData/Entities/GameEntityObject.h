@@ -36,10 +36,10 @@ namespace Game
         std::string GetName() const;
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override;
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override;
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.

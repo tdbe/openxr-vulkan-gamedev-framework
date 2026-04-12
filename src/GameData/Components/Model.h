@@ -36,7 +36,7 @@ namespace Game
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override
         {
             #ifdef DEBUG_VERBOSE
@@ -49,7 +49,7 @@ namespace Game
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override 
         {
             GameComponent::NotifyItemVersionChanged();

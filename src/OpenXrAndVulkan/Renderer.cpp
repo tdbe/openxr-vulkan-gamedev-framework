@@ -168,7 +168,7 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
                                     const Game::GameData& gameData)
 {
     util::DebugLog("\n[Game][Renderer][SetUpRenderProcesses]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t Setting up circular buffer of descriptor set pipeline data.");
+    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t\t Setting up circular buffer of descriptor set pipeline data.");
     std::vector<GameData::GameWorld*> gameWorlds = gameData.gameWorlds;
     int maxPossibleNumEntities = 0;
     int maxPossibleNumMaterials = 0;
@@ -336,7 +336,7 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
     }
 
     indexOffset = meshData->GetIndexOffset();
-    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t done.");
+    util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t\t done.");
     util::DebugLog("[Game][Renderer][SetUpRenderProcesses]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 

@@ -46,7 +46,7 @@ namespace Game
             }
 
             /// [tdbe] counts as if deleted
-            /// todo: this should be restricted to <see cref"GameDataPool"/>
+            /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
             void Clear()
             {
                 version = GameDataId::FREE;
@@ -94,7 +94,7 @@ namespace Game
         };
 
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged()
         {
             #ifdef DEBUG_VERBOSE

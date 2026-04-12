@@ -73,7 +73,7 @@ namespace Game
                     - get the component id by type via the entity's components.
                 - iterate component array (in parallel) (via chunks) checking the owner(s).
             Processing:
-                - since threading (jobs) are highly encouraged, you should from your jobs and queries, set up a queue of sync point / atomic operations (a "command buffer"), which you then run after the simulation step.
+                - since threading (jobs) are highly encouraged, you should from your jobs and queries, set up a queue of sync point / atomic operations (a "ECB"/"command buffer"), which you then run after the simulation step.
 
         </ [tdbe] GameDataPool Structure for entities/components/objects >
         */
@@ -182,7 +182,7 @@ namespace Game
                 return this->items[id.chunkIndex][id.indexInChunk];
             };
 
-            /// [tdbe] Marks the pool item as empty without clearing memory, and update <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
+            /// [tdbe] Marks the pool item as empty without clearing memory, and updates <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
             /// We also notify the item to reset its members. 
             /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
             /// (But if you set <param name="unsafe"/> to false, it won't clear anything cross-buffer, e.g. won't access its components or owners.)
@@ -211,7 +211,7 @@ namespace Game
                 this->validSize--;
             };
 
-            /// [tdbe] Marks the pool items as empty without clearing memory, and update <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
+            /// [tdbe] Marks the pool items as empty without clearing memory, and updates <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
             /// We also notify each item to reset its members. 
             /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
             /// (But if you set <param name="unsafe"/> to true, it won't clear any slow cross-buffer stuff, e.g. won't update its components or owners.)
@@ -505,8 +505,8 @@ namespace Game
         : tileSize(tileSize), worldIndex(worldIndex)
         {
             std::size_t numTypes = sizeof...(Types);
-            util::DebugLog("\n[ArchetypedGameDataPool][Constructing an Archetyped Pool]\t\t------------------");
-            util::DebugLog("[ArchetypedGameDataPool][Constructing an Archetyped Pool] it's a variadic archetype of "+ util::ToString(numTypes) +" subpools.");
+            util::DebugLog("\n[ArchetypedGameDataPool]\t----------------------------------------------------");
+            util::DebugLog("[ArchetypedGameDataPool]\t Constructing an Archetyped Pool - it's a variadic archetype of "+ util::ToString(numTypes) +" subpools.");
             tileCount = (uint32_t)((double)maxPossiblePoolSize / (double)tileSize);
             if(tileCount == 0u)
                 tileCount = 1u;
@@ -524,8 +524,8 @@ namespace Game
             {
                 VariadicIndexedLoopForSubpoolConstructor(std::index_sequence_for<Types...>{}, tileIdx);
             }
-            util::DebugLog("[ArchetypedGameDataPool][Constructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + "] and all its subpools and heap items.");
-            util::DebugLog("\n[ArchetypedGameDataPool][Constructing an Archetyped Pool]\t\t------------------\n");
+            util::DebugLog("[ArchetypedGameDataPool]\t Constructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + " and all its subpools and heap items.");
+            util::DebugLog("\n[ArchetypedGameDataPool]\t----------------------------------------------------\n");
         };
 
         /// [tdbe] Actually dispose of the allocated data

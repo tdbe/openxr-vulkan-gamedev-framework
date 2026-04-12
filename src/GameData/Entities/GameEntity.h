@@ -76,11 +76,11 @@ namespace Game
         void ClearComponentIDs();
 
         /// [tdbe] Use <see cref="GameDataPool<T>::ClearItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         /// [tdbe] Clear this item (and mark it as Free in its pool).
         virtual void NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage = false) override;
         /// [tdbe] Use <see cref="GameDataPool<T>::GetFreeItem"/>(s).
-        /// todo: this should be restricted to <see cref"GameDataPool"/>
+        /// todo: accessing this should be restricted to <see cref"GameDataPool"/>
         virtual void NotifyItemVersionChanged() override;
 
         /// [tdbe] e.g. whether or not it will be part of the active game. Some components also have an isVisible.
@@ -105,14 +105,13 @@ namespace Game
         /// [tdbe] which component types are on this entity
         uint64_t archetypeMask = 0ULL;
 
-        /// [tdbe] References for immediate/scripting convenience. An entity usually has just a few (e.g. 3-5) components.
-        /// Note: must be marked as free on <see cref="NotifyItemCleared"/>.
-        /// [tdbe] todo: we'd need restrictions on some components: at least Transform should be unique if present.
+        /// [tdbe] References for immediate/scripting convenience. An entity usually has just a few (e.g. 4-12) components (max 64).
+        /// NOTE: each must be marked as free, e.g. via <see cref="NotifyItemCleared"/>.
         std::vector<GameDataId::ID> components;
         /// [tdbe] Also find anyone that caches our ID and clear it (e.g. our components have set us as their owner), and any lone component that would be left dangling.
-        /// Note: if you wanted to be maximally efficient clearing millions of items, you wouldn't hop around memory with this function, you'd instead 
-        /// construct some global command buffers marking all the entities and all the components the game wants to clear on this frame, 
-        /// and then run a sync point with a job on the buffers coherently contiguously.
+        /// NOTE: if this entity has dependencies outside of the immediate memory chunks, and you wanted to be maximally efficient clearing millions of items, 
+        /// you wouldn't hop around memory with this function, you'd instead construct some global command buffers marking all the entities 
+        /// and all the components the game wants to clear on this frame, and then run a sync point with a job on the buffers coherently contiguously.
         void ClearItemDependencies();
         
         /// [tdbe] usage: AddToArchetype(GameData::TypeUIDs.someIdOrSomeCombinationOfIDs)

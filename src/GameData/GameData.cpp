@@ -33,11 +33,9 @@ GameData& Game::GameData::operator=(GameData const& copy)
 /// [tdbe] (deserialize, allocate, and basic init of the current scene/world)
 bool GameData::LoadGameWorlds()
 {
-    util::DebugLog(
-        "[Game][GameData][LoadGameWorlds]\t.........................................................................................................................");
-    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t Loading Game World(s).");
-    util::DebugLog(
-        "[Game][GameData][LoadGameWorlds]\t Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:");
+    util::DebugLog("\n[Game][GameData][LoadGameWorlds]\t.....................................................................................................................................");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t\t\t Loading Game World(s):");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t Loading, deserializing, creating pools for entities and components, hooking some events, creating some quick access maps:");
 
     entityObjectsWorld = new GameWorld();
     vfxEntityObjectsWorld = new GameWorld();
@@ -53,9 +51,9 @@ bool GameData::LoadGameWorlds()
     success = success && LoadVFXEntityObjects();
     success = success && LoadPlayers();
 
-    util::DebugLog(
-        "[Game][GameData][LoadGameWorlds]\t .........................................................................................................................");
-    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t Loaded Game World(s).");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t\t\t\t Loaded Game World(s).");
+    util::DebugLog("[Game][GameData][LoadGameWorlds]\t.....................................................................................................................................\n");
+    
     return success;
 }
 
@@ -1298,7 +1296,7 @@ bool GameData::LoadVFXEntityObjects()
 bool GameData::LoadPlayers()
 {
     util::DebugLog("\n[Game][GameData][LoadPlayers]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    util::DebugLog("[Game][GameData][LoadPlayers]\t\t Loading Players");
+    util::DebugLog("[Game][GameData][LoadPlayers]\t\t Loading Players:");
     bool success = true;
     playerObjects.resize(AllocationMagicNumbers.MAX_PLAYER_OBJECTS);
     playerObjects.at(0) = new PlayerObject(namedGameObjectIDs.left.at("worldRoot"), 
@@ -1307,7 +1305,10 @@ bool GameData::LoadPlayers()
                                            "XR Player 1");
 
     // [tdbe] NOTE: when you add a thing here, remember to check if it fits in AllocationMagicNumbers::MAX_XXXX
-
+    
+    util::DebugLog("[Game][GameData][LoadPlayers]\t\t Loaded Players.");
+    util::DebugLog("[Game][GameData][LoadPlayers]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    
     return success;
 }
 
@@ -1378,8 +1379,8 @@ void GameData::DeleteAllMeshData()
 
 bool Game::GameData::UnLoadGameWorlds(bool fast)
 {
-    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t.........................................................................................................................");
-    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloading Game World(s).");
+    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t.....................................................................................................................................");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloading Game World(s):");
     util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t Unloading entities and components, unhooking events, clearing any maps:");
     
     namedModelComponentIDs.clear();
@@ -1436,8 +1437,8 @@ bool Game::GameData::UnLoadGameWorlds(bool fast)
     entityObjectsWorld = nullptr;
     vfxEntityObjectsWorld = nullptr;
     
-    util::DebugLog("\n[Game][GameData][UnLoadGameWorlds]\t\t\t\t.........................................................................................................................");
     util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t\t\t\t Unloaded Game World(s).");
+    util::DebugLog("[Game][GameData][UnLoadGameWorlds]\t.....................................................................................................................................\n");
     
     //std::exception("NotImplementedException");
     return true;
@@ -1544,7 +1545,7 @@ void Game::GameData::DeleteWorlds()
 /// [tdbe] TODO: At this point these have already been unloaded with the game world(s) <see cref="UnLoadGameWorlds"/>. When we have a clearer picture of loading/unloading/streaming worlds, we can refactor or remove these calls.
 GameData::~GameData()
 {
-    util::DebugLog("\n[Game][GameData][~GameData]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    util::DebugLog("\n[Game][GameData][~GameData]\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     util::DebugLog("[Game][GameData][~GameData]\t Deleting Game Data: players, entity pools, component pools, worlds. These all should have been unloaded already with the world(s).");
     
     DeletePlayers();
@@ -1552,7 +1553,7 @@ GameData::~GameData()
     DeleteComponentPools();
     DeleteWorlds();
     util::DebugLog("[Game][GameData][~GameData]\t Deleted Game Data.");
-    util::DebugLog("[Game][GameData][~GameData]\t\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    util::DebugLog("[Game][GameData][~GameData]\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 }
 
 std::uint64_t GameData::TypeUIDs::FromTypeIndex(std::type_index typeIndex)
