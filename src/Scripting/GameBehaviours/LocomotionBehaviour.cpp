@@ -1,11 +1,11 @@
 
 #include "LocomotionBehaviour.h"
-#include "../Utils/Util.h"
-#include "../GameData/Entities/GameEntityObject.h"
-#include "../GameData/PlayerObject.h"
-#include "../GameData/Components/Transform.h"
-#include "../GameData/Components/Material.h"
-#include "../GameData/GameData.h"
+#include "../../Utils/Util.h"
+#include "../../GameData/Entities/GameEntityObject.h"
+#include "../../GameData/PlayerObject.h"
+#include "../../GameData/Components/Transform.h"
+#include "../../GameData/Components/Material.h"
+#include "../../GameData/GameData.h"
 #include <stdio.h>
 //#include <glm/gtx/matrix_decompose.hpp>
 using namespace Game;

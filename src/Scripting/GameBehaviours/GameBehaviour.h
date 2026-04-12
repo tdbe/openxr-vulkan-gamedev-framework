@@ -1,5 +1,5 @@
 #pragma once
-#include "../OpenXrInput/InputData.h"
+#include "../../OpenXrInput/InputData.h"
 
 namespace Behaviours
 {

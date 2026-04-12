@@ -1,7 +1,7 @@
 #pragma once
 #include "GameBehaviour.h"
 
-#include "../GameData/PlayerObject.h"
+#include "../../GameData/PlayerObject.h"
 using namespace Game;
 
 namespace Behaviours

@@ -1,9 +1,9 @@
 
-#include "../Utils/Util.h"
+#include "../../Utils/Util.h"
 #include "HandsBehaviour.h"
-#include "../GameData/Components/Transform.h"
-#include "../GameData/GameData.h"
-#include "../GameData/PlayerObject.h"
+#include "../../GameData/Components/Transform.h"
+#include "../../GameData/GameData.h"
+#include "../../GameData/PlayerObject.h"
 
 using namespace Game;
 using namespace Behaviours;

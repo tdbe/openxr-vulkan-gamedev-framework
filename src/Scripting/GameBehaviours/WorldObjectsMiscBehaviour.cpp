@@ -1,10 +1,10 @@
 
-#include "../Utils/Util.h"
-#include "../GameData/Entities/GameEntityObject.h"
-#include "../GameData/Components/Material.h"
-#include "../GameData/Components/Transform.h"
+#include "../../Utils/Util.h"
+#include "../../GameData/Entities/GameEntityObject.h"
+#include "../../GameData/Components/Material.h"
+#include "../../GameData/Components/Transform.h"
 #include "WorldObjectsMiscBehaviour.h"
-#include "../GameData/GameData.h"
+#include "../../GameData/GameData.h"
 
 using namespace Game;
 using namespace Behaviours;
@@ -25,19 +25,26 @@ WorldObjectsMiscBehaviour::WorldObjectsMiscBehaviour(GameDataId::ID bikeObject,
 void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
 {
     float radang = gameTime * 0.2f;
-    Transform* bikeTrans = GameData::Instance().entityObjectsWorld->
-                               entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(bikeObject)
+    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->
+                               entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    Transform* bikeTrans = gameEntityObjects.GetItem(bikeObject)
                                ->GetComponentByTypeIndex<Transform>();
     glm::mat4 bikeMatr = glm::mat4(1.0f);
     bikeMatr[3] = bikeTrans->GetWorldMatrix()[3];
     bikeMatr = glm::rotate(bikeMatr, radang, { 0.0f, 1.0f, 0.0f });
     bikeTrans->SetWorldMatrix(bikeMatr);
     
+    auto* testSquid = gameEntityObjects.GetItem(GameData::Instance().namedGameObjectIDs.left.at("testSquid"));
+    auto transSquid = testSquid->GetComponentByTypeIndex<Transform>();
+    auto squidLocalPose = transSquid->GetLocalPose();
+    squidLocalPose.position.y = 1.6f + glm::sin(radang*3.5f) * 0.2f;
+    transSquid->SetLocalPose(squidLocalPose);
+    
     bikeMatr[3].y += 1.0f;
     bikeMatr = glm::scale(bikeMatr, glm::vec3(8.448f, 8.448f, 3.25f));
-    GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(bikeLightObject)
-                               ->GetComponentByTypeIndex<Transform>()
-                               ->SetWorldMatrix(bikeMatr);
+    gameEntityObjects.GetItem(bikeLightObject)
+                                ->GetComponentByTypeIndex<Transform>()
+                                ->SetWorldMatrix(bikeMatr);
     
 }
 
