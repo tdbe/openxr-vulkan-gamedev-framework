@@ -13,18 +13,19 @@ Demo video, summer 2025. (There's also a [youtube hq 1600x1600/1440p 60fps versi
 
 # Abstract:
 
-|                                 <br />                                 |       `10` `<-0->` `10`      |                          <br />                         |
-| :--------------------------------------------------------------------: | :--------------------------: | :-----------------------------------------------------: |
-|             `"frictionlessly understandable by all humans"`            | `\|•║••••••••\|••••••••••\|` |           `"hoo-man? what is, this, hoo-man?"`          |
-|                `"human craft, real (abductive) attention"`             | `\|••║•••••••\|••••••••••\|` |           `"ai vibecoding slop & copy pasta"`           |
-|             `"beat all benchmarks, even the useless ones"`             | `\|•••║••••••\|••••••••••\|` |   `"I like C# style garbage collection, and hate ECS"`  |
-| `"fix engine tropes, frictions, dev UX"` `(but we got 0 budget)` 		 | `\|••••║•••••\|••••••••••\|` | `"I don't make games I just implement standards and compile engines"` |
+|                                                                 | ` 10 <-0-> 10 ` |                                         |
+| :------------------------------------------------------------: | :--------------------------: | :-----------------------------------------------------: |
+|             `"frictionlessly understandable by all humans"`    | `\|•║••••••••\|••••••••••\|` |           `"hoo-man? what is, this, hoo-man?"`          |
+|                `"human craft, real (abductive) attention"`     | `\|••║•••••••\|••••••••••\|` |           `"ai vibecoding slop & copy pasta"`           |
+|             `"beat all benchmarks, even the useless ones"`     | `\|•••║••••••\|••••••••••\|` |   `"I like C# style garbage collection, and hate ECS"`  |
+| `"fix engine tropes, frictions, dev UX" (but we got 0 budget)`| `\|••••║•••••\|••••••••••\|` | `"I don't make games I just implement standards and compile engines"` |
+|   | ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ |  |
 
 \*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but know not what is of hoo-man. I've managed to translate their work, for hoo-mans, whose lifetimes are too short to decipher all the khronos lunar manuals & messaging in hopes of achieving even the most basic contact.
 
-It didn't help that [they don't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of (XR) rendering).
+It didn't help that [they didn't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of (XR) rendering).
 
-In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes. And you'll find no insensitivity, abuse, or horrors beyond all comprehension, attached to this project.
+In any case, thanks to open-source (as opposed to commercial / AAA) you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes. And you'll find no insensitivity, abuse, or horrors beyond all comprehension, attached to this project.
 
 ## Builds:
 
@@ -133,8 +134,6 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 * `GameWorld` `{` `ArchetypedGameDataPool` `{` a variadic type Structure of tiled (chunked) Arrays (subpools) of `GameEntity` / `GameEntityObject`, and unique `Component`s `}`, and `GameDataPool` (also cache friendly tiled (chunked)) `{` shared `Component`s `}`, `GameDataPool` `{` sparse `Component`s `}`, and `GameDataPool` `{` Buffered `Component`s `}` `}`.
 
-  <br />
-
 * Everything is set in generic memory-span pools, by type, or variadic types ("archetype"). You set up a game world with maximum allocated memory for each pool, then during setup or gameplay you can request to use a free object, or mark a used one as clear (free and reusable). There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`). There's archetype masks on entities, and per archetype pool, but not per tile (chunk).
 
 * (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; but customizable e.g. build order)
@@ -151,15 +150,11 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 * Cleanup is either manual (jobs/systems) (and cache coherent) or automated via (cache-missing) awareness of component dependencies and function/event propagation.
 
-  <br />
-
 * `GameEntity` and `GameEntityObject:GameEntity`
 
 * Properties: `isVisible`, `isEnabled`, "object" entity versions also have some events etc. but no real extra memory usage.
 
 * `GameComponent`: `Material` (shared), `Model` (shared), `Transform`, `Bounds`, `Parent`, `Light` (sparse component).
-
-  <br />
 
 * `PlayerObject`s {`GameEntityObject`s, `PlayerActiveStates`}.
 
