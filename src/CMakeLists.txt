@@ -61,16 +61,16 @@ set(SRC
 	OpenXrAndVulkan/MirrorView.cpp
 	OpenXrAndVulkan/MirrorView.h
 	
-	GameMechanics/WorldObjectsMiscBehaviour.cpp
-	GameMechanics/WorldObjectsMiscBehaviour.h
-	GameMechanics/LocomotionBehaviour.cpp
-	GameMechanics/LocomotionBehaviour.h
-	GameMechanics/HandsBehaviour.cpp
-	GameMechanics/HandsBehaviour.h
-	GameMechanics/InputTesterBehaviour.cpp
-	GameMechanics/InputTesterBehaviour.h
-	GameMechanics/GameBehaviour.cpp
-	GameMechanics/GameBehaviour.h
+	Scripting/GameBehaviours/WorldObjectsMiscBehaviour.cpp
+	Scripting/GameBehaviours/WorldObjectsMiscBehaviour.h
+	Scripting/GameBehaviours/LocomotionBehaviour.cpp
+	Scripting/GameBehaviours/LocomotionBehaviour.h
+	Scripting/GameBehaviours/HandsBehaviour.cpp
+	Scripting/GameBehaviours/HandsBehaviour.h
+	Scripting/GameBehaviours/InputTesterBehaviour.cpp
+	Scripting/GameBehaviours/InputTesterBehaviour.h
+	Scripting/GameBehaviours/GameBehaviour.cpp
+	Scripting/GameBehaviours/GameBehaviour.h
 	
 	GameData/GameDataId.h
 	
@@ -138,7 +138,7 @@ find_package(Vulkan REQUIRED)
 
 add_executable(${TARGET_NAME})
 target_sources(${TARGET_NAME} PRIVATE ${SRC})
-target_include_directories(${TARGET_NAME} PRIVATE ${Vulkan_INCLUDE_DIRS})
+target_include_directories(${TARGET_NAME} PRIVATE ${Vulkan_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/external/taskflow)
 target_link_libraries(${TARGET_NAME} PRIVATE boxer glfw glm openxr tinyobjloader boost ${Vulkan_LIBRARIES})
 
 # [tdbe] use these instead of e.g. #define DEBUG or define _DEBUG
@@ -146,6 +146,8 @@ target_link_libraries(${TARGET_NAME} PRIVATE boxer glfw glm openxr tinyobjloader
 target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 # [tdbe] DEBUG_VERBOSE for messages triggered by objects/entities that might spam a lot, e.g. get pool item, parent/children changed, or item cleared.
 target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG_VERBOSE>)
+# [tdbe] DEBUG_THREADS for messages printing the state of jobs / threads / taskflow graphs.
+target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG_THREADS>)
 # [tdbe] DEBUG_RELEASE for optional messages in RLEASE builds
 target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Release>:DEBUG_RELEASE>)
 # [tdbe] _DEBUG - actually, this sets the MSVC debugger path, and when you build in Debug configuration with the MSVC compiler, it automatically defines the _DEBUG preprocessor macro by default.
