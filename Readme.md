@@ -1,88 +1,178 @@
-# TL;DR: 
-Performant open-source OpenXR, Vulkan, ECS, C++. 
+# TL;DR:
+
+Performant open-source OpenXR, Vulkan, ECS, C++.
 A boilerplate -> framework -> mini "game engine" to quickly make an actual playable modern royalty-free XR game.
 
-Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving khronos setup [openxr-vulkan-example](https://github.com/janhsimon/openxr-vulkan-example). 
+Demystifies ECS / Memory Management, Single Pass Rendering, XR Input, and XR gamedev fundamentals, on top of @janhsimon's excellent timesaving khronos setup [openxr-vulkan-example](https://github.com/janhsimon/openxr-vulkan-example).
 
-\[Note: [you can leave github comments over on my blog post version 😉](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)\]
+\[Note: [you can leave github comments over on my blog post version 😉](https://blog.deferredreality.com/openxr-vulkan-c++-gamedev-boilerplate/)]
 
-[snowglobe_openxr_vulkan_framework_30crf_800x800_github.webm](https://github.com/user-attachments/assets/410545fc-c14d-42bc-a6b8-046b0b7bae35)
+[snowglobe\_openxr\_vulkan\_framework\_30crf\_800x800\_github.webm](https://github.com/user-attachments/assets/410545fc-c14d-42bc-a6b8-046b0b7bae35)
 
 Demo video, summer 2025. (There's also a [youtube hq 1600x1600/1440p 60fps version](https://www.youtube.com/watch?v=0e41lgULUoA).)
 
-# Abstract: 
-\*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but lack hoo-man compatibility. I've managed to translate their stack, for hoo-mans, whose lifetimes may otherwise be too short to first decipher the khronos lunar manuals for hope of achieving even the most basic useful contact.
+# Abstract:
 
-It didn't help that [they don't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of rendering).
+|                                 <br />                                 |       `10` `<-0->` `10`      |                          <br />                         |
+| :--------------------------------------------------------------------: | :--------------------------: | :-----------------------------------------------------: |
+|             `"frictionlessly understandable by all humans"`            | `\|•║••••••••\|••••••••••\|` |           `"hoo-man? what is, this, hoo-man?"`          |
+|                `"human craft, real (abductive) attention"`             | `\|••║•••••••\|••••••••••\|` |           `"ai vibecoding slop & copy pasta"`           |
+|             `"beat all benchmarks, even the useless ones"`             | `\|•••║••••••\|••••••••••\|` |   `"I like C# style garbage collection, and hate ECS"`  |
+| `"fix engine tropes, frictions, dev UX"` `(but we got 0 budget)` 		 | `\|••••║•••••\|••••••••••\|` | `"I don't make games I just implement standards and compile engines"` |
 
-In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes.
+\*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but know not what is of hoo-man. I've managed to translate their work, for hoo-mans, whose lifetimes are too short to decipher all the khronos lunar manuals & messaging in hopes of achieving even the most basic contact.
+
+It didn't help that [they don't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of (XR) rendering).
+
+In any case, thanks to open-source you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes. And you'll find no insensitivity, abuse, or horrors beyond all comprehension, attached to this project.
 
 ## Builds:
-- See [Build-ProjectSetup.Readme.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Build-ProjectSetup.Readme.md) or just be lazy and run the windows build in `./out/` (or the github Release).
 
-- "Recommended Specs and Minimum Requirements": The scene runs on a RTX 4070 mobile at 90FPS (the refresh rate of the headset) with 8 (animated) tube lights and 2 directional lights, and a lot of transparent objects overdraw. It also runs on a RTX 2060 mobile with a bit of lag spikes if you have too much overdraw right on your face.
+* See [Build-ProjectSetup.Readme.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Build-ProjectSetup.Readme.md)
+
+* Or just be lazy and get my windows [Releases](https://github.com/tdbe/openxr-vulkan-gamedev-framework/releases), or the build in `./out*/` (e.g. `./outRelease/`).
+
+### "Recommended Specs" and "Minimum Requirements":
+
+* The test scene runs on a RTX 4070 mobile at 90FPS (the refresh rate of the headset) with 8 (animated) tube lights and 2 directional lights, and a lot of transparent objects overdraw.
+
+* It also runs on a RTX 2060 mobile (with a bit of lag spikes if you have too much overdraw right on your face).
 
 ## Controls:
 
-- [Controls.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Controls.md)
+* [Controls.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/Controls.md)
 
 # My feature stack so far:
 
 (sections ordered from high-level to low-level)
 
 ## XR Locomotion
-  - Rotating and (accelerated) Panning of the scene by grabbing with both hands, retreating into a non-euclideanly warped pocket dimension (pushing the world away from you non-linearly) and seeing a "tunnelvision" portal-style chaperone. Highest effectiveness and lowest sickness (carefully tweaked and tested across dozens of different people).
-  - Uses state machines for movement and for visuals. Supports animated teleportation with targets.
-![chaperone_demo_gif](https://github.com/user-attachments/assets/f5ef5e4b-5c8e-44c8-90fe-723dc2fd6602)
+
+* Rotating and (accelerated) Panning of the scene by grabbing with both hands, retreating into a non-euclideanly warped pocket dimension (pushing the world away from you non-linearly) and seeing a "tunnelvision" portal-style chaperone. Highest effectiveness and lowest sickness (carefully tweaked and tested across dozens of different people).
+
+* Uses state machines for movement and for visuals. Supports animated teleportation with targets.
+  ![chaperone\_demo\_gif](https://github.com/user-attachments/assets/f5ef5e4b-5c8e-44c8-90fe-723dc2fd6602)
 
 ## Base XR gameplay mechanics
-  - Mechanics system based on a list of `GameBehaviour`s set up as FSMs.
-  - Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and Destroyed.
-  - Mechanics for locomotion, hands, XR Input testing, world objects.
-  - Any `GameComponent` has one or more `GameEntity` parents and manual or automatic cleanup (and preventing dangling components when all owners are freed).
+
+* Mechanics system based on a list of `GameBehaviour`s set up as FSMs.
+
+* Each behaviour is Created (with its own required references), Updated (with frame & input data etc), and Destroyed.
+
+* Mechanics for locomotion, hands, XR Input testing, world objects.
+
+* Any `GameComponent` has one or more `GameEntity` parents and manual or automatic cleanup (and preventing dangling components when all owners are freed).
 
 ## Physics
-  - There's support for running jobs on `Bounds` components (generated at model load time), with proper functions for AABB intersection or enclosure tests, plane tests, rectangular selection (even at non-Axis-Aligned angles) / frustum casting, raycasting.
-  - There's a concept of ground in the locomotion system.
-  - But `TODO:` no actual Physics library added.
-  
-## Animation
-  - \*crickets\* `TODO:` just add it via full/extended gltf support.
-  - `TODO:` find something open-source for: IK, gpu-skinning, and LoDs.
-  
-## Audio
-  - \*crickets\* `TODO:` add Audio component, and threaded spatial sound library with audio queueing.
-  
-## GUI
-  - \*crickets\* `TODO:` vector or sdf text, and just textures. Then use previously made ui code.
-  - `TODO:` main menu, in-game hands inventory
-  - (I'm certainly not implementing a scene-graph management system (game editor))
-  
-## Jobs / Threading / Queueing
-  - The objects and memory is set up in a spanned ECS manner but `TODO:` no job system / threading example (there's only sequentially updated `GameBehaviour`s / state machines on the main thread).
-  - `TODO:` add a simple chunking concept, run jobs in parallel on chunks.
 
-## Systems, Queries, ECB (Entity Command Buffer), System Stages
-  - 
-  ### Transform Propagation System
-    - (WIP) parenting system that runs after the "simulation stage" and before "rendering stage" processes the chain of local (relative) Transform data (position, orientation, scale) based on Parent Components and entity query jobs.
+* There's support for running jobs on `Bounds` components (generated at model load time), with proper functions for AABB intersection or enclosure tests, plane tests, rectangular selection (even at non-Axis-Aligned angles) / frustum casting, raycasting.
+
+* There's a concept of ground in the locomotion system.
+
+* But `TODO:` no actual Physics library added.
+
+## Animation
+
+* \*crickets\* `TODO:` add it via/with full/extended gltf support.
+
+* `TODO:` find something open-source for: IK, gpu-skinning, and LoDs, or implement some of it.
+
+## Audio
+
+* \*crickets\* `TODO:` add Audio component, and threaded spatial sound library with audio queueing.
+
+## GUI
+
+* \*crickets\* `TODO:` vector or sdf text, and just textures. Then use previously made ui code.
+
+* `TODO:` main menu, in-game hands inventory
+
+* Use Blender instead of a scene-graph management system (game editor)?
+
+  * `TODO:` Maybe use Blender scenes and exports instead of in-engine scene serialization and even prefabs.
+
+## Jobs / Threading / Queueing
+
+* Using ./external/[taskflow](https://github.com/taskflow/taskflow), and here you can run threads per tile (chunk), the right way - all components of the entity are in the same chunk, comfortably fit in CPU cache.
+
+* The objects and memory are set up in tiled (chunked) ECS pools, and Archetyped pools.
+
+* There's a  e.g. a `SystemTransformPropagation` you can use as an example on how to run jobs over entities and components.
+
+* There is `tf::TaskFlow::for_each`, tasks and subtasks, task queuing, waiting, chaining, semaphoring, parenting & graph, work-stealing, pooling, thread load balancing, graph dump debugging.
+
+## Systems
+
+### Transform Propagation System
+
+* `SystemTransformPropagation` - Parenting system that runs after the "simulation stage" and before "rendering stage" and processes the chain of local (relative) Transform data (position, orientation, scale) using recursive jobs querying entity chunks with Parent Components and ignoring disabled entity trees. (This system what allows you to have children that move with their parent(s).)
+
+### Queries
+
+* If you're familiar with e.g. "Entity Queries" from Unity ECS, a "query" here would be a job we run on each chunk of a `GameWorld'`s `GameDataPool` or `ArchetypeGameDataPool`, and check yourself whatever you want: the entity's ID, archetype mask, specific component value etc.
+
+### ECB (Entity Command Buffer)
+
+* TODO:
+
+### System Stages
+
+* For now we have our Main game loop with:
+
+  * `GameBehaviour`s loop
+  
+  * `InputSystem` update & poses & haptics
+  
+  * Your custom Systems
+  
+  * Engine systems e.g. `SystemTransformPropagation`
+  
+  * Renderer
 
 ## GameData
-  - `GameWorld` `{` tiled/chunked `GameEntity`, `GameEntityObject`, and regular and shared `Component`s `}`.
-  - Everything is set in generic memory-span pools, by type. You set up a game world with maximum allocated memory for each pool, then during gameplay you can request to use a free object, or mark a used one as free and reusable. There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`).
-  - (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; customizable e.g. build order)
-  - TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
-  - The chunky Tiles are kept in `GameWorld`s (e.g. main, enemies, bullets, vfx). Each world has many Tiles each with e.g. 128 of every non-shared component and entity pools.
-  - Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][tileIndex][index][version]` and a cached `[typeIndex]` of the top level type for convenience.
-  - Entity Parenting support with automatic (or manual) management, and a builtin Transform Propagation System.
-  - Everything is easy to request and keep track of through various means, even by name in hash maps for manual light scripting purposes.
-  - Cleanup is either manual (and cache coherent) or automated via (cache-missing) awareness of component dependencies.
-  - `GameEntity` and `GameEntityObject` 
-  - `GameComponent`: `Material` (shared), `Model` (shared), `Transform`, `Bounds`, `Parent`, `Light` (sparse component).
-  - Properties: `isVisible`, `isEnabled`, object versions have `name` and some events etc.
-  - `PlayerObject`s {`GameEntityObject`s, `PlayerActiveStates`}.
-  - `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
-  
+
+* `GameWorld` `{` `ArchetypedGameDataPool` `{` a variadic type Structure of tiled (chunked) Arrays (subpools) of `GameEntity` / `GameEntityObject`, and unique `Component`s `}`, and `GameDataPool` (also cache friendly tiled (chunked)) `{` shared `Component`s `}`, `GameDataPool` `{` sparse `Component`s `}`, and `GameDataPool` `{` Buffered `Component`s `}` `}`.
+
+  <br />
+
+* Everything is set in generic memory-span pools, by type, or variadic types ("archetype"). You set up a game world with maximum allocated memory for each pool, then during setup or gameplay you can request to use a free object, or mark a used one as clear (free and reusable). There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`). There's archetype masks on entities, and per archetype pool, but not per tile (chunk).
+
+* (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; but customizable e.g. build order)
+
+* `TODO:` Nice to have but too much accounting work: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
+
+* The chunky Tiles are kept in `GameWorld`s (e.g. main world, enemies world, bullets, vfx etc.). Each world has many Tiles each with e.g. 128 elements.
+
+* Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][tileIndex][index][version]` and a cached `[typeIndex]` of the top level T for convenience.
+
+* Entity Parenting support with automatic (or manual) management, and a builtin Transform Propagation System.
+
+* Everything is easy to request and keep track of through various means, even by name in hash maps for the elements you set up with manual light scripting in mind.
+
+* Cleanup is either manual (jobs/systems) (and cache coherent) or automated via (cache-missing) awareness of component dependencies and function/event propagation.
+
+  <br />
+
+* `GameEntity` and `GameEntityObject:GameEntity`
+
+* Properties: `isVisible`, `isEnabled`, "object" entity versions also have some events etc. but no real extra memory usage.
+
+* `GameComponent`: `Material` (shared), `Model` (shared), `Transform`, `Bounds`, `Parent`, `Light` (sparse component).
+
+  <br />
+
+* `PlayerObject`s {`GameEntityObject`s, `PlayerActiveStates`}.
+
+* `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
+
+* AABB `Bounds` from the `Mesh`.
+
+* `Light` holding multiple kinds of lights based on properties and/or volume/sizes.
+
+* `Transform`, `Parent`
+
+* `Children` (just for local, cache-missing traversal, mainly for debugging or crawling e.g. a character rig)
+
 ## Rendering
   - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. There's a [blog post on correct tube lights](https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/):
   ![mrp_volumetric_lights_gif](https://github.com/user-attachments/assets/2db52360-7aba-4801-b1b6-92affac455fd)
@@ -105,14 +195,16 @@ In any case, thanks to open-source you can now build something pretty good the r
   - Exposes action state data (e.g. `lastChangeTime`, `isActive`, `changedSinceLastSync`)
 
 ## Utils
-  - Utils and math for XR, input, general gamedev.
-  - Debugging.
-  - `TODO:` Bring in gizmos, e.g. debug lines, wireframes for lights etc.
 
+* Utils and math for XR, input, general gamedev.
+
+* Debugging, logging to file.
+
+* `TODO:` Bring in gizmos, e.g. debug lines, wireframes for lights etc.
 
 ## A typical run log:
 
-- Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/TypicalRunLogSample.md) 
+* Game world load, setup, updates & render loops, unload and exit. [TypicalRunLogSample.md](https://github.com/tdbe/openxr-vulkan-gamedev-framework/blob/main/TypicalRunLogSample.md)
 
 # Attributions #2
 
@@ -148,12 +240,17 @@ In any case, thanks to open-source you can now build something pretty good the r
 
 This project demonstrates how you can write your own VR application using OpenXR 1.1 and Vulkan 1.3. These are its main features:
 
-- Basic rendering of example scene to the headset and into a resizeable mirror view on your desktop monitor. 
-- Focus on easy to read and understand C++ without smart pointers, inheritance, templates, etc.
-- Usage of the Vulkan `multiview` extension for extra performance.
-- Warning-free code base spread over a small handful of classes.
-- No OpenXR or Vulkan validation errors or warnings.
-- CMake project setup for easy building.
+* Basic rendering of example scene to the headset and into a resizeable mirror view on your desktop monitor.
+
+* Focus on easy to read and understand C++ without smart pointers, inheritance, templates, etc.
+
+* Usage of the Vulkan `multiview` extension for extra performance.
+
+* Warning-free code base spread over a small handful of classes.
+
+* No OpenXR or Vulkan validation errors or warnings.
+
+* CMake project setup for easy building.
 
 Integrating both OpenXR and Vulkan yourself can be a daunting and painfully time-consuming task. Both APIs are very verbose and require the correct handling of countless minute details. This is why there are two main use cases where this project comes in handy:
 
