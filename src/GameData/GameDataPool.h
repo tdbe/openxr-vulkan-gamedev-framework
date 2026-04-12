@@ -54,14 +54,22 @@ namespace Game
                     - get the component id by type via the entity's components.
                 - iterate component array (in parallel) (via chunks) checking the owner(s).
             Processing:
-                - since threading (jobs) are highly encouraged, you should from your jobs and queries, set up a queue of sync point / atomic operations (a "command buffer"), which you then run after the simulation step.
+                - since threading (jobs) are highly encouraged, you should from your jobs and queries, set up a queue of sync point / atomic operations (a "ECB"/"command buffer"), which you then run after the simulation step.
 
         </ [tdbe] GameDataPool Structure for entities/components/objects >
         */
 
+        struct NonCopyableVector : public std::vector<T*>
+        {
+            using std::vector<T*>::vector;
+            NonCopyableVector(NonCopyableVector const& copy) = delete;
+            NonCopyableVector& operator=(NonCopyableVector const& copy) = delete;
+            NonCopyableVector& operator=(NonCopyableVector&& copy) = default;
+            NonCopyableVector(NonCopyableVector&& rcOther) = default;
+        };
         /// [tdbe] std::vector<T*> contains both active and "deleted" (marked free) items, split into [tile][item] to fit in cache and be thread friendy.
-        // [tdbe] newb-friendly-note: the constructor of the pool needs to make sure the actual data the vectors are pointing to, is constructed sequentially or otherwise tries to guarantee a contiguous distribution per tile in the heap memory.
-        std::vector<std::vector<T*>> items;
+        /// [tdbe] newb-friendly-note: the constructor of the pool needs to make sure the actual data the vectors are pointing to, is constructed sequentially or otherwise tries to guarantee a contiguous distribution per tile in the heap memory.
+        std::vector<NonCopyableVector> items;
         
         /// [tdbe] Global number of items which are valid (in use) (are not free/cleared) (including all tiles).
         /// NOTE: the pool can be fragmented, so use <see cref="Size()"/> to get the iteratable "count".
@@ -74,10 +82,16 @@ namespace Game
         {
             return maxPossiblePoolSize - validSize;
         };
-        /// [tdbe] Flattened size for iteration. It's actually the <see cref="maxUsedIndex"/> + 1.
+        /// [tdbe] Flattened size for iteration. It's actually 1 + the <see cref="maxUsedIndex"/> which guarantees there are no used items after it (but there may be unused items before it).
         uint32_t Size() const
         {
             return maxUsedIndex + 1;
+        };
+        /// [tdbe] based on the <see cref="maxUsedIndex"/> and <See cref="tileSize"/>
+        /// guarantees there are no used tiles after it (but there may be unused tiles before it)
+        uint32_t MaxUsedTile() const
+        {
+            return std::ceil(maxUsedIndex / tileSize);
         };
         uint32_t MaxSize() const
         {
@@ -92,6 +106,12 @@ namespace Game
         uint32_t NumTiles() const
         {
             return items.size();
+        };
+        
+        /// [tdbe] note: this checks for exact match only, not is_base_of_v etc.
+        template <typename U> static constexpr bool ContainsType()
+        {
+            return std::is_same_v<U, T>;
         };
 
         /// [tdbe] Returns an item if it exists and it's valid, else a nullptr.
@@ -176,7 +196,7 @@ namespace Game
             validSize--;
         };
 
-        /// [tdbe] Marks the pool items as empty without clearing memory, and update <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
+        /// [tdbe] Marks the pool items as empty without clearing memory, and updates <see cref="firstEmptyIndex"/> and <see cref="maxUsedIndex"/>.
         /// We also notify each item to reset its members. 
         /// And to clear any cached ids to itself, which although lightweight, is less efficient / cache coherent. 
         /// (But if you set <param name="unsafe"/> to true, it won't clear any slow cross-buffer stuff, e.g. won't update its components or owners.)
@@ -288,25 +308,20 @@ namespace Game
             util::DebugLog("[~GameDataPool][Destructed<" + topTypeStr + ">] and all its heap items.\n");
             #endif
         };
-
-        GameDataPool(GameDataPool const& copy)
-        {
-            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't copy this / pass by value.");
-        };
-        GameDataPool& operator=(GameDataPool const& copy) 
-        {
-            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't copy this / pass by value.");
-            return *this;
-        };
-
-        GameDataPool(GameDataPool&& rcOther)
-        {
-            util::DebugError("\n[~GameDataPool] NotImplementedException. Don't move this.");
-        }
+        
+        /// [tdbe] Don't copy this / pass by value.
+        GameDataPool(GameDataPool const& copy) = delete;
+        /// [tdbe] Don't copy this / pass by value.
+        GameDataPool& operator=(GameDataPool const& copy) = delete;
+        /// [tdbe] Don't copy this / pass by value.
+        GameDataPool& operator=(GameDataPool&& copy) = delete;
+        /// [tdbe] Don't move this.
+        GameDataPool(GameDataPool&& rcOther) = delete;
 
       // ----------------------------------------------------
       private:
         /// [tdbe] this marks the end of the used items so we don't have to iterate past it.
+        /// Guarantees there are no used items after it (but there may be unused items before it)
         uint32_t maxUsedIndex = 0;
         /// [tdbe] 1 means no split. Splits the pool into "chunks" of fixed element count size.
         uint32_t tileSize = 1u;// 128 is a good average case number to flexibly fit in cache with any contents and amongst everything else.

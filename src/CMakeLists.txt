@@ -110,6 +110,9 @@ set(SRC
 	
 	GameData/GameData.h
 	GameData/GameData.cpp
+  
+	Systems/SystemBase.h
+	Systems/SystemTransformPropagation.h
 
 	OpenXrAndVulkan/Pipeline.cpp
 	OpenXrAndVulkan/Pipeline.h

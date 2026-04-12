@@ -88,8 +88,16 @@ namespace Game
         
         template <typename SVT> struct SubpoolTiledVector
         {
+            struct NonCopyableVector : public std::vector<SVT*>
+            {
+                using std::vector<SVT*>::vector;
+                NonCopyableVector(NonCopyableVector const& copy) = delete;
+                NonCopyableVector& operator=(NonCopyableVector const& copy) = delete;
+                NonCopyableVector& operator=(NonCopyableVector&& copy) = default;
+                NonCopyableVector(NonCopyableVector&& rcOther) = default;
+            };
             /// [tdbe] [tiles][items]
-            std::vector<std::vector<SVT*>> items;
+            std::vector<NonCopyableVector> items;
 
             std::string GetTopTypeStr() const { return this->topTypeStr; };
             uint32_t GetMaxPossiblePoolSize() const { return this->maxPossiblePoolSize; };
@@ -115,6 +123,12 @@ namespace Game
             uint32_t Size() const
             {
                 return this->maxUsedIndex + 1;
+            };
+            /// [tdbe] based on the <see cref="maxUsedIndex"/> and <See cref="tileSize"/>
+            /// guarantees there are no used tiles after it (but there may be unused tiles before it)
+            uint32_t MaxUsedTile() const
+            {
+                return (uint32_t)std::ceil(maxUsedIndex / tileSize);
             };
             uint32_t MaxSize() const
             {
@@ -282,26 +296,21 @@ namespace Game
             {
                 util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.");
             };
-            
+
             ~SubpoolTiledVector()
             {
                 util::DebugLog("[ArchetypedGameDataPool][~SubpoolTiledVector][Destructed<" + this->topTypeStr + ">] and all its heap items.\n");
             };
             
-            SubpoolTiledVector(SubpoolTiledVector const& copy)
-            {
-                util::DebugError("\n[ArchetypedGameDataPool][SubpoolTiledVector] NotImplementedException. Don't copy this / pass by value.");
-            };
-            SubpoolTiledVector& operator=(SubpoolTiledVector const& copy) 
-            {
-                util::DebugError("\n[ArchetypedGameDataPool][SubpoolTiledVector] NotImplementedException. Don't copy this / pass by value.");
-                return *this;
-            };
-
-            SubpoolTiledVector(SubpoolTiledVector&& rcOther)
-            {
-                util::DebugError("\n[ArchetypedGameDataPool][SubpoolTiledVector] NotImplementedException. Don't move this.");
-            }
+            
+            /// [tdbe] Don't copy this / pass by value.
+            SubpoolTiledVector(SubpoolTiledVector const& copy) = delete;
+            /// [tdbe] Don't copy this / pass by value.
+            SubpoolTiledVector& operator=(SubpoolTiledVector const& copy) = delete;
+            /// [tdbe] Don't copy this / pass by value.
+            SubpoolTiledVector& operator=(SubpoolTiledVector&& copy) = delete;
+            /// [tdbe] Don't move this.
+            SubpoolTiledVector(SubpoolTiledVector&& rcOther) = delete;
             
           // ----------------------------------------------------
           private:
@@ -469,17 +478,23 @@ namespace Game
             std::apply([&f](auto&... subpools) {
                 (f(subpools), ...);
             }, items);
-        }
+        };
         
         /// [tdbe] See <see cref="items"/>. A subpool is the chunks of entities or of components.
         template <typename T> SubpoolTiledVector<T>& GetSubpoolByType()
         {
             return std::get<SubpoolTiledVector<T>>(items);
-        }
+        };
+        
+        /// [tdbe] note: this checks for exact match only, not is_base_of_v etc.
+        template <typename T> static constexpr bool ContainsType()
+        {
+            return (std::is_same_v<T, Types> || ...);
+        };
         
         static constexpr std::size_t NumTypesInArchetypePool() {
             return sizeof...(Types);
-        }
+        };
         
         /// [tdbe] All tiles are the same size. It's items[0].size().
         uint32_t TileSize() const
@@ -499,7 +514,7 @@ namespace Game
             {
                 subpoolVec.ClearItems(alsoDestroy, unsafe, clearDataLoadedFromStorage);
             });
-        }
+        };
         
         ArchetypedGameDataPool(std::vector<uint64_t> typeUIDs, const uint16_t tileSize, const uint32_t maxPossiblePoolSize = 0, const int16_t worldIndex = 0)
         : tileSize(tileSize), worldIndex(worldIndex)
@@ -567,7 +582,7 @@ namespace Game
         ArchetypedGameDataPool(ArchetypedGameDataPool&& rcOther)
         {
             util::DebugError("\n[ArchetypedGameDataPool] NotImplementedException. Don't move this.");
-        }
+        };
         
         private:
             /// [tdbe] std::vector<T*> contains both active and "deleted" (marked free) items
@@ -592,7 +607,7 @@ namespace Game
             {
                 // For each index I in {0,1,2,...}, do:
                 (VariadicSubpoolConstructor<Is>(tileIdx), ...);  // C++17 fold expression
-            }
+            };
 
             /// [tdbe] here we continue our constructor while having the I-th variadic type (we specifically know we're on vector<Types[I]*>)
             template <std::size_t I> void VariadicSubpoolConstructor(const uint32_t tileIdx)
@@ -622,6 +637,6 @@ namespace Game
                                 ", tiles: " + util::ToString(tileCount) + 
                                 ", tileSize: " + util::ToString(tileSize) + 
                                 ", subpool.items.size(): "+util::ToString(subpool.items.size()));
-            }
+            };
     };
 }
