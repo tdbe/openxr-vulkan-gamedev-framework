@@ -11,6 +11,7 @@
 #include "Components/Material.h"
 #include "Components/Light.h"
 #include "Entities/GameEntityObject.h"
+#include "Entities/GameEntity.h"
 #include "PlayerObject.h"
 
 using namespace Game;
@@ -93,23 +94,31 @@ GameComponent* GameData::GetComponent(GameDataId::ID id)
     }
 }
 
-GameEntity* GameData::GetEntity(GameDataId::ID id)
+template <typename EntityT, typename PoolT>
+GameEntity* CompileTimeEntityTypeChecker(PoolT* pool, GameDataId::ID id)
 {
-    if (id.typeUID == TypeUIDs.GAME_ENTITY_OBJECTS)
+    if constexpr (std::is_base_of_v<GameEntity, EntityT> &&
+                  PoolT::template ContainsType<EntityT>())
     {
-        return gameWorlds[id.worldIndex]->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(id);
-    }
-    else if (id.typeUID == TypeUIDs.GAME_ENTITIES)
-    {
-        //return gameWorlds[id.worldIndex]->gameEntities->GetItem(id);
-        // TODO:
-        util::DebugError("[GameData][ClearEntity] 'NotImplementedException': see GameWorld::gameEntityObjects");
-        return nullptr;
+        return pool->GetSubpoolByType<EntityT>().GetItem(id);
     }
     else
     {
         return nullptr;
     }
+}
+
+GameEntity* GameData::GetEntity(GameDataId::ID id)
+{
+    if (id.typeUID == TypeUIDs.GAME_ENTITY_OBJECTS)
+    {
+        return CompileTimeEntityTypeChecker<GameEntityObject>(gameWorlds[id.worldIndex]->entityArchetypePool, id);
+    }
+    else if (id.typeUID == TypeUIDs.GAME_ENTITIES)
+    {
+        return CompileTimeEntityTypeChecker<GameEntity>(gameWorlds[id.worldIndex]->entityArchetypePool, id);
+    }
+    return nullptr;
 }
 
 void GameData::ClearComponent(GameDataId::ID id, bool unsafe)
@@ -1053,6 +1062,29 @@ bool GameData::LoadGameEntityObjects()
     
     gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
     gento->SetName("squid");
+    trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
+    trans->AddOwnerId(gento->id);
+    gento->AddComponentId(trans->id);
+    parent = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Parent>().GetFreeItem(0, gento->id.chunkIndex);
+    parent->AddOwnerId(gento->id);
+    gento->AddComponentId(parent->id);
+    children = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Children>().GetFreeItem(0, gento->id.chunkIndex);
+    children->AddOwnerId(gento->id);
+    gento->AddComponentId(children->id);
+    comp = GetComponent(namedModelComponentIDs.left.at("squidModelComp"));
+    comp->AddOwnerId(gento->id);
+    gento->AddComponentId(comp->id);
+    bounds = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Bounds>().GetFreeItem(0, gento->id.chunkIndex);
+    bounds->SetBoundsAABB(static_cast<Model*>(comp));
+    bounds->AddOwnerId(gento->id);
+    gento->AddComponentId(bounds->id);
+    comp = GetComponent(namedMaterialComponentIDs.left.at("squidMaterialComp"));
+    comp->AddOwnerId(gento->id);
+    gento->AddComponentId(comp->id);
+    ConfiguredGameObject(gento);
+    
+    gento = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetFreeItem();
+    gento->SetName("testSquid");
     trans = entityObjectsWorld->entityArchetypePool->GetSubpoolByType<Transform>().GetFreeItem(0, gento->id.chunkIndex);
     trans->AddOwnerId(gento->id);
     gento->AddComponentId(trans->id);

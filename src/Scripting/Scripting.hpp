@@ -4,6 +4,7 @@
 
 #include "../GameData/Components/Material.h"
 #include "../GameData/Components/Light.h"
+#include "../GameData/Components/Parent.h"
 
 /// [tdbe] No actual scripting layer, just a less-holy place where we can configure our e.g. game world items setup, scenes, object positions, colors etc.
 namespace Scripting
@@ -417,16 +418,30 @@ namespace Scripting
         gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("logo2"))
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::translate(worldRootMatr, { 0.0f, 3.0f, -10.0f }));
-        gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("bike"))
-            ->GetComponentByTypeIndex<Transform>()
-            ->SetWorldMatrix(glm::rotate(glm::translate(worldRootMatr, 
-                                                        { 0.0f, 0.0f, -4.5f }), 
-                                         0.2f, { 0.0f, 1.0f, 0.0f }));
-        // glm::scale(glm::translate(worldRoot.worldMatrix, { 4.0f, 2.0f, -2.5f }), { 0.5f, 0.5f, 0.5f });
+        auto* bike = gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("bike"));
+        bike->GetComponentByTypeIndex<Transform>()
+            ->SetWorldMatrix(glm::translate(glm::rotate(worldRootMatr, 
+                                                        0.2f, { 0.0f, 1.0f, 0.0f }), 
+                                         { 0.0f, 0.0f, -4.5f }));
+        auto* testSquid = gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("testSquid"));
+        auto transSquid = testSquid->GetComponentByTypeIndex<Transform>();
+        //transSquid->SetWorldMatrix(glm::translate(glm::rotate(worldRootMatr, 
+        //                                                    1.5708f, { 0.0f, 0.0f, 1.0f }),
+        //                                        { 1.6f, 1.0f, -5.0f }));
+        testSquid->GetComponentByTypeIndex<Parent>()->SetParent(bike->id);
+        auto squidLocalPose = transSquid->GetLocalPose();
+        auto squidWorldPose = transSquid->GetWorldPose();
+        squidLocalPose.scale = glm::vec3{0.25f, 0.25f, 0.25f};
+        squidLocalPose.position = glm::vec3{0.0f, 1.6f, -0.85f};
+        //                                                     90 degrees *4 because of the parent's rotation (and this is the local rotation)
+        squidLocalPose.orientation = util::quaternionFromAngleAxis(1.5708f*4, { 0.0f, 0.0f, 1.0f });
+        transSquid->SetLocalPose(squidLocalPose);
+        
         gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("cube"))
             ->GetComponentByTypeIndex<Transform>()
-            ->SetWorldMatrix(glm::scale(glm::translate(worldRootMatr, 
-                                                      { 0.0f, -0.45f, -4.5f }),
+            ->SetWorldMatrix(glm::scale(glm::rotate(glm::translate(worldRootMatr, 
+                                                                    { 0.0f, -0.45f, -4.5f }),
+                                                    -glm::radians(90.0f), { 0.0f, 1.0f, 0.0f }),
                                         { 0.5f, 0.5f, 0.5f }));
         gameEntityObjects.GetItem(gameData.namedGameObjectIDs.left.at("textLocomotion"))
             ->GetComponentByTypeIndex<Transform>()

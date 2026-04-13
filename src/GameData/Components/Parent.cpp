@@ -41,7 +41,7 @@ void Parent::SetParent(GameDataId::ID newParentId, bool ripple)
     auto owner = GameData::Instance().GetEntity(GetOwner()->id);
     auto myTransform = owner->GetComponentByTypeIndex<Transform>();
     auto parentTransform = GameData::Instance().GetEntity(parentId)->GetComponentByTypeIndex<Transform>();
-    myTransform->ParentTo(parentTransform->GetWorldPose());
+    myTransform->OnParentWorldPoseUpdated(parentTransform->GetWorldPose());
 }
 
 void Parent::ClearParent(bool ripple)
@@ -53,7 +53,7 @@ void Parent::ClearParent(bool ripple)
     // [tdbe] must update the Transform Local TRS (position (translation), rotation, scale)
     auto owner = GameData::Instance().GetEntity(GetOwner()->id);
     auto myTransform = owner->GetComponentByTypeIndex<Transform>();
-    myTransform->Unparent();
+    myTransform->OnUnparent();
 }
 
 

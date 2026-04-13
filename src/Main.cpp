@@ -1,4 +1,4 @@
-// [tdbe] instead of using #define DEBUG, uncomment this line in CMakeLists.txt: #target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>) # Add a clean DEBUG prepocessor define if applicable
+// [tdbe] instead of using #define DEBUGs, uncomment the line(s) in CMakeLists.txt: #target_compile_definitions(${TARGET_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>) # Add a clean DEBUG prepocessor define if applicable
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdio.h>
@@ -11,16 +11,17 @@
 #include "GameData/MeshData.h"
 #include "OpenXrAndVulkan/MirrorView.h"
 #include "OpenXrAndVulkan/Renderer.h"
-#include "gameMechanics/GameBehaviour.h"
-#include "gameMechanics/HandsBehaviour.h"
-#include "gameMechanics/InputTesterBehaviour.h"
-#include "gameMechanics/LocomotionBehaviour.h"
-#include "gameMechanics/WorldObjectsMiscBehaviour.h"
+#include "Scripting/GameBehaviours/GameBehaviour.h"
+#include "Scripting/GameBehaviours/HandsBehaviour.h"
+#include "Scripting/GameBehaviours/InputTesterBehaviour.h"
+#include "Scripting/GameBehaviours/LocomotionBehaviour.h"
+#include "Scripting/GameBehaviours/WorldObjectsMiscBehaviour.h"
 #include "GameData/Components/Material.h"
 #include "GameData/Components/Light.h"
 #include "GameData/Components/Transform.h"
 #include "GameData/Entities/GameEntityObject.h"
 #include "Scripting/Scripting.hpp"
+#include "Systems/SystemTransformPropagation.h"
 using namespace Game;
 using namespace Behaviours;
 using namespace Scripting;
@@ -178,6 +179,8 @@ int main()
         return EXIT_FAILURE;
     }
     
+    SystemTransformPropagation transformPropagationSystem;
+    transformPropagationSystem.OnCreate();
     static float gameTime = 0.0f;
     // Main loop
     util::DebugLog("\n[Game][Main]\t\t『⛬』🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞");
@@ -225,6 +228,8 @@ int main()
             // [tdbe] apply all the haptics we accumulated in our behaviours above
             inputSystem.ApplyHapticFeedbackRequests(inputHaptics);
 
+            transformPropagationSystem.OnUpdate();
+
             // headset.setXrReferenceSpacePose(stage space update matrix);
 
             // [tdbe] TODO: do a xrRequestExitSession(session); ?
@@ -264,6 +269,9 @@ int main()
     }
     util::DebugLog("\n[Game][Main]\t\t🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞🎞『⛬』");
     util::DebugLog("[Game][Main]\t\t Game Loop ended. Cleaning up.");
+    
+    transformPropagationSystem.OnDestroy();
+    
     for (size_t i = 0; i < gameBehaviours.size(); i++)
     {
         delete (gameBehaviours[i]);

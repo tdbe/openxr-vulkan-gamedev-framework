@@ -25,6 +25,13 @@ namespace Game
         /// <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
         void SetWorldPose(util::Posef newWorldPose)
         {
+            if(!isParentedDetected)
+            {
+                localPose.position = newWorldPose.position;
+                localPose.scale = newWorldPose.scale;
+                localPose.orientation = newWorldPose.orientation;
+                return;
+            }
             // [tdbe] I'm not defending against zero scale or number abuse
             
             glm::vec3 inverseScale = glm::vec3(1.0f) / cachedParentWorldPose.scale;
@@ -39,6 +46,11 @@ namespace Game
         /// [tdbe] actually computes the world pose from the cachedParentWorldPose and our localPose
         util::Posef GetWorldPose() const
         {
+            if(!isParentedDetected)
+            {
+                return localPose;
+            }
+            
             util::Posef worldPose;
             worldPose.position = cachedParentWorldPose.position + 
                                 cachedParentWorldPose.orientation * (cachedParentWorldPose.scale * localPose.position);
@@ -70,10 +82,11 @@ namespace Game
         
         /// [tdbe] Updates the localPose, but behaves as if the object wasn't parented. As if you "locked" the child object in place while moving the parent. 
         /// There is no stored worldPose. <see cref="localPose"/> is king + the <see cref="cachedParentWorldPose"/>, because of the <see cref="SystemTransformPropagation"/>.
-        void LockOnParentWorldPoseUpdated(util::Posef newParentWorldPose)
+        void LockedParentWorldPoseUpdated(util::Posef newParentWorldPose)
         {
             util::Posef currentWorldPose = GetWorldPose();
             cachedParentWorldPose = newParentWorldPose;
+            isParentedDetected = true;
             SetWorldPose(currentWorldPose);
         }
         
@@ -82,6 +95,7 @@ namespace Game
         void OnParentWorldPoseUpdated(util::Posef newParentWorldPose)
         {
             cachedParentWorldPose = newParentWorldPose;
+            isParentedDetected = true;
         };
         
         /// [tdbe] sets the localPose to worldPose
@@ -89,6 +103,7 @@ namespace Game
         {
             localPose = GetWorldPose();
             cachedParentWorldPose = util::makeIdentity();
+            isParentedDetected = false;
         };
         
         void DebugPrintTransformValues()
@@ -129,6 +144,7 @@ namespace Game
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             cachedParentWorldPose = util::makeIdentity();
+            isParentedDetected = false;
             localPose = util::makeIdentity();
         };
 
@@ -155,22 +171,7 @@ namespace Game
         /// [tdbe] coordinate system: Y is up, Z is forward
         util::Posef localPose = util::makeIdentity();
         
-        /*
-        void UpdateLocalPoseFromDeltaWorldPose(util::Posef newWorldPose)
-        {
-            localPose.position += cachedParentWorldPose.position - newWorldPose.position;
-            localPose.scale *= newWorldPose.scale / cachedParentWorldPose.scale;
-            glm::quat diff = glm::inverse(newWorldPose.orientation) * cachedParentWorldPose.orientation;
-            localPose.orientation = diff * localPose.orientation;
-        }
-        
-        void UpdateWorldPoseFromDeltaLocalPose(util::Posef newLocalPose)
-        {
-            cachedParentWorldPose.position += localPose.position - newLocalPose.position;
-            cachedParentWorldPose.scale *= newLocalPose.scale / localPose.scale;
-            glm::quat diff = glm::inverse(newLocalPose.orientation) * localPose.orientation;
-            cachedParentWorldPose.orientation = diff * cachedParentWorldPose.orientation;
-        }*/
+        bool isParentedDetected = false;
 	};
 
 } // namespace Game
