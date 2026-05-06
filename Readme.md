@@ -13,19 +13,19 @@ Demo video, summer 2025. (There's also a [youtube hq 1600x1600/1440p 60fps versi
 
 # Abstract:
 
-|                                                                 | ` 10 <-0-> 10 ` |                                         |
+|                  ⠀⠀⠀⠀⠀⠀⠀⠀                                       | `⠀10 <-0-> 10⠀` |                  ⠀⠀⠀⠀⠀⠀⠀⠀               |
 | :------------------------------------------------------------: | :--------------------------: | :-----------------------------------------------------: |
 |             `"frictionlessly understandable by all humans"`    | `\|•║••••••••\|••••••••••\|` |           `"hoo-man? what is, this, hoo-man?"`          |
 |                `"human craft, real (abductive) attention"`     | `\|••║•••••••\|••••••••••\|` |           `"ai vibecoding slop & copy pasta"`           |
 |             `"beat all benchmarks, even the useless ones"`     | `\|•••║••••••\|••••••••••\|` |   `"I like C# style garbage collection, and hate ECS"`  |
-| `"fix engine tropes, frictions, dev UX" (but we got 0 budget)`| `\|••••║•••••\|••••••••••\|` | `"I don't make games I just implement standards and compile engines"` |
-|   | ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ |  |
+| `"fix engine tropes, frictions, dev UX" `| `\|••••║•••••\|••••••••••\|` | `"I don't make games I just implement standards and compile engines"` |
+|  `(but we got 0 budget)`  | ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ |  |
 
 \*Trey Parker voice\* Vulkan has a rich body of work, and many strengths as a people; but know not what is of hoo-man. I've managed to translate their work, for hoo-mans, whose lifetimes are too short to decipher all the khronos lunar manuals & messaging in hopes of achieving even the most basic contact.
 
 It didn't help that [they didn't want to touch](https://community.khronos.org/t/what-is-the-right-way-to-implement-single-pass-rendering-with-openxr/109157/9) Single-Pass rendering (the performant & industry-standard linchpin of (XR) rendering).
 
-In any case, thanks to open-source (as opposed to commercial / AAA) you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes. And you'll find no insensitivity, abuse, or horrors beyond all comprehension, attached to this project.
+In any case, thanks to open-source (as opposed to commercial / AAA) you can now build something pretty good the right way, without worrying about mighty morphing license agreements or wetting the beaks of people with golden parachutes. PS: you'll find no insensitivity, abuse, or horrors beyond all comprehension, attached to this project.
 
 ## Builds:
 
@@ -52,9 +52,12 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 * Rotating and (accelerated) Panning of the scene by grabbing with both hands, retreating into a non-euclideanly warped pocket dimension (pushing the world away from you non-linearly) and seeing a "tunnelvision" portal-style chaperone. Highest effectiveness and lowest sickness (carefully tweaked and tested across dozens of different people).
 
 * Uses state machines for movement and for visuals. Supports animated teleportation with targets.
+
   ![chaperone\_demo\_gif](https://github.com/user-attachments/assets/f5ef5e4b-5c8e-44c8-90fe-723dc2fd6602)
 
 ## Base XR gameplay mechanics
+
+* There's jobs and Systems:SystemBase for ECS mechanics (more below), and a more traditional:
 
 * Mechanics system based on a list of `GameBehaviour`s set up as FSMs.
 
@@ -110,7 +113,7 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 
 ### Queries
 
-* If you're familiar with e.g. "Entity Queries" from Unity ECS, a "query" here would be a job we run on each chunk of a `GameWorld'`s `GameDataPool` or `ArchetypeGameDataPool`, and check yourself whatever you want: the entity's ID, archetype mask, specific component value etc.
+* If you're familiar with e.g. "Entity Queries" from Unity ECS, a "query" here would be a job we run on each element of a chunk of a `GameWorld'`s `GameDataPool` or `ArchetypeGameDataPool`, and check yourself whatever you want: the entity's ID, archetype mask, specific component value etc.
 
 ### ECB (Entity Command Buffer)
 
@@ -175,17 +178,17 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
   - `TODO:` does not include subsurface scattering,
   - `TODO:` does not include shadows, 
   - `TODO:` no per-pixel transparent object sorting,
-  - ^, ^^, ^^^: but, I'll someday add in raytracing into some form of nanite clumps or other semi-volumetric discrete mesh data, instead of going through the legacy shading/sorting timesinks again.
-  - Per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add new `shaders` with all the static and dynamic uniform data you need, instance geometry etc.
+  - ^, ^^, ^^^: but, I'll someday add in raytracing into some form of "nanite" clumps or other semi-volumetric discrete mesh data, instead of going through the legacy shading/sorting timesinks again.
+  - We have per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add new `shaders` with all the static and dynamic uniform data you need, instanced geometry etc.
   - Render pipeline knows if you modified any default properties and creates pipelines from unique materials. Tries its best to batch per unique material and per model to minimise GPU-CPU communication, and has instancing, but it's not Indirect Rendering.
-  - Expanded, added to, and explained Khronos' & JanhSimon's `Headset`, `Context`, `Renderer`/`Pipeline` etc, and the easily misleading & hard to customize khronos vulkan <-> openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
+  - Expanded and explained Khronos' & JanhSimon's `Headset`, `Context`, `Renderer`/`Pipeline`, `MirrorView` etc, and the easily misleading & hard to customize khronos vulkan <-> openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
 
 ## `Input` class and `InputData`.
   - A 'proper' universal xr input class, supporting (probably) all controllers/headsets, with customizable binding paths and action sets.
-  - Nicely accessible data through `InputData` and `InputHaptics`, including matrixes and other tracked XR positional data.
+  - Nicely accessible data through `InputData` and `InputHaptics`, including matrixes, poses, tracked XR data.
+  - User presence / headset activity state.
   - Poses for controllers and for head.
   - Actions (buttons, sticks, triggers, pressure, proximity etc).
-  - User presence / headset activity state.
   - Haptic feedback output.
   - Exposes action state data (e.g. `lastChangeTime`, `isActive`, `changedSinceLastSync`)
 
