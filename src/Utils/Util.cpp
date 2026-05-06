@@ -84,6 +84,41 @@ template <typename T, int size> std::string util::ToString(const glm::vec<size, 
 }
 */
 
+std::string util::ToString(const glm::quat& quat, bool includeAngleAxis = true)
+{
+    const int size = 4;
+    std::string str = "{ ";
+    if(includeAngleAxis)
+    {
+        str = "{ quat: { ";
+    }
+    for (int i = 0; i < size; i++)
+    {
+        str += std::to_string(quat[i]);
+        if (i != size - 1)
+            str += ", ";
+    }
+    str += " }";
+    if(includeAngleAxis)
+    {
+        float angle; glm::vec3 axis;
+        util::quaternionToAngleAxis(quat, angle, axis);
+        str += "; angle: "+util::ToString(angle)+"; axis: "+util::ToString(axis)+";}";
+    }
+    return str;
+}
+
+std::string util::ToString(const util::Posef& pose)
+{
+    float angle; glm::vec3 axis;
+    util::quaternionToAngleAxis(pose.orientation, angle, axis);
+    std::string str = "{ Pose: position: " + util::ToString(pose.position) +
+                        + "; orientation: " + util::ToString(pose.orientation, true) 
+                        + "; scale: "+ util::ToString(pose.scale) + ";}";
+    return str;
+}
+
+
 std::string util::ToString(const glm::vec4& vec)
 {
     const int size = 4;
@@ -455,7 +490,8 @@ util::Posef util::matrixToPose(const glm::mat4& matrix)
                           glm::length(glm::vec3{ matrix[1].x, matrix[1].y, matrix[1].z }),
                           glm::length(glm::vec3{ matrix[2].x, matrix[2].y, matrix[2].z })
   };
-  pose.orientation = glm::toQuat(matrix);
+  // [tdbe] normalize to prevent quaterion drift
+  pose.orientation = glm::normalize(glm::toQuat(matrix));
   return pose;
 }
 
@@ -669,30 +705,34 @@ float util::vectorAngleAroundNormal(const glm::vec3& vec1, const glm::vec3& vec2
 
 glm::mat4 util::rotationAroundPoint(glm::vec3 point, glm::mat4 rotationMatrix)
 {
-  glm::mat4 translateToPoint = glm::translate(glm::mat4(), 
-                                                 glm::vec3(point.x, point.y, point.z)
-                                                 );
+  glm::mat4 translateToPoint = glm::translate(glm::mat4(), glm::vec3(point.x, point.y, point.z));
   glm::mat4 inverseTranslate = glm::inverse( translateToPoint );
   return translateToPoint * rotationMatrix * inverseTranslate;
 }
 
 void util::quaternionToAngleAxis(const glm::quat& quat, float& angle, glm::vec3& axis)
-{
-  angle = 2 * acos(quat.w);
-
-  axis.x = quat.x / sqrt(1-quat.w*quat.w);
-  axis.y = quat.y / sqrt(1-quat.w*quat.w);
-  axis.z = quat.z / sqrt(1-quat.w*quat.w);
+{  
+  float quat_w = glm::clamp(quat.w, -1.0f, 1.0f);
+  angle = 2 * acos(quat_w);
+  float sinHalfAngle = sqrt(1 - quat_w * quat_w);
+  if (sinHalfAngle > 0.000001f) {
+    axis.x = quat.x / sinHalfAngle;
+    axis.y = quat.y / sinHalfAngle;
+    axis.z = quat.z / sinHalfAngle;
+  } else {
+    axis = glm::vec3(0, 0, 1);
+  }
 }
 
 glm::quat util::quaternionFromAngleAxis(const float& angle, const glm::vec3& axis)
 {
+  float angle2 = angle/2.0f;
   glm::quat quat = glm::quat_identity<float, glm::packed_highp>();
 
-  quat.x = axis.x * sin(angle/2);
-  quat.y = axis.y * sin(angle/2);
-  quat.z = axis.z * sin(angle/2);
-  quat.w = cos(angle/2);
+  quat.x = axis.x * sin(angle2);
+  quat.y = axis.y * sin(angle2);
+  quat.z = axis.z * sin(angle2);
+  quat.w = cos(angle2);
 
   return quat;
 }

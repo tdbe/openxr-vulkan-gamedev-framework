@@ -112,6 +112,8 @@ namespace util
     //template <typename T, int size> std::string ToString(const glm::vec<size, T>& vec);
     // template <typename T, int rows, int cols> std::string ToString(const glm::mat<rows, cols, T>& mat);
     std::string ToString(const glm::mat4& mat);
+    std::string ToString(const glm::quat& quat, bool includeAngleAxis = true);
+    std::string ToString(const util::Posef& pose);
     std::string ToString(const glm::vec4& vec);
     std::string ToString(const glm::vec3& vec);
     std::string ToString(const glm::vec2& vec);
