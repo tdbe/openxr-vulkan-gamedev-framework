@@ -39,13 +39,22 @@ int main()
     util::PrintToLogFile("", false);// clear the previous log file
     util::DebugLog("\n[Game][Main][Starting]\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     #ifdef DEBUG
-        util::DebugLog("\n[Game][Main][Starting]\t DEBUG flag enabled from CMakeLists.txt");
+        util::DebugLog("\n[Game][Main][Starting]\t\t DEBUG flag enabled from CMakeLists.txt. For regular notification log messages for the Debug build.");
     #endif
     #ifdef DEBUG_VERBOSE
-        util::DebugLog("\n[Game][Main][Starting]\t DEBUG_VERBOSE flag enabled from CMakeLists.txt");
+        util::DebugLog("\n[Game][Main][Starting]\t\t DEBUG_VERBOSE flag enabled from CMakeLists.txt. For messages triggered by objects/entities that might spam a lot, e.g. get pool item, parent/children changed, or item cleared.");
+    #endif
+    #ifdef DEBUG_THREADS
+        // [tdbe] NOTE: for debugging & inspection, you can use:
+        // Windows Performance Recorder (WPR) + Windows Performance Analyzer (WPA)
+        // or Perfview.
+        // And for deeper inspection, Intel VTune Profiler (x86, also works on AMD, and linux) which also records cache misses and other analysis inside bottlenecks.
+        // Unfortunately, as CPU/memory profilers 'from the outside', these don't have as much convenient feedback or direct integration, as Renderdoc or Unity Job Profiler.
+        // But we have these DEBUG_THREADS taskflow.dump()'s at least.
+        util::DebugLog("\n[Game][Main][Starting]\t\t DEBUG_THREADS flag enabled from CMakeLists.txt. For messages printing the state of jobs / threads / taskflow graphs.");
     #endif
     #ifdef DEBUG_RELEASE
-        util::DebugLog("\n[Game][Main][Starting]\t DEBUG_RELEASE flag enabled from CMakeLists.txt");
+        util::DebugLog("\n[Game][Main][Starting]\t\t DEBUG_RELEASE flag enabled from CMakeLists.txt. For regular notification log messages but for the Release build.");
     #endif
     util::DebugLog("\n");
     
