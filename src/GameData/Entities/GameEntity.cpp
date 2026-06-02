@@ -12,6 +12,16 @@ GameEntity::GameEntity(GameDataId::ID id) : GameDataId(id)
 
 void GameEntity::AddComponentId(GameDataId::ID component)
 {
+    if(id.worldIndex != component.worldIndex){
+        std::throw_with_nested(std::exception(("[GameEntity][AddComponentId]\t You're trying to add a component from a world different than the entity's world: \"{" +
+                            component.PrintGlobalUID() + "}\" to Game Entity: \"{" + id.PrintGlobalUID() + "}\".").c_str()));
+    }
+    
+    if(id.chunkIndex != component.chunkIndex){
+        std::throw_with_nested(std::exception(("[GameEntity][AddComponentId]\t You're trying to add a component from a chunk index that is different than the entity's chunk index: \"{" +
+                            component.PrintGlobalUID() + "}\" to Game Entity: \"{" + id.PrintGlobalUID() + "}\".").c_str()));
+    }
+    
     if (component.IsCleared())
         std::throw_with_nested(std::exception(("[GameEntity][AddComponentId]\t You're trying to add a component which is invalid (cleared): \"{" +
                             component.PrintGlobalUID() + "}\" to Game Entity: \"{" + id.PrintGlobalUID() + "}\".").c_str()));

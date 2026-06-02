@@ -24,7 +24,7 @@ namespace Game
 		{
 			#ifdef DEBUG_VERBOSE
 			if(!unsafe)
-				util::DebugLog("[Component][Parent]\t clearing this item: " + this->id.PrintGlobalUID());
+				util::DebugLog("[Attribute]\t clearing this item: " + this->id.PrintGlobalUID());
 			#endif
 			GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
 		};
