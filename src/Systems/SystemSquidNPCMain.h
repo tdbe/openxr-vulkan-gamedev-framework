@@ -10,15 +10,8 @@
 
 namespace Game
 {
-    /// [tdbe] ECS transform hierarchy propagation system, ie the thing that allows the <see cref="Transform"/> of child entities to move / scale / rotate with the transform of the parent.
-    /// The full traversal happens every frame but it skips disabled entities.
-    /// I do a cache-coherent & multithreaded BFS traversal from root entities all the way to the leaves. Each chunk on each level of the (sub)tree is processed by a job (task). Each subtask knows what parent to look for in that chunk.
-    /// Uses taskflow with dynamic subflows and a shared executor. Translation: we can spawn tasks from other tasks recursively and they are all monitored by an executor that assigns work to the appropriate amount of jobs for the CPU threads our system has.
-    ///
-    /// [tdbe] TODO: The downside to the current approach is it creates a taskflow subflow representation of essentially your entire scene graph. So, overhead, every update.
-    /// I'm yolo-creating subtasks from subtasks because I wanted to avoid collecting and creating level-order arrays entities and components.
-    /// It's a tree traversal so it needs recursion, but maybe we can build a more permanent and still cache friendly (and updateable) spatial partitioning scheme for transform propagation.
-    struct SystemTransformPropagation : SystemBase
+    
+    struct SystemSquidNPCMain : SystemBase
     {
         #ifdef DEBUG_THREADS
             size_t framesToDebug = 1;
@@ -29,11 +22,8 @@ namespace Game
             
         };
         
-        /// [tdbe] Update all transforms in the world by traversing the hierarchy from roots down
         virtual void OnUpdate()
         {
-            // (the main entry point for the transform propagation system).
-            RecursiveEntityTraversalTasksFromRootEntities();
         };
 
         virtual void OnDestroy()

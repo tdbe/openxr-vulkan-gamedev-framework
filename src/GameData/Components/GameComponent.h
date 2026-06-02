@@ -13,9 +13,8 @@ namespace Game
     struct GameComponent : GameDataId
     {
       public:
-        /// [tdbe] ECS Note: serve a const reference to unique heap data, but owners can change (in addition to some version ids maybe becoming outdated). 
-        /// [tdbe] Use the owner fetching methods in derived components which return a safe copy,
-        /// especially if there isn't a huge amount of owners.
+        /// [tdbe] ECS Note: serve a const reference to unique heap data, but the owners can change. (in addition to some version ids maybe becoming outdated) 
+        /// [tdbe] The derived components have function(s) to get a local pointer to owner (if unique) and/or vector of ownerS (if it's shared or attribute), directly as Entity.
         const std::vector<GameDataId::ID>& GetOwnerIDs() const;
         size_t CountValidOwners() const;
 

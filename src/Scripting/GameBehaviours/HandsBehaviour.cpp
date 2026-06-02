@@ -19,7 +19,7 @@ HandsBehaviour::HandsBehaviour(PlayerObject& playerObject,
     this->handLight01 = handLight01;
     this->sudaBeam02 = sudaBeam02;
     this->handLight02 = handLight02;
-    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& gameEntityObjects = GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     GameEntityObject* sudaBeam01Geo = gameEntityObjects.GetItem(sudaBeam01);
     GameEntityObject* handLight01Geo = gameEntityObjects.GetItem(handLight01);
     GameEntityObject* sudaBeam02Geo = gameEntityObjects.GetItem(sudaBeam02);
@@ -34,8 +34,8 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
                             const Inputspace::InputData &inputData,
                             Inputspace::InputHaptics &inputHaptics)
 {
-    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
-    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& gameEntityObjects = GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     Transform* worldRootTrans = gameEntityObjects.GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<Transform>();
     GameEntityObject* handLeftGeo = vfxGameEntityObjects.GetItem(playerObject.handLeftId);
     Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();

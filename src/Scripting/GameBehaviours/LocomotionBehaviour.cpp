@@ -37,13 +37,13 @@ LocomotionBehaviour::LocomotionBehaviour(PlayerObject& playerObject,
     this->chaperoneSkyboxId = chaperoneSkyboxId;
     this->handsMaterialId = handsMaterialId;
     
-    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     
     Material* floorGridMat = vfxGameEntityObjects.GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
     Material* ceilingGridMat = vfxGameEntityObjects.GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* handsMat = GameData::Instance().vfxEntityObjectsWorld->materialComponents->GetItem(handsMaterialId);
+    Material* handsMat = GameData::Instance().vfxEntityWorld->materialComponents->GetItem(handsMaterialId);
     
     Material* chaperoneSkyMat = vfxGameEntityObjects.GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
@@ -77,13 +77,13 @@ void LocomotionBehaviour::HandleVisualsState(const float deltaTime, const Inputs
     {
         return;
     }
-    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
-    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& vfxGameEntityObjects = GameData::Instance().vfxEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
+    auto& gameEntityObjects = GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     Material* floorGridMat = vfxGameEntityObjects.GetItem(floorGridId)
         ->GetComponentByTypeIndex<Material>();
     Material* ceilingGridMat = vfxGameEntityObjects.GetItem(ceilingGridId)
         ->GetComponentByTypeIndex<Material>();
-    Material* handsMat = GameData::Instance().vfxEntityObjectsWorld->materialComponents->GetItem(handsMaterialId);
+    Material* handsMat = GameData::Instance().vfxEntityWorld->materialComponents->GetItem(handsMaterialId);
 
     Material* chaperoneSkyMat = vfxGameEntityObjects.GetItem(chaperoneSkyboxId)
             ->GetComponentByTypeIndex<Material>();
@@ -364,7 +364,7 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
         return;
     }
 
-    Transform* worldRootTrans = GameData::Instance().entityObjectsWorld->
+    Transform* worldRootTrans = GameData::Instance().mainEntityWorld->
                                         entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(playerObject.worldRootId)
                                         ->GetComponentByTypeIndex<Transform>();
     glm::mat4 worldRootMatr = worldRootTrans->GetWorldMatrix();
@@ -402,13 +402,13 @@ void LocomotionBehaviour::HandleMovementState(const float deltaTime, const Input
 
     auto handleUpdateState = [&](bool autoTransition = true)
     {
-        Transform* handLeftTrans =  GameData::Instance().entityObjectsWorld->
+        Transform* handLeftTrans =  GameData::Instance().mainEntityWorld->
                                        entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(playerObject.handLeftId)
                                        ->GetComponentByTypeIndex<Transform>();
-        Transform* handRightTrans = GameData::Instance().entityObjectsWorld->
+        Transform* handRightTrans = GameData::Instance().mainEntityWorld->
                                         entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(playerObject.handRightId)
                                         ->GetComponentByTypeIndex<Transform>();
-        Transform* skyTrans =       GameData::Instance().entityObjectsWorld->
+        Transform* skyTrans =       GameData::Instance().mainEntityWorld->
                                         entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(icosphereSkyboxId)
                                         ->GetComponentByTypeIndex<Transform>();
 

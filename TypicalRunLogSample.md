@@ -215,526 +215,526 @@ What a typical run log looks like, with `DEBUG` and `DEBUG_VERBOSE` turned on. G
 
 [Game][GameData][LoadGameEntityObjects]		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [Game][GameData][LoadGameEntityObjects]		 Loading Game Entity Objects (main entityObjectsWorld)
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
 
-[ArchetypedGameDataPool]	----------------------------------------------------
-[ArchetypedGameDataPool]	 Constructing an Archetyped Pool - it's a variadic archetype of { 5 } subpools.
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 2 }, topTypeStr: struct Game::GameEntityObject, worldIndex: { 0 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 4 }, topTypeStr: struct Game::Transform, worldIndex: { 0 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 8 }, topTypeStr: struct Game::Parent, worldIndex: { 0 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 16 }, topTypeStr: struct Game::Children, worldIndex: { 0 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 128 }, topTypeStr: struct Game::Bounds, worldIndex: { 0 }
+[TiledGameDataPools]	----------------------------------------------------
+[TiledGameDataPools]	 Constructing an Archetyped Pool - it's a variadic archetype of { 5 } subpools.
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 2 }, topTypeStr: struct Game::GameEntityObject, worldIndex: { 0 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 4 }, topTypeStr: struct Game::Transform, worldIndex: { 0 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 8 }, topTypeStr: struct Game::Parent, worldIndex: { 0 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 16 }, topTypeStr: struct Game::Children, worldIndex: { 0 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 100 }, tileSize: { 128 }, typeUID: { 128 }, topTypeStr: struct Game::Bounds, worldIndex: { 0 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::GameEntityObject>] T: struct Game::GameEntityObject, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 2 }_struct Game::GameEntityObject, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::GameEntityObject>] T: struct Game::GameEntityObject, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 2 }_struct Game::GameEntityObject, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Transform>] T: struct Game::Transform, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 4 }_struct Game::Transform, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Transform>] T: struct Game::Transform, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 4 }_struct Game::Transform, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Parent>] T: struct Game::Parent, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 8 }_struct Game::Parent, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Parent>] T: struct Game::Parent, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 8 }_struct Game::Parent, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Children>] T: struct Game::Children, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 16 }_struct Game::Children, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Children>] T: struct Game::Children, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 16 }_struct Game::Children, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Bounds>] T: struct Game::Bounds, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 128 }_struct Game::Bounds, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
-[ArchetypedGameDataPool]	 Constructed Archetyped Pool 0b10011110 and all its subpools and heap items.
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Bounds>] T: struct Game::Bounds, maxPossiblePoolSize: { 100 }, world: { 0 }, typeUID: { 128 }_struct Game::Bounds, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools]	 Constructed Archetyped Pool 0b10011110 and all its subpools and heap items.
 
-[ArchetypedGameDataPool]	----------------------------------------------------
+[TiledGameDataPools]	----------------------------------------------------
 
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "worldRoot", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "mainDirectionalLight", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 0 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle01", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 1 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle02", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 2 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle03", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 3 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle04", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 4 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle05", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 5 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "tentacle06", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 6 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }, validSize: { 7 }, currentVersion: { 7 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 6 }:version_{ 7 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "handLight01", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 7 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }, validSize: { 8 }, currentVersion: { 8 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 7 }:version_{ 8 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "handLight02", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "bikeLight", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "icosphereSkybox_world", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 8 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }, validSize: { 9 }, currentVersion: { 9 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 8 }:version_{ 9 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "ground", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 9 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }, validSize: { 10 }, currentVersion: { 10 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 9 }:version_{ 10 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "ruins", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 10 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }, validSize: { 11 }, currentVersion: { 11 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 10 }:version_{ 11 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "carLeft", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 11 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }, validSize: { 12 }, currentVersion: { 12 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 11 }:version_{ 12 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "carRight", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 12 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }, validSize: { 13 }, currentVersion: { 13 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 12 }:version_{ 13 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "beetle", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 13 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }, validSize: { 14 }, currentVersion: { 14 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 13 }:version_{ 14 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "beetleGlass", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 14 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }, validSize: { 15 }, currentVersion: { 15 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 14 }:version_{ 15 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "bike", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 15 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }, validSize: { 16 }, currentVersion: { 16 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 15 }:version_{ 16 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "logo1", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 16 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }, validSize: { 17 }, currentVersion: { 17 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 16 }:version_{ 17 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "logo2", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 17 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }, validSize: { 18 }, currentVersion: { 18 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 17 }:version_{ 18 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "textLocomotion", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 18 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }, validSize: { 19 }, currentVersion: { 19 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 18 }:version_{ 19 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "textSudaBeam", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 19 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }, validSize: { 20 }, currentVersion: { 20 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 19 }:version_{ 20 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "textSeeControlsMd", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 20 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }, validSize: { 21 }, currentVersion: { 21 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 20 }:version_{ 21 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "cube", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 21 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }, validSize: { 22 }, currentVersion: { 22 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 21 }:version_{ 22 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "icosphereSmoothTripInstancing", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 22 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }, validSize: { 23 }, currentVersion: { 23 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 22 }:version_{ 23 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "icosphereSmoothForInstancing", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 23 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }, validSize: { 24 }, currentVersion: { 24 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 23 }:version_{ 24 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "sudaBeam01", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 24 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }, validSize: { 25 }, currentVersion: { 25 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 24 }:version_{ 25 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "sudaBeam02", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 25 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }, validSize: { 26 }, currentVersion: { 26 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 25 }:version_{ 26 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "squid", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 30 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }, validSize: { 31 }, currentVersion: { 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 26 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }, validSize: { 27 }, currentVersion: { 27 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 26 }:version_{ 27 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "testSquid", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 30 }:version_{ 31 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 31 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }, validSize: { 32 }, currentVersion: { 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 27 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }, validSize: { 28 }, currentVersion: { 28 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 27 }:version_{ 28 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "monke", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 31 }:version_{ 32 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 32 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }, validSize: { 33 }, currentVersion: { 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 28 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }, validSize: { 29 }, currentVersion: { 29 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 28 }:version_{ 29 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "monkeEye1", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 32 }:version_{ 33 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 33 }, with id: world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }, validSize: { 34 }, currentVersion: { 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 29 }, with id: world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }, validSize: { 30 }, currentVersion: { 30 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 0 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 29 }:version_{ 30 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "monkeEye2", id: "world_{ 0 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 33 }:version_{ 34 }", is std::type_index(typeid(GameEntityObject)): true.
 
 [Game][GameData][LoadVFXEntityObjects]		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[Game][GameData][LoadVFXEntityObjects]		 Loading Game VFX Objects (vfxEntityObjectsWorld)
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
-[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.
+[Game][GameData][LoadVFXEntityObjects]		 Loading Game VFX Objects (vfxEntityWorld)
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
+[TiledGameDataPools][SubpoolTiledVector] Default Constructed.
 
-[ArchetypedGameDataPool]	----------------------------------------------------
-[ArchetypedGameDataPool]	 Constructing an Archetyped Pool - it's a variadic archetype of { 5 } subpools.
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 2 }, topTypeStr: struct Game::GameEntityObject, worldIndex: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 4 }, topTypeStr: struct Game::Transform, worldIndex: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 8 }, topTypeStr: struct Game::Parent, worldIndex: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 16 }, topTypeStr: struct Game::Children, worldIndex: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 128 }, topTypeStr: struct Game::Bounds, worldIndex: { 1 }
+[TiledGameDataPools]	----------------------------------------------------
+[TiledGameDataPools]	 Constructing an Archetyped Pool - it's a variadic archetype of { 5 } subpools.
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 2 }, topTypeStr: struct Game::GameEntityObject, worldIndex: { 1 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 4 }, topTypeStr: struct Game::Transform, worldIndex: { 1 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 8 }, topTypeStr: struct Game::Parent, worldIndex: { 1 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 16 }, topTypeStr: struct Game::Children, worldIndex: { 1 }
+[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: { 6 }, tileSize: { 128 }, typeUID: { 128 }, topTypeStr: struct Game::Bounds, worldIndex: { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::GameEntityObject>] T: struct Game::GameEntityObject, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 2 }_struct Game::GameEntityObject, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::GameEntityObject>] T: struct Game::GameEntityObject, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 2 }_struct Game::GameEntityObject, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Transform>] T: struct Game::Transform, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 4 }_struct Game::Transform, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Transform>] T: struct Game::Transform, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 4 }_struct Game::Transform, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Parent>] T: struct Game::Parent, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 8 }_struct Game::Parent, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Parent>] T: struct Game::Parent, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 8 }_struct Game::Parent, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Children>] T: struct Game::Children, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 16 }_struct Game::Children, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Children>] T: struct Game::Children, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 16 }_struct Game::Children, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
 
-[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<struct Game::Bounds>] T: struct Game::Bounds, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 128 }_struct Game::Bounds, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
-[ArchetypedGameDataPool]	 Constructed Archetyped Pool 0b10011110 and all its subpools and heap items.
+[TiledGameDataPools][Constructed a SubpoolTiledVector<struct Game::Bounds>] T: struct Game::Bounds, maxPossiblePoolSize: { 6 }, world: { 1 }, typeUID: { 128 }_struct Game::Bounds, firstEmptyIndex: { 0 }, tiles: { 1 }, tileSize: { 128 }, subpool.items.size(): { 1 }
+[TiledGameDataPools]	 Constructed Archetyped Pool 0b10011110 and all its subpools and heap items.
 
-[ArchetypedGameDataPool]	----------------------------------------------------
+[TiledGameDataPools]	----------------------------------------------------
 
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "icosphereSkybox_chaperone", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 2 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }, validSize: { 3 }, currentVersion: { 3 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "floorGrid", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 2 }:version_{ 3 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 3 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }, validSize: { 4 }, currentVersion: { 4 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "ceilingGrid", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 3 }:version_{ 4 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 4 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }, validSize: { 5 }, currentVersion: { 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 0 }, with id: world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }, validSize: { 1 }, currentVersion: { 1 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 0 }:version_{ 1 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "handLeft", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 4 }:version_{ 5 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::GameEntityObject>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::GameEntityObject>][owner chunk id: { -1 }]	 world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
 [Game][GameData][GameEntityObject]	 Using: {name: "EMPTY_NAME_GAME_ENTITY_OBJECT", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }", is std::type_index(typeid(GameEntityObject)): true.
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
-[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Transform>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Transform>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b100 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Parent>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Parent>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b1000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Children>]	 Found free item at index: { 5 }, with id: world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }, validSize: { 6 }, currentVersion: { 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Children>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }
+[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<struct Game::Bounds>]	 Found free item at index: { 1 }, with id: world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }, validSize: { 2 }, currentVersion: { 2 }
+[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<struct Game::Bounds>][owner chunk id: { 0 }]	 world_{ 1 }:type_{ 0b10000000 }:chunk_{ 0 }:index_{ 1 }:version_{ 2 }
 [Game][GameData][LoadGameWorlds][GameEntityObject]	 Configured {name: "handRight", id: "world_{ 1 }:type_{ 0b10 }:chunk_{ 0 }:index_{ 5 }:version_{ 6 }", is std::type_index(typeid(GameEntityObject)): true.
 
 [Game][GameData][LoadPlayers]		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1105,26 +1105,26 @@ p00000158E6CDA270[label="p00000158E6CDA270" ];
 [Game][GameData][UnLoadGameWorlds]	.....................................................................................................................................
 [Game][GameData][UnLoadGameWorlds]				 Unloading Game World(s):
 [Game][GameData][UnLoadGameWorlds]	 Unloading entities and components, unhooking events, clearing any maps:
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
-[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::GameEntityObject>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Transform>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Parent>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Children>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
+[TiledGameDataPools][SubpoolTiledVector][ClearItems<struct Game::Bounds>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
 [GameDataPool][ClearItems<struct Game::Model>]	 Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: true; (destroy both used and cleared items).
 [GameDataPool][ClearItems<struct Game::Model>]	 Also unsafe: true; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or "dangling" children). So you can clear them yourself after this in a more efficient / cache coherent pass.
 [~GameDataPool][Destructing<struct Game::Model>] and all its heap items.

@@ -2,12 +2,14 @@
 #include <boost/bimap.hpp>
 #include <string>
 #include <array>
+#include <vector>
+#include <tuple>
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 #include <unordered_map>
 
 #include "GameDataPool.h"
-#include "ArchetypedGameDataPool.h"
+#include "TiledGameDataPools.h"
 #include "GameDataId.h"
 
 namespace Game
@@ -20,6 +22,8 @@ namespace Game
     struct Children;
     struct Model;
     struct Bounds;
+    struct ASquidNPC;
+    struct AMysterySphere;
     struct Material;
     struct Light;
     struct GameEntity;
@@ -52,11 +56,15 @@ namespace Game
             static const uint64_t TRANSFORM_COMPONENTS = 1ULL<<2;
             static const uint64_t PARENT_COMPONENTS = 1ULL<<3;
             static const uint64_t CHILDREN_COMPONENTS = 1ULL<<4;
-            static const uint64_t ROOT_ATTRIBUTE_COMPONENTS = 1ULL<<5;
-            static const uint64_t MODEL_COMPONENTS = 1ULL<<6;
-            static const uint64_t BOUNDS_COMPONENTS = 1ULL<<7;
-            static const uint64_t MATERIAL_COMPONENTS = 1ULL<<8;
-            static const uint64_t LIGHT_COMPONENTS = 1ULL<<9;
+            static const uint64_t MODEL_COMPONENTS = 1ULL<<5;
+            static const uint64_t BOUNDS_COMPONENTS = 1ULL<<6;
+            static const uint64_t MATERIAL_COMPONENTS = 1ULL<<7;
+            static const uint64_t LIGHT_COMPONENTS = 1ULL<<8;
+            
+            static const uint64_t A_NPC_MYSTERY_SPHERE = 1ULL<<62;
+            static const uint64_t A_NPC_SQUID = 1ULL<<63;
+            
+            static const inline std::vector<uint64_t> typeUIDsForPools = {GAME_ENTITY_OBJECTS, TRANSFORM_COMPONENTS, PARENT_COMPONENTS, CHILDREN_COMPONENTS, BOUNDS_COMPONENTS, A_NPC_SQUID, A_NPC_MYSTERY_SPHERE};
             
             static std::uint64_t FromTypeIndex(std::type_index typeIndex);
             static std::type_index ToTypeIndex(uint64_t typeUID);
@@ -81,23 +89,27 @@ namespace Game
             static const uint16_t POOL_TILE_DEFAULT_SIZE = 128;
         } AllocationMagicNumbers;
 
+#pragma region GameWorld        
         /// [tdbe] GameWorlds are just a way to sort and conceptually group classes of entities + components.
         /// You might want a "bullets entity world", a "game entity object world", a "vfx world" etc.
-        /// [tdbe] Tiles: elements don't have to be in order "index per column" but they have to all belong to each other in the current tile.
+        /// [tdbe] Tiles: elements don't have to be in order "index per column" but they have to all belong to each other in the current tile (chunk).
         /// (Because of pool reuse + tiling, (re)adding a component asks for the tile of the owner entity (stored in entity ID).)
-        /// (The "chunking" does not measure size (e.g. 64kb) it's just based on number of slots, most flexible for components & gamedev.)
-        /// (If you're not using a pool then don't allocate it.)
+        /// (The "chunking" does not measure size (e.g. 64kb) it's just based on number of slots, <see cref="AllocationMagicNumbers"/>.)
+        /// If you're not using a pool then don't allocate it.
         /// [tdbe] TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
         struct GameWorld
         {
-            /// [tdbe] Note: ie [RequireOwnerRestriction(1)]. To support multiple of the same component on the same entity, we need a heap buffer component like <see cref="Children"/>.
+            /// [tdbe] Note: regarding "[RequireOwnerRestriction(1)]". To support multiple of the same component on the same entity, we need a heap buffer component like <see cref="Children"/>.
           #pragma region Entities and Unique Components
             /// [tdbe] <see cref="GameEntity"/> or <see cref="GameEntityObject"/>: entities with ids and versions ((weak) "references"); and know their components. 
-            /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable).
-            /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
-            /// [tdbe] Bounds (AABB) - technically is created per model, and is free if you don't have a model, but it's stored per entity and editable.
-            ArchetypedGameDataPool<GameEntityObject, Transform, Parent, Children, Bounds>* entityArchetypePool = nullptr;
-            
+            /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable). Entities and components have ids and versions ((weak) "references"); and know their owner(s).
+            /// [tdbe] NOTE: The easiest way is for us to pre-allocate the <see cref="TiledGameDataPools"/> with all possible Components (and Attributes) for any world (we don't do code generation / just in time / any time accounting work). 
+            /// So "Entity doesn't have component x" means that component slot is a Free version (and the Entity's archetype mask doesn't contain it) (we could even leave the whole tiled component subvector null in the pool but there is a small max number of components possible (e.g. 64), and, when tiled/chunked, these data structures are small enough to all fit in cpu cache).
+            /// So we have "different archetypes per pool per world", and can also change the archetype of the <see cref="TiledGameDataPools"/> during play time.
+            /// Importantly we're also able to store an array of <see cref="GameWorld"/>'s. (as opposed to a game worlds tuple, dependent on compile time constants, with variadic types for the archetyped pool, but it's not very useful or usable.)
+            /// [tdbe] Note: <see cref="Bounds"/> (AABB) - technically is created per model, and is free (empty) if you don't have a model, but it's stored per entity and editable.
+            TiledGameDataPools<GameEntityObject, Transform, Parent, Children, Bounds, ASquidNPC, AMysterySphere>* 
+            entityArchetypePool = nullptr;// TODO: you need to remember to add to TypeUIDs and to this template, every new component or attribute manually.
           #pragma endregion Entities And Unique Components
             
           #pragma region Shared Components
@@ -122,7 +134,24 @@ namespace Game
             /// [tdbe] This is for large components that would break the cache-coherency of a chunked or tiled pool. For example components that store arrays of data.
           #pragma endregion Buffer Components
         };
-        
+
+        GameWorld* mainEntityWorld = nullptr;
+        GameWorld* npcEntitiesWorld = nullptr;
+        /// [tdbe] vfx objects need to be processsed at the end (because their materials need special late drawcalls)
+        GameWorld* vfxEntityWorld = nullptr;
+        /// [tdbe] NOTE: when you create a new game world you need to add it here so you can fetch it later e.g. from IDs or for rendering.
+        /// [tdbe] NOTE: The index because is also saved in the component and entity IDs for reference. 
+        std::vector<GameWorld*> gameWorlds;
+        int GameWorldsIndexOf(GameWorld* gameWorld){
+            for (size_t i=0; i < gameWorlds.size(); i++){
+                if(gameWorlds[i] == gameWorld)
+                        return i;
+            }
+            return -1;
+        }
+
+#pragma endregion GameWorld
+
 #pragma region StorageData
         /// [tdbe] data buffer loaded from e.g. 3d objects in storage
         MeshData* meshData = nullptr;
@@ -150,22 +179,6 @@ namespace Game
         /// [tdbe] ecs note: <param name="unsafe"> If true, it won't clean itself up from any references / owners.</param>
         void ClearEntity(GameDataId::ID id, bool unsafe = false);
 #pragma endregion GameEntity
-
-#pragma region GameWorld
-        GameWorld* entityObjectsWorld = nullptr;
-        /// [tdbe] vfx objects need to be at the end of the list (because their materials need special late drawcalls)
-        GameWorld* vfxEntityObjectsWorld = nullptr;
-        std::vector<GameWorld*> gameWorlds;
-        int GameWorldsIndexOf(GameWorld* world)
-        {
-            for(int i = 0; i < gameWorlds.size(); i++)
-            {
-                if(gameWorlds[i] == world)
-                    return i;
-            }
-            return -1;
-        };
-#pragma endregion GameWorld
 
 #pragma region Players
         /// [tdbe] for now a player is a collection of game entity object pointers, and states.

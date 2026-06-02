@@ -9,6 +9,7 @@ namespace Game
 {
     struct GameEntity;
     struct GameComponent;
+    struct GameAttribute;
     struct UIDTypeCheckHelper
     {
         static bool IsTypeUIDEntity(uint64_t uid);
@@ -16,30 +17,35 @@ namespace Game
 
 
     /// <summary>
-    /// [tdbe] This is the components "archetype" (slot wise) for default game world entities. The pool is tiled but the archetype is not enforced (see Notes for strategy).
-    /// It's basically the same as <see cref="GameDataPool"/> but with more than 1 type templates.
+    /// [tdbe] This is the pool holding all possible component "archetypes" (slot wise) for game world entities. The pool is tiled but the archetype is not enforced (see Notes below for strategy).
+    /// It's basically the same as <see cref="GameDataPool"/> but with more than 1 type templates, and each type is chunked/tiled, and we have cross-pool functionality.
     ///
-    /// Note: 1: the meta here would be to generate different structures with different amount of component templates based on needed archetypes. We don't really care about that too much because:
-    /// Note: 2: each entity maintains its own archetype mask, and right now we don't bother to maintain or enforce per-chunk archetype / masks at all. 
-    /// A <see cref="ArchetypedGameDataPool"/> is performant and cache coherent enough even when partially/randomly allocated with components (we're making games not benchmarks).
+    /// NOTE: 1: the ECS meta here would be to generate different structures with different amount of component templates based on needed archetypes.
+    /// Here we don't do any accounting work or generation. We simply allocate a pool of Free elements across all possible component and attribute types and use or not use these slots for whichever combo / archetype we want throughout the pool's lifetime.
+    /// NOTE: 2: Each entity (in this pool) maintains its own archetype mask and connects to its components and attributes which are in the same tile/chunk as the entity.
+    /// NOTE: 3: The pool itself doesn't enforce a single archetype for each entity inside it, or inside any of its tiles/chunks (too much accounting work for not much gain).
+    /// A <see cref="TiledGameDataPools"/> is performant and cache coherent enough even when partially/randomly allocated with components (we're making games not benchmarks).
+    /// There is a small max number of components possible (e.g. 64), and, when tiled/chunked, these data structures are small enough to all fit in cpu cache.
     /// Plus we have multiple <see cref="GameWorld"/>'s (pools) to sort special things like e.g. bullets.
     ///
-    /// [tdbe] [ArchetypedGameDataPool] This is a ECS "chunked" (split into tiles of equal <see cref="tileSize"/> count), 
+    /// [tdbe] [TiledGameDataPools] This is a ECS "chunked" (split into tiles of equal <see cref="tileSize"/> count), 
     /// contiguous (but fragmentable (mark items as reusable)) heap array (vector) pool,
     /// of entity or component style objects,
     /// allocated once, with the <see cref="maxPossiblePoolSize"/>, and never resized.
     /// It has best™ average-case performance, cache-coherency, no deletions, no garbage, and great UX via detailed ID handles.
-    /// Ted talk inside.
+    /// 
+    /// [tdbe] NOTE: the template Types must define all possible future Components (and Attributes) used in it (we don't do code generation / just in time / any time redistribution of pools based on you adding or removing components later). 
+    /// "Entity doesn't have component x" means that component slot is a free version, or the whole component subvector is null.
     /// </summary>
     ///
-    /// Not for Shared Components (e.g. materials and meshes), or Sparse Components (e.g Lights)
+    /// Not for Shared Components (e.g. materials and meshes), or Sparse Components (e.g Lights).
     /// For regular unique components and attributes e.g.:
     ///     transform, parent, children, bounds, physicsbody, physicscolider, etc.
     /// <typeparam name="TypeX"> "where TypeX : derived from GameDataId" </typeparam>
     // [tdbe] newb-friendly-note: remember variadic arguments myFunc(Args... args)? It works for variadic types as well.
-    template <typename... Types> struct ArchetypedGameDataPool
+    template <typename... Types> struct TiledGameDataPools
     {
-        /*
+        /* This is the readme from the GameDataPool:
         < [tdbe] <see cref="GameDataPool"/> Structure for entities/components/objects >
 
             The Game Object/Entity Memory Management:
@@ -159,8 +165,8 @@ namespace Game
             /// space to place similar T items together later e.g. materials of the same type of pipeline.
             /// NOTE: the skip is global (across all tiles (chunks))</param>
             /// <param name="ownerEntityTileId"> When you're adding unique components, you want them in the same 
-            /// tile (chunk) as the owning entity of the same <see cref="ArchetypedGameDataPool"/>, so specify that entity here.
-            /// TODO: this param is a bit awkward because this <see cref="ArchetypedGameDataPool"/> is meant to 
+            /// tile (chunk) as the owning entity of the same <see cref="TiledGameDataPools"/>, so specify that entity here.
+            /// TODO: this param is a bit awkward because this <see cref="TiledGameDataPools"/> is meant to 
             /// hold entities alongside components (they are both <see cref="SVT"/>). </param>
             SVT* GetFreeItem(const uint32_t skipThisManyFreeSlots = 0, const int32_t ownerEntityTileId = -1)
             {
@@ -169,24 +175,24 @@ namespace Game
                                     GetFirstFree(id, skipThisManyFreeSlots)
                                     : GetFirstFree(id, skipThisManyFreeSlots, ownerEntityTileId);
                 #ifdef DEBUG_VERBOSE
-                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr + ">][owner chunk id: " + util::ToString(ownerEntityTileId) + "]\t " + id.PrintGlobalUID());
+                util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr + ">][owner chunk id: " + util::ToString(ownerEntityTileId) + "]\t " + id.PrintGlobalUID());
                 #endif
                 if (status == SpotInPool::FAIL)
                 {
-                    util::DebugError("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
+                    util::DebugError("[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
                                     ">]\t Somehow fetched a SpotInPool::FAIL?");
                     return nullptr;
                 }
                 else if (status == SpotInPool::UNINITIALIZED)
                 {
-                    util::DebugError("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
+                    util::DebugError("[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
                                     ">]\t Somehow fetched a SpotInPool::UNINITIALIZED.");
                     return nullptr;
                 }
                 else if (status == SpotInPool::UNINITIALIZED)
                 {
                     #ifdef DEBUG_VERBOSE
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetFreeItem<" + this->topTypeStr +
                                     ">]\t Fetched a SpotInPool::UNINITIALIZED.");
                     #endif
                     return nullptr;
@@ -204,11 +210,11 @@ namespace Game
             {
                 GameDataId* gid = static_cast<GameDataId*>(item);
                 #ifdef DEBUG_VERBOSE
-                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItem<" + this->topTypeStr + ">]\t "+item->id.PrintGlobalUID());
+                util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItem<" + this->topTypeStr + ">]\t "+item->id.PrintGlobalUID());
                 #endif
                 if (!IsIdValidItem(gid->id))
                 {
-                    util::DebugError("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItem<" + this->topTypeStr +">]\t There's a mistake: you're trying to clear id \"" +
+                    util::DebugError("[TiledGameDataPools][SubpoolTiledVector][ClearItem<" + this->topTypeStr +">]\t There's a mistake: you're trying to clear id \"" +
                                     gid->id.PrintGlobalUID()
                                     + "\", which is already empty! This should never happen!");
                 }
@@ -233,17 +239,17 @@ namespace Game
             {
                 if (this->items.empty()) return;
                 if (alsoDestroy)
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: " + util::ToString(alsoDestroy) + "; (destroy both used and cleared items).");
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Clearing the used pool items, and alsoDestroy (deleting memory) of whole pool: " + util::ToString(alsoDestroy) + "; (destroy both used and cleared items).");
                 else
-                    util::DebugLog("\n[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Cearing the used pool items.");
+                    util::DebugLog("\n[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Cearing the used pool items.");
                 if (unsafe)
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Also unsafe: "+util::ToString(unsafe)+"; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or \"dangling\" children). So you can clear them yourself after this in a more efficient / cache coherent pass.");
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Also unsafe: "+util::ToString(unsafe)+"; items you clear now won't automatically clear their owner(s) and/or children's owner(s) (from other pools) (or \"dangling\" children). So you can clear them yourself after this in a more efficient / cache coherent pass.");
                 if (clearDataLoadedFromStorage)
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Also clearDataLoadedFromStorage: "+util::ToString(clearDataLoadedFromStorage)+"; for example a model will delete the serialized mesh data, or a texture its image. You don't want this unless you're not using it again in the currently loaded game world.");
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Also clearDataLoadedFromStorage: "+util::ToString(clearDataLoadedFromStorage)+"; for example a model will delete the serialized mesh data, or a texture its image. You don't want this unless you're not using it again in the currently loaded game world.");
                 uint32_t max = this->maxUsedIndex + 1;
                 if (this->items.size() * this->tileSize <= this->maxUsedIndex)
                 {
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Clearing anyway, but items.size() * tileSize: \"" +
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr + ">]\t Clearing anyway, but items.size() * tileSize: \"" +
                                 util::ToString(this->items.size() * this->tileSize) + "\" <= maxUsedIndex: \"" + util::ToString(this->maxUsedIndex) +"\"!? Did you resize the pool?");
                     max = (uint32_t)this->items.size() * this->tileSize;
                 }
@@ -263,10 +269,10 @@ namespace Game
                     {
                         #ifdef DEBUG_VERBOSE
                         if (alsoDestroy)
-                            util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr +
+                            util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr +
                                         ">]\t Delete item only: already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
                         else
-                            util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][ClearItems<" + this->topTypeStr +
+                            util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][ClearItems<" + this->topTypeStr +
                                         ">]\t Skipping already marked as cleared/unused in pool: " + gid->id.PrintGlobalUID() + ".");
                         #endif
                     }
@@ -288,18 +294,18 @@ namespace Game
                 this->typeUID = typeUID;
                 this->topTypeStr = typeid(SVT).name();
                 this->worldIndex = worldIndex;
-                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector] Initialized. maxPossiblePoolSize: "+
+                util::DebugLog("[TiledGameDataPools][SubpoolTiledVector] Initialized. maxPossiblePoolSize: "+
                     util::ToString(maxPossiblePoolSize)+", tileSize: "+util::ToString(tileSize)+", typeUID: "+util::ToString(typeUID)+", topTypeStr: "+this->topTypeStr+", worldIndex: "+util::ToString(worldIndex));
             };
             
             SubpoolTiledVector()
             {
-                util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector] Default Constructed.");
+                util::DebugLog("[TiledGameDataPools][SubpoolTiledVector] Default Constructed.");
             };
 
             ~SubpoolTiledVector()
             {
-                util::DebugLog("[ArchetypedGameDataPool][~SubpoolTiledVector][Destructed<" + this->topTypeStr + ">] and all its heap items.\n");
+                util::DebugLog("[TiledGameDataPools][~SubpoolTiledVector][Destructed<" + this->topTypeStr + ">] and all its heap items.\n");
             };
             
             
@@ -383,7 +389,7 @@ namespace Game
                 {
                     bool found = ScanForNextEmptyIndex(firstEmptyIndexPlus, this->tileSize * forcedTile);
                     if(!found || firstEmptyIndexPlus >= this->tileSize * (forcedTile + 1))
-                        util::DebugError("[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr +
+                        util::DebugError("[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr +
                                             ">]\t a new slot was requested in specifically this tile index: " + util::ToString(forcedTile) +
                                             ", however we couldn't get an index in that tile: " + util::ToString(firstEmptyIndexPlus) +
                                             ", (tile size: " + util::ToString(this->tileSize) + "). This should never happen (this pool is of non-shared components unique to the owner entity)! Did you forget to clean up an old unmanaged dangling component and it's now filling this tile?");
@@ -391,7 +397,7 @@ namespace Game
                 
                 if (firstEmptyIndexPlus == this->maxPossiblePoolSize)
                 {
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
                                 "\", == maxPossiblePoolSize! This pool is full!");
                     success = SpotInPool::FAIL;
                     itemId = {};
@@ -412,7 +418,7 @@ namespace Game
                     itemId.typeIndex = std::type_index(typeid(SVT));
                     if (this->maxUsedIndex < firstEmptyIndexPlus)
                         this->maxUsedIndex = firstEmptyIndexPlus;
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t firstEmptyIndexPlus: \"" + util::ToString(firstEmptyIndexPlus) +
                                 "\", BUT the vector('s item) is not yet constructed at the current index ["+util::ToString(tileIndex)+"]["+util::ToString(indexInTile)+"], items.size(): "+util::ToString(this->items.size()));
                 }
                 else
@@ -422,7 +428,7 @@ namespace Game
                         success = SpotInPool::USED;
                         itemId = {};
                         if (skipThisManyFreeSlots != 0)
-                            util::DebugError("[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr +
+                            util::DebugError("[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr +
                                             ">]\t the version of firstEmptyIndexPlus: " + util::ToString(firstEmptyIndexPlus) +
                                             ", with id \"" + this->items[tileIndex][indexInTile]->id.PrintGlobalUID() +
                                             "\", was not empty! This should never happen!");
@@ -436,7 +442,7 @@ namespace Game
                             this->maxUsedIndex = firstEmptyIndexPlus;
                         itemId = this->items[tileIndex][indexInTile]->id;
                         #ifdef DEBUG_VERBOSE
-                        util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t Found free item at index: " + util::ToString(firstEmptyIndexPlus) + ", with id: " + itemId.PrintGlobalUID() +
+                        util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetFirstFree<" + this->topTypeStr + ">]\t Found free item at index: " + util::ToString(firstEmptyIndexPlus) + ", with id: " + itemId.PrintGlobalUID() +
                                     ", validSize: " + util::ToString(this->validSize) + ", currentVersion: " + util::ToString(this->currentVersion));
                         #endif
                     }
@@ -460,7 +466,7 @@ namespace Game
 
                 if (id.version == GameDataId::FREE)
                 {
-                    util::DebugLog("[ArchetypedGameDataPool][SubpoolTiledVector][GetItem<" + this->topTypeStr + ">]\t the version of id \"" + id.PrintGlobalUID() +
+                    util::DebugLog("[TiledGameDataPools][SubpoolTiledVector][GetItem<" + this->topTypeStr + ">]\t the version of id \"" + id.PrintGlobalUID() +
                                 "\", is " + util::ToString(GameDataId::FREE) + " (expired or never used).");
                     return false;
                 }
@@ -516,12 +522,13 @@ namespace Game
             });
         };
         
-        ArchetypedGameDataPool(std::vector<uint64_t> typeUIDs, const uint16_t tileSize, const uint32_t maxPossiblePoolSize = 0, const int16_t worldIndex = 0)
+        TiledGameDataPools(std::vector<uint64_t> typeUIDs, const uint16_t tileSize, const uint32_t maxPossiblePoolSize = 0, const int16_t worldIndex = 0)
         : tileSize(tileSize), worldIndex(worldIndex)
         {
             std::size_t numTypes = sizeof...(Types);
-            util::DebugLog("\n[ArchetypedGameDataPool]\t----------------------------------------------------");
-            util::DebugLog("[ArchetypedGameDataPool]\t Constructing an Archetyped Pool - it's a variadic archetype of "+ util::ToString(numTypes) +" subpools.");
+            util::DebugLog("\n[TiledGameDataPools]\t----------------------------------------------------");
+            util::DebugLog("[TiledGameDataPools]\t Constructing an Archetyped Pool - it's a variadic archetype of "+ util::ToString(numTypes) +" subpools.");
+            
             tileCount = (uint32_t)((double)maxPossiblePoolSize / (double)tileSize);
             if(tileCount == 0u)
                 tileCount = 1u;
@@ -539,15 +546,15 @@ namespace Game
             {
                 VariadicIndexedLoopForSubpoolConstructor(std::index_sequence_for<Types...>{}, tileIdx);
             }
-            util::DebugLog("[ArchetypedGameDataPool]\t Constructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + " and all its subpools and heap items.");
-            util::DebugLog("\n[ArchetypedGameDataPool]\t----------------------------------------------------\n");
+            util::DebugLog("[TiledGameDataPools]\t Constructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + " and all its subpools and heap items.");
+            util::DebugLog("\n[TiledGameDataPools]\t----------------------------------------------------\n");
         };
 
         /// [tdbe] Actually dispose of the allocated data
-        ~ArchetypedGameDataPool()
+        ~TiledGameDataPools()
         {
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[~ArchetypedGameDataPool][Destructing Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + "] and all its subpools and heap items.");
+            util::DebugLog("[~TiledGameDataPools][Destructing Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + "] and all its subpools and heap items.");
             #endif
             forEachSubpool([](auto& subpool) 
             {
@@ -565,23 +572,23 @@ namespace Game
             });
             archetypeMask = 0ULL;
             #ifdef DEBUG_VERBOSE
-            util::DebugLog("[~ArchetypedGameDataPool][Destructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + "] and all its subpools and heap items.\n");
+            util::DebugLog("[~TiledGameDataPools][Destructed Archetyped Pool " + util::BitMaskToString_64u(archetypeMask) + "] and all its subpools and heap items.\n");
             #endif
         };
 
-        ArchetypedGameDataPool(ArchetypedGameDataPool const& copy)
+        TiledGameDataPools(TiledGameDataPools const& copy)
         {
-            util::DebugError("\n[ArchetypedGameDataPool] NotImplementedException. Don't copy this / pass by value.");
+            util::DebugError("\n[TiledGameDataPools] NotImplementedException. Don't copy this / pass by value.");
         };
-        ArchetypedGameDataPool& operator=(ArchetypedGameDataPool const& copy) 
+        TiledGameDataPools& operator=(TiledGameDataPools const& copy) 
         {
-            util::DebugError("\n[ArchetypedGameDataPool] NotImplementedException. Don't copy this / pass by value.");
+            util::DebugError("\n[TiledGameDataPools] NotImplementedException. Don't copy this / pass by value.");
             return *this;
         };
 
-        ArchetypedGameDataPool(ArchetypedGameDataPool&& rcOther)
+        TiledGameDataPools(TiledGameDataPools&& rcOther)
         {
-            util::DebugError("\n[ArchetypedGameDataPool] NotImplementedException. Don't move this.");
+            util::DebugError("\n[TiledGameDataPools] NotImplementedException. Don't move this.");
         };
         
         private:
@@ -629,7 +636,7 @@ namespace Game
                 }
                 
                 archetypeMask |= subpool.GetTypeUID();
-                util::DebugLog("\n[ArchetypedGameDataPool][Constructed a SubpoolTiledVector<" + subpool.GetTopTypeStr() + ">] T: "+ typeid(T).name() + 
+                util::DebugLog("\n[TiledGameDataPools][Constructed a SubpoolTiledVector<" + subpool.GetTopTypeStr() + ">] T: "+ typeid(T).name() + 
                                 ", maxPossiblePoolSize: " + util::ToString(subpool.GetMaxPossiblePoolSize()) + 
                                 ", world: " + util::ToString(subpool.GetWorldIndex()) + 
                                 ", typeUID: " + util::ToString(subpool.GetTypeUID()) + "_" + subpool.GetTopTypeStr() +

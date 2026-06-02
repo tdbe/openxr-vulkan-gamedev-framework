@@ -25,7 +25,7 @@ WorldObjectsMiscBehaviour::WorldObjectsMiscBehaviour(GameDataId::ID bikeObject,
 void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
 {
     float radang = gameTime * 0.2f;
-    auto& gameEntityObjects = GameData::Instance().entityObjectsWorld->
+    auto& gameEntityObjects = GameData::Instance().mainEntityWorld->
                                entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     Transform* bikeTrans = gameEntityObjects.GetItem(bikeObject)
                                ->GetComponentByTypeIndex<Transform>();
@@ -81,13 +81,13 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
     const Inputspace::InputData &inputData, Inputspace::InputHaptics &inputHaptics)
 {
     Mechanic_bikeObject(gameTime);
-    GameData::Instance().entityObjectsWorld->materialComponents->GetItem(textMat)->dynamicUniformData.colorMultiplier = 
+    GameData::Instance().mainEntityWorld->materialComponents->GetItem(textMat)->dynamicUniformData.colorMultiplier = 
         RotateMatColor(gameTime, 0.33f);
         // RotateMatColorUnrealistic(gameTime);
-    GameData::Instance().entityObjectsWorld->materialComponents->GetItem(logoMat)->dynamicUniformData.colorMultiplier = 
+    GameData::Instance().mainEntityWorld->materialComponents->GetItem(logoMat)->dynamicUniformData.colorMultiplier = 
         RotateMatColor(gameTime, 0.95f);
         // RotateMatColorUnrealistic(gameTime);
-    GameData::Instance().entityObjectsWorld->materialComponents->GetItem(handsMat)->dynamicUniformData.colorMultiplier =
+    GameData::Instance().mainEntityWorld->materialComponents->GetItem(handsMat)->dynamicUniformData.colorMultiplier =
         RotateMatColor(gameTime, 0.33f);
         //RotateMatColorUnrealistic(gameTime);
 
@@ -123,7 +123,7 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
             customAngle = 2.5f;
             customPos = glm::vec3(0.0f, -0.15f, 0.0f);
         }
-        GameData::Instance().entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[id01.chunkIndex][id01.indexInChunk + i - 1]
+        GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[id01.chunkIndex][id01.indexInChunk + i - 1]
             ->GetComponentByTypeIndex<Transform>()
             ->SetWorldMatrix(glm::scale(
                 glm::rotate(

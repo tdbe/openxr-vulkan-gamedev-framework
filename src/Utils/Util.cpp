@@ -84,7 +84,7 @@ template <typename T, int size> std::string util::ToString(const glm::vec<size, 
 }
 */
 
-std::string util::ToString(const glm::quat& quat, bool includeAngleAxis = true)
+std::string util::ToString(const glm::quat& quat, bool includeAngleAxis)
 {
     const int size = 4;
     std::string str = "{ ";

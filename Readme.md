@@ -113,7 +113,7 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 
 ### Queries
 
-* If you're familiar with e.g. "Entity Queries" from Unity ECS, a "query" here would be a job we run on each element of a chunk of a `GameWorld'`s `GameDataPool` or `ArchetypeGameDataPool`, and check yourself whatever you want: the entity's ID, archetype mask, specific component value etc.
+* If you're familiar with e.g. "Entity Queries" from Unity ECS, a "query" here would be a job we run on each element of a chunk of a `GameWorld'`s `GameDataPool` or `TiledGameDataPools`, and check yourself whatever you want: the entity's ID, archetype mask, specific component value etc.
 
 ### ECB (Entity Command Buffer)
 
@@ -135,21 +135,21 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 
 ## GameData
 
-* `GameWorld` `{` `ArchetypedGameDataPool` `{` a variadic type Structure of tiled (chunked) Arrays (subpools) of `GameEntity` / `GameEntityObject`, and unique `Component`s `}`, and `GameDataPool` (also cache friendly tiled (chunked)) `{` shared `Component`s `}`, `GameDataPool` `{` sparse `Component`s `}`, and `GameDataPool` `{` Buffered `Component`s `}` `}`.
+* `GameWorld` `{` `TiledGameDataPools` `{` a variadic type Structure of tiled (chunked) Arrays (subpools) of `GameEntity` / `GameEntityObject`, and unique `Component`s `}`, and `GameDataPool` (also cache friendly tiled (chunked)) `{` shared `Component`s `}`, `GameDataPool` `{` sparse `Component`s `}`, and `GameDataPool` `{` Buffered `Component`s `}` `}`.
 
-* Everything is set in generic memory-span pools, by type, or variadic types ("archetype"). You set up a game world with maximum allocated memory for each pool, then during setup or gameplay you can request to use a free object, or mark a used one as clear (free and reusable). There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`). There's archetype masks on entities, and per archetype pool, but not per tile (chunk).
+* Everything is set in generic memory-span pools, by type, or variadic types (which encompass the "archetypes"). You set up a game world with maximum allocated memory for each pool, then during setup or gameplay you can request to use a free object, or mark a used one as clear (free and reusable). There's no need for defragmenting, or swap-and-pop (would be slower in average-case) ("ted talk" in `GameDataPool.h`). There's archetype masks on entities, but not per tile (chunk).
 
 * (non-shared) Pools are also split into Tiles (simple chunking): a component will always be added to the tile where the owner entity is. (order in tile doesn't matter) (purpose is cache coherency) (no automatic archetype management; but customizable e.g. build order)
 
 * `TODO:` Nice to have but too much accounting work: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
 
-* The chunky Tiles are kept in `GameWorld`s (e.g. main world, enemies world, bullets, vfx etc.). Each world has many Tiles each with e.g. 128 elements.
+* The chunky Tiles are kept in `TiledGameDataPools` in `GameWorld`s (e.g. main world, enemies world, bullets, vfx etc.). Each world has many Tiles each with e.g. 128 elements.
 
 * Enities and components are based on `GameDataId` (serving as a weak reference): `[worldIndex][typeUID][tileIndex][index][version]` and a cached `[typeIndex]` of the top level T for convenience.
 
 * Entity Parenting support with automatic (or manual) management, and a builtin Transform Propagation System.
 
-* Everything is easy to request and keep track of through various means, even by name in hash maps for the elements you set up with manual light scripting in mind.
+* Everything is easy to request and keep track of through various means, even by name in hash maps for the elements you set up with scripting in mind.
 
 * Cleanup is either manual (jobs/systems) (and cache coherent) or automated via (cache-missing) awareness of component dependencies and function/event propagation.
 
@@ -181,7 +181,7 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
   - ^, ^^, ^^^: but, I'll someday add in raytracing into some form of "nanite" clumps or other semi-volumetric discrete mesh data, instead of going through the legacy shading/sorting timesinks again.
   - We have per-material, per-model, per-pipeline properties. Easily create a material e.g. transparent, doublesided; add new `shaders` with all the static and dynamic uniform data you need, instanced geometry etc.
   - Render pipeline knows if you modified any default properties and creates pipelines from unique materials. Tries its best to batch per unique material and per model to minimise GPU-CPU communication, and has instancing, but it's not Indirect Rendering.
-  - Expanded and explained Khronos' & JanhSimon's `Headset`, `Context`, `Renderer`/`Pipeline`, `MirrorView` etc, and the easily misleading & hard to customize khronos vulkan <-> openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
+  - Expanded, added to, and explained Khronos' & JanhSimon's `Headset`, `Context`, `Renderer`/`Pipeline`, `MirrorView` etc, and the easily misleading & hard to customize khronos vulkan <-> openxr implementation. Especially regarding multipass vs singlepass & multiview, and what it takes if you want to use your own renderer or a diffrent API like `webgpu`. (look for `"// [tdbe]" `)
 
 ## `Input` class and `InputData`.
   - A 'proper' universal xr input class, supporting (probably) all controllers/headsets, with customizable binding paths and action sets.

@@ -114,7 +114,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    GameEntityObject* worldRoot = gameData.entityObjectsWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(gameData.playerObjects[0]->worldRootId);
+    GameEntityObject* worldRoot = gameData.mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(gameData.playerObjects[0]->worldRootId);
     Transform* worldRootTrans = worldRoot->GetComponentByTypeIndex<Transform>();
     
     success = Scripting::SceneSetup(gameData);

@@ -95,12 +95,16 @@ set(SRC
 	GameData/Components/Light.h
 	GameData/Components/Light.cpp
 
+	GameData/Attributes/GameAttribute.h
+	GameData/Attributes/AMysterySphere.h
+	GameData/Attributes/ASquidNPC.h
+
 	GameData/PlayerObject.h
 
 	GameData/GameDataPool.h
 	GameData/GameDataPool.cpp
-	GameData/ArchetypedGameDataPool.h
-	GameData/ArchetypedGameDataPool.cpp
+	GameData/TiledGameDataPools.h
+	GameData/TiledGameDataPools.cpp
 	
 	GameData/MeshData.cpp
 	GameData/MeshData.h
@@ -112,6 +116,7 @@ set(SRC
 	GameData/GameData.cpp
   
 	Systems/SystemBase.h
+	Systems/SystemSquidNPCMain.h
 	Systems/SystemTransformPropagation.h
 
 	OpenXrAndVulkan/Pipeline.cpp
