@@ -5,13 +5,13 @@
 
 namespace Game
 {
-    /// [tdbe] Shared Component. Default Material struct. Can treat as "uber material" data, or can make multiple versions of this.
+    /// [tdbe] Shared Component. Default CMaterial struct. Can treat as "uber material" data, or can make multiple versions of this.
     /// When you create different "copies" of the same material (e.g. same shader & blending but different uniform properties (color etc)), 
-    /// please create them together (next to each other in the <see cref="GameDataPool<Material>"/>) so that the renderer can batch them.
+    /// please create them together (next to each other in the <see cref="GameDataPool<CMaterial>"/>) so that the renderer can batch them.
     /// If you add a new material at runtime, you must use an already existing pipeline. (and you probably can't batch it)
     /// (to batch materials with out of order pipelines, in the material buffer, we'd need a way to sort them, e.g. a new buffer just for 
-    /// pipelines, with Material children with game Entity owners... not worth it)
-    struct Material : public GameComponent
+    /// pipelines, with CMaterial children with game Entity owners... not worth it)
+    struct CMaterial : public GameComponent
     {
       public:
 
@@ -60,7 +60,7 @@ namespace Game
         {
             #ifdef DEBUG_VERBOSE
             if(!unsafe)
-                util::DebugLog("[Component][Material]\t clearing this item: " + this->id.PrintGlobalUID());
+                util::DebugLog("[Component][CMaterial]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             dynamicUniformData = {};
@@ -86,10 +86,10 @@ namespace Game
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorlds"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.
-        Material(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner)
+        CMaterial(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner)
         {
         };
-        ~Material() {};
+        ~CMaterial() {};
 
       private:
         bool isVisible = true; // [tdbe] whether or not it will be rendered.

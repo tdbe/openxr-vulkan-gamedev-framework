@@ -1,9 +1,9 @@
-#include "Material.h"
+#include "CMaterial.h"
 #include "../GameData.h"
 
 using namespace Game;
 
-void Material::SetName(std::string name)
+void CMaterial::SetName(std::string name)
 {
     auto it = GameData::Instance().namedMaterialComponentIDs.right.find(id);
     if(it == GameData::Instance().namedMaterialComponentIDs.right.end())
@@ -17,7 +17,7 @@ void Material::SetName(std::string name)
     }
 }
 
-std::string Material::GetName() const
+std::string CMaterial::GetName() const
 {
     auto it = GameData::Instance().namedMaterialComponentIDs.right.find(id);
     if(it != GameData::Instance().namedMaterialComponentIDs.right.end())

@@ -7,11 +7,11 @@ using namespace util;
 namespace Game
 {
 /// [tdbe] AABB (axis-aligned bounding box) of model (mesh), and possibly other bounds. 
-/// (The values here are in object-space (relative to the object's centre) and are not processed by the entity's Transform Matrix.)
+/// (The values here are in object-space (relative to the object's centre) and are not processed by the entity's CTransform Matrix.)
 /// (A physics collider would be another separate component that maybe also is aware of the bounds from here.)
 /// [RequireComponentOnOwnerEntities(typeof<Model>)]
 /// [RequireOwnerRestriction(1)]
-struct Bounds final : public GameComponent
+struct CBounds final : public GameComponent
 {
   public:
     /// [tdbe] TODO: visualize bounds
@@ -112,7 +112,7 @@ struct Bounds final : public GameComponent
         };
     } aabb;
 
-    void SetBoundsAABB(const Model* model)
+    void SetBoundsAABB(const CModel* model)
     {
         aabb.SetVals(model->minPointAABB, model->maxPointAABB);
     };
@@ -132,7 +132,7 @@ struct Bounds final : public GameComponent
         return &aabb;
     };
 
-    void NotifyModelChanged(const Model* model)
+    void NotifyModelChanged(const CModel* model)
     {
         SetBoundsAABB(model);
     };
@@ -154,7 +154,7 @@ struct Bounds final : public GameComponent
     {
         #ifdef DEBUG_VERBOSE
         if(!unsafe)
-            util::DebugLog("[Component][Bounds]\t clearing this item: " + this->id.PrintGlobalUID());
+            util::DebugLog("[Component][CBounds]\t clearing this item: " + this->id.PrintGlobalUID());
         #endif
         GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
         aabb.SetVals(glm::vec3(0.0f), glm::vec3(0.0f));
@@ -170,9 +170,9 @@ struct Bounds final : public GameComponent
     /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
     /// See <see cref="GameData::LoadGameWorlds"/>. And remember to add it to some <see cref="GameEntity"/> or <see
     /// cref="GameEntityObject"/>.
-    Bounds(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner) 
+    CBounds(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner) 
     {
     };
-    ~Bounds() {};
+    ~CBounds() {};
 };
 } // namespace Game

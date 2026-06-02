@@ -10,9 +10,9 @@
 namespace Game
 {
     struct MeshData;
-    struct Model;
-    struct Material;
-    struct Light;
+    struct CModel;
+    struct CMaterial;
+    struct CLight;
     struct GameEntityObject;
     struct GameData;
 }

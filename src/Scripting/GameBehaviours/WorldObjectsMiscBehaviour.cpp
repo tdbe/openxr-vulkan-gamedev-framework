@@ -1,8 +1,8 @@
 
 #include "../../Utils/Util.h"
 #include "../../GameData/Entities/GameEntityObject.h"
-#include "../../GameData/Components/Material.h"
-#include "../../GameData/Components/Transform.h"
+#include "../../GameData/Components/CMaterial.h"
+#include "../../GameData/Components/CTransform.h"
 #include "WorldObjectsMiscBehaviour.h"
 #include "../../GameData/GameData.h"
 
@@ -27,15 +27,15 @@ void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
     float radang = gameTime * 0.2f;
     auto& gameEntityObjects = GameData::Instance().mainEntityWorld->
                                entityArchetypePool->GetSubpoolByType<GameEntityObject>();
-    Transform* bikeTrans = gameEntityObjects.GetItem(bikeObject)
-                               ->GetComponentByTypeIndex<Transform>();
+    CTransform* bikeTrans = gameEntityObjects.GetItem(bikeObject)
+                               ->GetComponentByTypeIndex<CTransform>();
     glm::mat4 bikeMatr = glm::mat4(1.0f);
     bikeMatr[3] = bikeTrans->GetWorldMatrix()[3];
     bikeMatr = glm::rotate(bikeMatr, radang, { 0.0f, 1.0f, 0.0f });
     bikeTrans->SetWorldMatrix(bikeMatr);
     
     auto* testSquid = gameEntityObjects.GetItem(GameData::Instance().namedGameObjectIDs.left.at("testSquid"));
-    auto transSquid = testSquid->GetComponentByTypeIndex<Transform>();
+    auto transSquid = testSquid->GetComponentByTypeIndex<CTransform>();
     auto squidLocalPose = transSquid->GetLocalPose();
     squidLocalPose.position.y = 1.6f + glm::sin(radang*3.5f) * 0.2f;
     transSquid->SetLocalPose(squidLocalPose);
@@ -43,7 +43,7 @@ void WorldObjectsMiscBehaviour::Mechanic_bikeObject(const float gameTime)
     bikeMatr[3].y += 1.0f;
     bikeMatr = glm::scale(bikeMatr, glm::vec3(8.448f, 8.448f, 3.25f));
     gameEntityObjects.GetItem(bikeLightObject)
-                                ->GetComponentByTypeIndex<Transform>()
+                                ->GetComponentByTypeIndex<CTransform>()
                                 ->SetWorldMatrix(bikeMatr);
     
 }
@@ -124,7 +124,7 @@ void WorldObjectsMiscBehaviour::Update(const float deltaTime, const float gameTi
             customPos = glm::vec3(0.0f, -0.15f, 0.0f);
         }
         GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().items[id01.chunkIndex][id01.indexInChunk + i - 1]
-            ->GetComponentByTypeIndex<Transform>()
+            ->GetComponentByTypeIndex<CTransform>()
             ->SetWorldMatrix(glm::scale(
                 glm::rotate(
                     glm::translate(

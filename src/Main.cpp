@@ -16,9 +16,9 @@
 #include "Scripting/GameBehaviours/InputTesterBehaviour.h"
 #include "Scripting/GameBehaviours/LocomotionBehaviour.h"
 #include "Scripting/GameBehaviours/WorldObjectsMiscBehaviour.h"
-#include "GameData/Components/Material.h"
-#include "GameData/Components/Light.h"
-#include "GameData/Components/Transform.h"
+#include "GameData/Components/CMaterial.h"
+#include "GameData/Components/CLight.h"
+#include "GameData/Components/CTransform.h"
 #include "GameData/Entities/GameEntityObject.h"
 #include "Scripting/Scripting.hpp"
 #include "Systems/SystemTransformPropagation.h"
@@ -115,13 +115,13 @@ int main()
     }
 
     GameEntityObject* worldRoot = gameData.mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>().GetItem(gameData.playerObjects[0]->worldRootId);
-    Transform* worldRootTrans = worldRoot->GetComponentByTypeIndex<Transform>();
+    CTransform* worldRootTrans = worldRoot->GetComponentByTypeIndex<CTransform>();
     
     success = Scripting::SceneSetup(gameData);
     /*
                 Material Components
                 Object Entities
-                Light Components
+                CLight Components
     */
     if (!success)
     {

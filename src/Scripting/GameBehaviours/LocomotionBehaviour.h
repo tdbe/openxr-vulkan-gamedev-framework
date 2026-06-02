@@ -6,8 +6,8 @@
 namespace Game
 {
     // [tdbe] newb-friendly-note: predeclaring here so we can use pointers here and avoid circular dependency, we reference the real headers inside the .cpp
-    struct Transform;
-    struct Material;
+    struct CTransform;
+    struct CMaterial;
     struct GameEntityObject;
     struct PlayerObject;
 }

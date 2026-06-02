@@ -4,10 +4,10 @@
 
 namespace Game
 {
-	/// [tdbe] Parent component for entity hierarchy. 
-	/// Related to <see cref="Transform"/>, <see cref="SystemTRSParentingPropagation"/>", and maybe <see cref="Children"/>.
+	/// [tdbe] CParent component for entity hierarchy. 
+	/// Related to <see cref="CTransform"/>, <see cref="SystemTRSParentingPropagation"/>", and maybe <see cref="CChildren"/>.
 	/// [RequireOwnerRestriction(1)]
-	struct Parent : public GameComponent
+	struct CParent : public GameComponent
 	{
 		GameEntity* GetOwner() const;
 				
@@ -29,7 +29,7 @@ namespace Game
 		{
 			#ifdef DEBUG_VERBOSE
 			if(!unsafe)
-				util::DebugLog("[Component][Parent]\t clearing this item: " + this->id.PrintGlobalUID());
+				util::DebugLog("[Component][CParent]\t clearing this item: " + this->id.PrintGlobalUID());
 			#endif
 			if(!unsafe)
 				ClearParent(!unsafe);
@@ -43,16 +43,16 @@ namespace Game
 		};
 
 		/// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
-		Parent(GameDataId::ID id = {}, GameDataId::ID owner = {});
-		~Parent();
+		CParent(GameDataId::ID id = {}, GameDataId::ID owner = {});
+		~CParent();
 
 	  private:
 		/// [tdbe] ecs performance & racing warning: This is an immediate way to jump to 
-		/// the parent entity's Children component and remove itself from that list.
+		/// the parent entity's CChildren component and remove itself from that list.
 		void RemoveOwnerFromChildrenOfParent();
 		
 		/// [tdbe] ecs performance & racing warning: This is an immediate way to jump to 
-		/// the parent entity's Children component and add itself to that list.
+		/// the parent entity's CChildren component and add itself to that list.
 		void AddOwnerToChildrenOfParent();
 		
 		GameDataId::ID parentId;

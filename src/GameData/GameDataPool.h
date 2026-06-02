@@ -44,7 +44,7 @@ namespace Game
         that you want to work on, then run your jobs (preferably pushing to a command buffer). You'd also probably want a list of heap arrays,
         to store different kinds of game objects e.g. scenery, bullets etc.
 
-            - <see cref="GameDataPool"/> of component Transform, Material, Model, Light etc.
+            - <see cref="GameDataPool"/> of component CTransform, CMaterial, CModel, CLight etc.
             etc.
             - <see cref="GameDataPool"/> of entities (Game Entity Objects)
 

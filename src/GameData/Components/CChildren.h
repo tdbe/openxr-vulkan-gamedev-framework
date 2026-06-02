@@ -6,14 +6,14 @@
 
 namespace Game
 {
-	/// [tdbe] Children component for entity hierarchy. 
+	/// [tdbe] CChildren component for entity hierarchy. 
     /// Instead of this, query entities (e.g. run jobs on chunks checking entities' archetypes for parent, get parent id"), 
     /// otherwse you'd just iterate through 100% cache-miss children of children.
     /// Related to <see cref="Parent"/>.
     /// [tdbe] Note: this is mainly for crawling animated character hierarchies, conveniently knowing relationships, legacy OOP. 
     /// 
 	/// [RequireOwnerRestriction(1)]
-	struct Children : public GameComponent
+	struct CChildren : public GameComponent
 	{
 		GameEntity* GetOwner() const;
                 
@@ -60,7 +60,7 @@ namespace Game
             if(!HasChild(childId))
                 return;
             #ifdef DEBUG_VERBOSE
-                util::DebugLog("[Children]\t clearing this child: " + childId.PrintGlobalUID() + " because the paren't");
+                util::DebugLog("[CChildren]\t clearing this child: " + childId.PrintGlobalUID() + " because the paren't");
             #endif
             if(ripple)
                 RemoveOwnerFromParentOfChild(childId);
@@ -93,8 +93,8 @@ namespace Game
         };
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
-        Children(GameDataId::ID id = {}, GameDataId::ID owner = {});
-        ~Children();
+        CChildren(GameDataId::ID id = {}, GameDataId::ID owner = {});
+        ~CChildren();
             
       private:
         /// [tdbe] ecs performance & racing warning: This is an immediate way to jump to 

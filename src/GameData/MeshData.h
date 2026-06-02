@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
-#include "Components/Model.h"
+#include "Components/CModel.h"
 
 namespace Game
 {
-    struct Model;
+    struct CModel;
 
     /*
      * The vertex struct provides the vertex definition used for all geometry in the project.
@@ -41,8 +41,8 @@ namespace Game
         };
         bool LoadModel(const std::string& filename,
                        Color color,
-                       Model* model);
-        bool UnLoadModelMesh(const Model* model);
+                       CModel* model);
+        bool UnLoadModelMesh(const CModel* model);
 
         size_t GetSize() const;
         size_t GetIndexOffset() const;

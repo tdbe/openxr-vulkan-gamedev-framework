@@ -8,7 +8,7 @@ namespace Game
 	/// [tdbe] Matrix & Pose information, local and world, for Translate Rotate Scale of Entity.
     /// [tdbe] TODO: could use an "isDirty" (TRS changed) for <see cref="SystemTRSParentingPropagation"/>", but realistically / ecs / jobs wise it would need to manage timestamps.
     /// [RequireOwnerRestriction(1)]
-	struct Transform : public GameComponent
+	struct CTransform : public GameComponent
 	{
         GameEntity* GetOwner() const
         {
@@ -112,7 +112,7 @@ namespace Game
             float angle;
             glm::vec3 axis;
             util::quaternionToAngleAxis(localPose.orientation, angle, axis);
-            util::DebugLog("[Transform]["+owner->GetName()+"] position: "+util::ToString(localPose.position)+"; scale: "+util::ToString(localPose.scale)+"; orientation: "+util::ToString(localPose.orientation)+"; angle: "+util::ToString(angle)+"; axis: "+util::ToString(axis));
+            util::DebugLog("[CTransform]["+owner->GetName()+"] position: "+util::ToString(localPose.position)+"; scale: "+util::ToString(localPose.scale)+"; orientation: "+util::ToString(localPose.orientation)+"; angle: "+util::ToString(angle)+"; axis: "+util::ToString(axis));
         };
         
         util::Posef GetLocalPose() const
@@ -140,7 +140,7 @@ namespace Game
         {
             #ifdef DEBUG_VERBOSE
             if(!unsafe)
-                util::DebugLog("[Component][Transform]\t clearing this item: " + this->id.PrintGlobalUID());
+                util::DebugLog("[Component][CTransform]\t clearing this item: " + this->id.PrintGlobalUID());
             #endif
             GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
             cachedParentWorldPose = util::makeIdentity();
@@ -157,10 +157,10 @@ namespace Game
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorlds"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.
-        Transform(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner)
+        CTransform(GameDataId::ID id = {}, GameDataId::ID owner = {}) : GameComponent(id, owner)
         {
         };
-        ~Transform(){};
+        ~CTransform(){};
 
 	  private:
         /// [tdbe] losslessly stores position, rotation, and scale (matrixes degrade over time)

@@ -38,7 +38,7 @@ namespace Game
       private:
         /// [tdbe] References for immediate/scripting convenience. A component may have maxint owners or even 0 owners (e.g. a lone material).
         /// NOTE: each must be marked as free, e.g. via <see cref="NotifyItemCleared"/>.
-        /// todo: should enforce even at ancestor level: some components must (really should) have only one owner... like the Light or the Transform.
+        /// todo: should enforce even at ancestor level: some components must (really should) have only one owner... like the CLight or the CTransform.
         std::unique_ptr<std::vector<GameDataId::ID>> owners;
         /// [tdbe] Also find anyone that caches our ID and clear that also (e.g. our owners).
         /// NOTE: if this entity has dependencies outside of the immediate memory chunks, and you wanted to be maximally efficient clearing millions of items, 

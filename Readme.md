@@ -69,7 +69,7 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 
 ## Physics
 
-* There's support for running jobs on `Bounds` components (generated at model load time), with proper functions for AABB intersection or enclosure tests, plane tests, rectangular selection (even at non-Axis-Aligned angles) / frustum casting, raycasting.
+* There's support for running jobs on `CBounds` components (generated at model load time), with proper functions for AABB intersection or enclosure tests, plane tests, rectangular selection (even at non-Axis-Aligned angles) / frustum casting, raycasting.
 
 * There's a concept of ground in the locomotion system.
 
@@ -157,19 +157,21 @@ In any case, thanks to open-source (as opposed to commercial / AAA) you can now 
 
 * Properties: `isVisible`, `isEnabled`, "object" entity versions also have some events etc. but no real extra memory usage.
 
-* `GameComponent`: `Material` (shared), `Model` (shared), `Transform`, `Bounds`, `Parent`, `Light` (sparse component).
+* `GameComponent`: `CMaterial` (shared), `CModel` (shared), `CTransform`, `CBounds`, `CParent`, `CLight` (sparse component), etc.
+
+* `GameAttribute`: `ASquidNPC` etc.
 
 * `PlayerObject`s {`GameEntityObject`s, `PlayerActiveStates`}.
 
-* `Material`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
+* `CMaterial`s {`Shader`, Descriptor-set `UniformData`, instancing, optional/shared `Pipeline` (for e.g blend ops)}
 
-* AABB `Bounds` from the `Mesh`.
+* AABB `CBounds` from the `Mesh`.
 
-* `Light` holding multiple kinds of lights based on properties and/or volume/sizes.
+* `CLight` holding multiple kinds of lights based on properties and/or volume/sizes.
 
-* `Transform`, `Parent`
+* `CTransform`, `CParent`
 
-* `Children` (just for local, cache-missing traversal, mainly for debugging or crawling e.g. a character rig)
+* `CChildren` (just for local, cache-missing traversal, mainly for debugging or crawling e.g. a character rig)
 
 ## Rendering
   - Implemented the most high quality e.g. Disney BRDF lighting equations for diffuse, specular and MRP based (Most Representative Point) shape lights. There's a [blog post on correct tube lights](https://blog.deferredreality.com/mrp-volumetric-lights-are-broken/):

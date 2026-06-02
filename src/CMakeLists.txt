@@ -80,20 +80,20 @@ set(SRC
 	GameData/Components/GameComponent.h
 	GameData/Components/GameComponent.cpp
 		
-	GameData/Components/Transform.h
-	GameData/Components/Bounds.h
-	GameData/Components/Material.h
-	GameData/Components/Material.cpp
-	GameData/Components/Model.h
-	GameData/Components/Model.cpp
+	GameData/Components/CTransform.h
+	GameData/Components/CBounds.h
+	GameData/Components/CMaterial.h
+	GameData/Components/CMaterial.cpp
+	GameData/Components/CModel.h
+	GameData/Components/CModel.cpp
 	
-	GameData/Components/Parent.h
-	GameData/Components/Parent.cpp
-	GameData/Components/Children.h
-	GameData/Components/Children.cpp
+	GameData/Components/CParent.h
+	GameData/Components/CParent.cpp
+	GameData/Components/CChildren.h
+	GameData/Components/CChildren.cpp
 
-	GameData/Components/Light.h
-	GameData/Components/Light.cpp
+	GameData/Components/CLight.h
+	GameData/Components/CLight.cpp
 
 	GameData/Attributes/GameAttribute.h
 	GameData/Attributes/AMysterySphere.h

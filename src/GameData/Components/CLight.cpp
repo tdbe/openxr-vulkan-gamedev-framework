@@ -1,16 +1,16 @@
 
 #include "../../Utils/Util.h"
-#include "Light.h"
-#include "Transform.h"
+#include "CLight.h"
+#include "CTransform.h"
 #include "../Entities/GameEntityObject.h"
 
 using namespace Game;
 
-Light::Light(GameDataId::ID id, GameDataId::ID owner) : GameComponent(id, owner)
+CLight::CLight(GameDataId::ID id, GameDataId::ID owner) : GameComponent(id, owner)
 {
 }
 
-GameEntity* Light::GetOwner() const
+GameEntity* CLight::GetOwner() const
 {
     std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
     GameEntity* found = nullptr;
@@ -21,11 +21,11 @@ GameEntity* Light::GetOwner() const
     return found;
 }
 
-void Light::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
+void CLight::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
 {
     #ifdef DEBUG_VERBOSE
     if(!unsafe)
-        util::DebugLog("[Component][Light]\t clearing this item: " + this->id.PrintGlobalUID());
+        util::DebugLog("[Component][CLight]\t clearing this item: " + this->id.PrintGlobalUID());
     #endif
     GameComponent::NotifyItemCleared(unsafe, clearDataLoadedFromStorage);
     shaderMatrix = glm::mat4(1.0f);
@@ -33,54 +33,54 @@ void Light::NotifyItemCleared(bool unsafe, bool clearDataLoadedFromStorage)
     isVisible = true;// [tdbe] don't worry, items with empty versions don't get rendered
 }
 
-void Light::NotifyItemVersionChanged()
+void CLight::NotifyItemVersionChanged()
 {
     GameComponent::NotifyItemVersionChanged();
 }
 
-glm::mat4 Light::GetOwnerTransformWorldMatrix()
+glm::mat4 CLight::GetOwnerTransformWorldMatrix()
 {
     //GameDataId::ID ownerId = GetOwnerIDs().front();
     //auto owningEntity = static_cast<GameEntityObject*>(GameData::Instance().GetEntity(ownerId));
-    //auto transformId = owningEntity->GetComponentIDsByTypeIndex<Transform>().front();
-    //auto transform = static_cast<Transform*>(GameData::Instance().GetComponent(transformId));
+    //auto transformId = owningEntity->GetComponentIDsByTypeIndex<CTransform>().front();
+    //auto transform = static_cast<CTransform*>(GameData::Instance().GetComponent(transformId));
     // [tdbe] aggressive but you should always have an owner and a transform, and there are exceptions thrown upstream 
-    return GetOwner()->GetComponentByTypeIndex<Transform>()->GetWorldMatrix();
+    return GetOwner()->GetComponentByTypeIndex<CTransform>()->GetWorldMatrix();
 }
 
-void Light::SetRenderProperties(int lightType)
+void CLight::SetRenderProperties(int lightType)
 {
     this->lightType = (float)lightType;
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(glm::vec4 colorAndIntensity)
+void CLight::SetRenderProperties(glm::vec4 colorAndIntensity)
 {
     this->colorAndIntensity = colorAndIntensity;
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(glm::vec3 color)
+void CLight::SetRenderProperties(glm::vec3 color)
 {
     this->colorAndIntensity = glm::vec4(color, colorAndIntensity.w);
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier)
+void CLight::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier)
 {
     this->radiusMultiplier = radiusMultiplier;
     this->colorAndIntensity = colorAndIntensity;
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(glm::vec4 colorAndIntensity, int lightType)
+void CLight::SetRenderProperties(glm::vec4 colorAndIntensity, int lightType)
 {
     this->lightType = (float)lightType;
     this->colorAndIntensity = colorAndIntensity;
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier, int lightType)
+void CLight::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier, int lightType)
 {
     this->radiusMultiplier = radiusMultiplier;
     this->lightType = (float)lightType;
@@ -88,37 +88,37 @@ void Light::SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultipl
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(float radiusMultiplier, int lightType)
+void CLight::SetRenderProperties(float radiusMultiplier, int lightType)
 {
     this->radiusMultiplier = radiusMultiplier;
     this->lightType = (float)lightType;
     SetShaderProperties();
 }
 
-void Light::SetRenderProperties(float radiusMultiplier)
+void CLight::SetRenderProperties(float radiusMultiplier)
 {
     this->radiusMultiplier = radiusMultiplier;
     SetShaderProperties();
 }
 
-glm::mat4 Light::GetShaderMatrix()
+glm::mat4 CLight::GetShaderMatrix()
 {
-    SetShaderProperties();// [tdbe] doing this just to update with an eventual latest Transform Matrix
+    SetShaderProperties();// [tdbe] doing this just to update with an eventual latest CTransform Matrix
     return shaderMatrix;
 }
 
-void Light::SetVisible(bool visible)
+void CLight::SetVisible(bool visible)
 {
     isVisible = visible;
     SetShaderProperties();
 }
 
-bool Light::IsVisible()
+bool CLight::IsVisible()
 {
     return id.version != GameComponent::FREE && isVisible;
 }
 
-void Light::SetShaderProperties()
+void CLight::SetShaderProperties()
 {
     glm::mat4 worldMatrix = GetOwnerTransformWorldMatrix();
     glm::vec4 mainVec = glm::vec4(1.0f);
@@ -165,7 +165,7 @@ void Light::SetShaderProperties()
     /// cube light.
     else if (lightType == LightTypes::LIGHT_TYPE_CUBE)
     {
-        // std::exception("[Light] Cube Light NotImplementedException");
+        // std::exception("[CLight] Cube CLight NotImplementedException");
         mainVec.w = 1.0f;
         shapeVec0.w = lightType;
         shapeVec1.w = 1.0f;
@@ -173,7 +173,7 @@ void Light::SetShaderProperties()
     /// 2D quad area light (scale Y is flat (ignored))
     else if (lightType == LightTypes::LIGHT_TYPE_QUAD)
     {
-        // std::exception("[Light] Quad Light NotImplementedException");
+        // std::exception("[CLight] Quad CLight NotImplementedException");
         mainVec.w = 1.0f;
         shapeVec0.w = lightType;
         shapeVec1.w = 1.0f;
@@ -181,7 +181,7 @@ void Light::SetShaderProperties()
     /// disc light. (scale Y is flat (ignored))
     else if (lightType == LightTypes::LIGHT_TYPE_DISC)
     {
-        // std::exception("[Light] Disc Light NotImplementedException");
+        // std::exception("[CLight] Disc CLight NotImplementedException");
         mainVec.w = 1.0f;
         shapeVec0.w = lightType;
         shapeVec1.w = 1.0f;
@@ -194,7 +194,7 @@ void Light::SetShaderProperties()
     shaderMatrix[2] = shapeVec0;
     shaderMatrix[3] = shapeVec1;
     /*
-    util::DebugLog("##Light [IsVisible: " + util::ToString(IsVisible()) + "][MyId: " + id.PrintGlobalUID() + "][Owners: " +
+    util::DebugLog("##CLight [IsVisible: " + util::ToString(IsVisible()) + "][MyId: " + id.PrintGlobalUID() + "][Owners: " +
                    util::ToString(GetOwnerIDs().size()) +
                    "][Owner0: " + GetOwnerIDs().front().PrintGlobalUID() +
                    "; name: " + static_cast<GameEntityObject*>(GameData::Instance().GetEntity(GetOwnerIDs().front()))->GetName() +
@@ -204,7 +204,7 @@ void Light::SetShaderProperties()
 }
 
 /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
-void Light::SetName(std::string name)
+void CLight::SetName(std::string name)
 {
     auto it = GameData::Instance().namedLightComponentIDs.right.find(id);
     if(it == GameData::Instance().namedLightComponentIDs.right.end())
@@ -220,7 +220,7 @@ void Light::SetName(std::string name)
 
 
 /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
-std::string Light::GetName() const
+std::string CLight::GetName() const
 {
     auto it = GameData::Instance().namedLightComponentIDs.right.find(id);
     if(it != GameData::Instance().namedLightComponentIDs.right.end())
@@ -229,6 +229,6 @@ std::string Light::GetName() const
         return "NO_NAME_LIGHT";
 }
 
-Light::~Light()
+CLight::~CLight()
 {
 }

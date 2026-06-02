@@ -1,7 +1,7 @@
 
 #include "../../Utils/Util.h"
 #include "HandsBehaviour.h"
-#include "../../GameData/Components/Transform.h"
+#include "../../GameData/Components/CTransform.h"
 #include "../../GameData/GameData.h"
 #include "../../GameData/PlayerObject.h"
 
@@ -36,11 +36,11 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
 {
     auto& gameEntityObjects = GameData::Instance().mainEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
     auto& vfxGameEntityObjects = GameData::Instance().vfxEntityWorld->entityArchetypePool->GetSubpoolByType<GameEntityObject>();
-    Transform* worldRootTrans = gameEntityObjects.GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<Transform>();
+    CTransform* worldRootTrans = gameEntityObjects.GetItem(playerObject.worldRootId)->GetComponentByTypeIndex<CTransform>();
     GameEntityObject* handLeftGeo = vfxGameEntityObjects.GetItem(playerObject.handLeftId);
-    Transform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<Transform>();
+    CTransform* handLeftTrans = handLeftGeo->GetComponentByTypeIndex<CTransform>();
     GameEntityObject* handRightGeo = vfxGameEntityObjects.GetItem(playerObject.handRightId);
-    Transform* handRightTrans = handRightGeo->GetComponentByTypeIndex<Transform>();
+    CTransform* handRightTrans = handRightGeo->GetComponentByTypeIndex<CTransform>();
     glm::mat4 worldMatrix = worldRootTrans->GetWorldMatrix();
     glm::mat4 handLeftMatr = worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
     glm::mat4 handRightMatr = worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
@@ -147,8 +147,8 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
 
     if (sudaBeam01Geo->IsEnabled())
     {
-        Transform* sudaBeam01Trans = sudaBeam01Geo->GetComponentByTypeIndex<Transform>();
-        Transform* handLight01Trans = handLight01Geo->GetComponentByTypeIndex<Transform>();
+        CTransform* sudaBeam01Trans = sudaBeam01Geo->GetComponentByTypeIndex<CTransform>();
+        CTransform* handLight01Trans = handLight01Geo->GetComponentByTypeIndex<CTransform>();
 
         glm::mat4 sudaBeam01Matr =
             worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::LEFT];
@@ -170,8 +170,8 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
 
     if (sudaBeam02Geo->IsEnabled())
     {
-        Transform* sudaBeam02Trans = sudaBeam02Geo->GetComponentByTypeIndex<Transform>();
-        Transform* handLight02Trans = handLight02Geo->GetComponentByTypeIndex<Transform>();
+        CTransform* sudaBeam02Trans = sudaBeam02Geo->GetComponentByTypeIndex<CTransform>();
+        CTransform* handLight02Trans = handLight02Geo->GetComponentByTypeIndex<CTransform>();
 
         glm::mat4 sudaBeam02Matr =
             worldMatrix * inputData.controllerAimPoseMatrixes[(int)Inputspace::ControllerEnum::RIGHT];
@@ -194,5 +194,5 @@ void HandsBehaviour::Update(const float deltaTime, const float gameTime,
 
 HandsBehaviour::~HandsBehaviour()
 {
-    // [tdbe] do not delete/release the constructor (Model) references for obvious reasons
+    // [tdbe] do not delete/release the constructor (CModel) references for obvious reasons
 }

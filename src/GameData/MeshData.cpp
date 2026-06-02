@@ -14,7 +14,7 @@ Game::MeshData::MeshData()
 
 bool MeshData::LoadModel(const std::string& filename,
                          Color color, 
-                         Model* model)
+                         CModel* model)
 {
   tinyobj::attrib_t attrib;
   std::vector<tinyobj::shape_t> shapes;
@@ -94,7 +94,7 @@ bool MeshData::LoadModel(const std::string& filename,
 /// Not very useful: 
 /// 1). We move all possible 3d models to the gpu on <see cref="LoadGameWorlds"/>, and then never replace any parts of those vertex buffers (unless we unload/reload). 
 /// 2). We'd need a better data streaming strategy than arbitrary recreation of the whole buffer.
-bool Game::MeshData::UnLoadModelMesh(const Model* model)
+bool Game::MeshData::UnLoadModelMesh(const CModel* model)
 {
     util::DebugLog("[MeshData][Model]\t ! completely deleting this model's mesh data !: " + model->id.PrintGlobalUID());
 

@@ -13,9 +13,9 @@
 #include "RenderTarget.h"
 
 #include "../GameData/GameData.h"
-#include "../GameData/Components/Transform.h"
-#include "../GameData/Components/Material.h"
-#include "../GameData/Components/Light.h"
+#include "../GameData/Components/CTransform.h"
+#include "../GameData/Components/CMaterial.h"
+#include "../GameData/Components/CLight.h"
 #include "../GameData/Entities/GameEntityObject.h"
 #include "../OpenXrAndVulkan/DataBuffer.h"
 
@@ -241,7 +241,7 @@ void Renderer::SetUpRenderProcesses(const Game::MeshData* meshData,
         {
             for (size_t i = 0; i < materials->items[t].size(); i++)
             {
-                Material* mat = materials->items[t][i];
+                CMaterial* mat = materials->items[t][i];
                 if (mat->id.IsCleared())
                     continue;
                 // [tdbe] inefficient checking, but there aren't (ever) that many materials
@@ -422,7 +422,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                     if (gameEntity->id.IsCleared() || !gameEntity->IsEnabled())
                         continue;
                     
-                    auto mats = gameEntity->GetComponentsByTypeIndex<Material>();
+                    auto mats = gameEntity->GetComponentsByTypeIndex<CMaterial>();
                     if (mats.size() == 0)
                         continue;
                     
@@ -442,7 +442,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                             continue;
                         // [tdbe] protip: broadly speaking it's okay to skip^ pool elements, it's also part of best average case performance.
 
-                        Transform* trans = gameEntity->GetComponentByTypeIndex<Transform>();
+                        CTransform* trans = gameEntity->GetComponentByTypeIndex<CTransform>();
                         renderProcess->dynamicVertexUniformData[globalIndex].worldMatrix = trans->GetWorldMatrix();
                         renderProcess->dynamicVertexUniformData[globalIndex].colorMultiplier =
                             mat->dynamicUniformData.colorMultiplier;
@@ -494,7 +494,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                 {
                     for (size_t i = 0; i < gameWorlds[w]->lightComponents->items[t].size(); i++)
                     {
-                        Light* light = gameWorlds[w]->lightComponents->items[t][i];
+                        CLight* light = gameWorlds[w]->lightComponents->items[t][i];
                         //if (light->id.IsCleared()) 
                         //    continue;
                         glm::mat4 matr = light->GetShaderMatrix();
@@ -582,7 +582,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
         {
             for (size_t i = 0; i < gameWorlds[w]->materialComponents->items[t].size(); i++)
             {
-                Material* mat = gameWorlds[w]->materialComponents->items[t][i];
+                CMaterial* mat = gameWorlds[w]->materialComponents->items[t][i];
                 if (mat->id.IsCleared() || !mat->IsVisible())
                     continue;
 
@@ -636,7 +636,7 @@ void Renderer::Render(const glm::mat4& cameraMatrix,
                     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0u, 1u,
                                             &descriptorSet, dynamicOffsetsCount, uniformBufferDynamicOffsets);
 
-                    Model* model = gameEntity->GetComponentByTypeIndex<Game::Model>();
+                    CModel* model = gameEntity->GetComponentByTypeIndex<Game::CModel>();
                     // [tdbe] the instance ID of the first instance to draw. (fed into gl_InstanceIndex in the vertex shader)
                     uint32_t firstInstance;
                     if (mat->instanceCount > 1)

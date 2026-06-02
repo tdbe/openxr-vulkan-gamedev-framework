@@ -3,9 +3,9 @@
 #include <vector>
 #include "SystemBase.h"
 #include "../GameData/GameData.h"
-#include "../GameData/Components/Transform.h"
-#include "../GameData/Components/Parent.h"
-#include "../GameData/Components/Children.h"
+#include "../GameData/Components/CTransform.h"
+#include "../GameData/Components/CParent.h"
+#include "../GameData/Components/CChildren.h"
 #include "../GameData/Entities/GameEntityObject.h"
 
 namespace Game
@@ -42,8 +42,8 @@ namespace Game
         {
             if(parentEntity != nullptr)// we're not in the special initial case when we're a root
             {
-                Transform* transform = entity->GetComponentByTypeIndex<Transform>();
-                Transform* parentTransform = parentEntity->GetComponentByTypeIndex<Transform>();
+                CTransform* transform = entity->GetComponentByTypeIndex<CTransform>();
+                CTransform* parentTransform = parentEntity->GetComponentByTypeIndex<CTransform>();
                 util::Posef parentWorldPose = parentTransform->GetWorldPose();
 
                 transform->OnParentWorldPoseUpdated(parentWorldPose);
@@ -72,7 +72,7 @@ namespace Game
             tf::Subflow& subflow,
             size_t chunkIndex,
             // [tdbe] the actual explicit unabiguous type (depending on the target pool) looks like this: 
-            // const typename TiledGameDataPools<GameEntityObject, Transform, Parent, Children, Bounds>
+            // const typename TiledGameDataPools<GameEntityObject, Transform, CParent, CChildren, CBounds>
             //      ::SubpoolTiledVector<GameEntityObject>& entitySubpool
             const SubpoolT& entitySubpool, 
             const GameEntityObject* parentEntityWeSeek)
@@ -87,7 +87,7 @@ namespace Game
                     GameData::TypeUIDs.TRANSFORM_COMPONENTS | GameData::TypeUIDs.PARENT_COMPONENTS);
                 if(!archetypePass)
                     continue;
-                const Parent* parentComp = entity->GetComponentByTypeIndex<Parent>();
+                const CParent* parentComp = entity->GetComponentByTypeIndex<CParent>();
                 if(!parentComp)
                     continue;
                 GameEntity* parentEntity = parentComp->GetParent();
@@ -127,7 +127,7 @@ namespace Game
             tf::Subflow& subflow,
             size_t chunkIndex,
             // [tdbe] the actual explicit unabiguous type (depending on the target pool) looks like this: 
-            // const typename TiledGameDataPools<GameEntityObject, Transform, Parent, Children, Bounds>
+            // const typename TiledGameDataPools<GameEntityObject, Transform, CParent, CChildren, CBounds>
             //      ::SubpoolTiledVector<GameEntityObject>& entitySubpool
             const SubpoolT& entitySubpool)
         {
@@ -142,7 +142,7 @@ namespace Game
                     GameData::TypeUIDs.TRANSFORM_COMPONENTS | GameData::TypeUIDs.PARENT_COMPONENTS);
                 if(!archetypePass)
                     continue;
-                const Parent* parentComp = entity->GetComponentByTypeIndex<Parent>();
+                const CParent* parentComp = entity->GetComponentByTypeIndex<CParent>();
                 if(!parentComp)
                     continue;
                 GameEntity* parentEntity = parentComp->GetParent();

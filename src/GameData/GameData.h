@@ -17,15 +17,15 @@ namespace Game
     // [tdbe] newb-friendly-note: predeclaring here so we can use pointers here and avoid circular dependency, we reference the real headers inside the .cpp
     struct MeshData;
     struct GameComponent;
-    struct Transform;
-    struct Parent;
-    struct Children;
-    struct Model;
-    struct Bounds;
+    struct CTransform;
+    struct CParent;
+    struct CChildren;
+    struct CModel;
+    struct CBounds;
     struct ASquidNPC;
     struct AMysterySphere;
-    struct Material;
-    struct Light;
+    struct CMaterial;
+    struct CLight;
     struct GameEntity;
     struct GameEntityObject;
     struct PlayerObject;
@@ -83,7 +83,7 @@ namespace Game
             static const uint32_t MAX_MODELS = 32;
             static const uint32_t MAX_MATERIALS = 50;
             static const uint32_t MAX_VFX_MATERIALS = 4;
-            static const uint32_t LIGHTS_COUNT = 10;// [tdbe] remember to change LIGHT_COUNT in _Lighting.glsl, and maybe in Light.vert and LightTentacle.vert
+            static const uint32_t LIGHTS_COUNT = 10;// [tdbe] remember to change LIGHT_COUNT in _Lighting.glsl, and maybe in CLight.vert and LightTentacle.vert
             static const uint32_t DEFAULT_COMPONENTS_PER_GAME_ENTITY_OBJECT = 16;
             static const uint32_t MAX_PLAYER_OBJECTS = 1;
             static const uint16_t POOL_TILE_DEFAULT_SIZE = 128;
@@ -99,7 +99,7 @@ namespace Game
         /// [tdbe] TODO: Nice to have: the tile (chunk) enforce and expose an archetype for the purpose of knowing ahead of time what is in a chunk while querying all chunks.
         struct GameWorld
         {
-            /// [tdbe] Note: regarding "[RequireOwnerRestriction(1)]". To support multiple of the same component on the same entity, we need a heap buffer component like <see cref="Children"/>.
+            /// [tdbe] Note: regarding "[RequireOwnerRestriction(1)]". To support multiple of the same component on the same entity, we need a heap buffer component like <see cref="CChildren"/>.
           #pragma region Entities and Unique Components
             /// [tdbe] <see cref="GameEntity"/> or <see cref="GameEntityObject"/>: entities with ids and versions ((weak) "references"); and know their components. 
             /// plus the derived GameEntityObject has other little conveniences like events (and name fetching if it's scriptable). Entities and components have ids and versions ((weak) "references"); and know their owner(s).
@@ -107,26 +107,26 @@ namespace Game
             /// So "Entity doesn't have component x" means that component slot is a Free version (and the Entity's archetype mask doesn't contain it) (we could even leave the whole tiled component subvector null in the pool but there is a small max number of components possible (e.g. 64), and, when tiled/chunked, these data structures are small enough to all fit in cpu cache).
             /// So we have "different archetypes per pool per world", and can also change the archetype of the <see cref="TiledGameDataPools"/> during play time.
             /// Importantly we're also able to store an array of <see cref="GameWorld"/>'s. (as opposed to a game worlds tuple, dependent on compile time constants, with variadic types for the archetyped pool, but it's not very useful or usable.)
-            /// [tdbe] Note: <see cref="Bounds"/> (AABB) - technically is created per model, and is free (empty) if you don't have a model, but it's stored per entity and editable.
-            TiledGameDataPools<GameEntityObject, Transform, Parent, Children, Bounds, ASquidNPC, AMysterySphere>* 
+            /// [tdbe] Note: <see cref="CBounds"/> (AABB) - technically is created per model, and is free (empty) if you don't have a model, but it's stored per entity and editable.
+            TiledGameDataPools<GameEntityObject, CTransform, CParent, CChildren, CBounds, ASquidNPC, AMysterySphere>* 
             entityArchetypePool = nullptr;// TODO: you need to remember to add to TypeUIDs and to this template, every new component or attribute manually.
           #pragma endregion Entities And Unique Components
             
           #pragma region Shared Components
             /// [tdbe] entities with ids and versions ((weak) "references"); and know their owner(s).
             /// multiple Models can use the same MeshData; we load the meshData into models
-            GameDataPool<Model>* modelComponents = nullptr;
+            GameDataPool<CModel>* modelComponents = nullptr;
             /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
             /// Just having different materials won't really affect rendering performance; rederer queues per-model right now. 
             /// We have global, per mesh, and per material data, all found in these Materials. The data modifies the
             /// vulkan descriptor or pipeline used if you change a corresponding property.
-            GameDataPool<Material>* materialComponents = nullptr;
+            GameDataPool<CMaterial>* materialComponents = nullptr;
           #pragma endregion Shared Components
         
           #pragma region Sparse Components  
             /// [tdbe] components with ids and versions ((weak) "references"); and know their owner(s).
             /// [tdbe] The first light is directional (the main directional light)
-            GameDataPool<Light>* lightComponents = nullptr;
+            GameDataPool<CLight>* lightComponents = nullptr;
           #pragma endregion Sparse Components
           
           #pragma region Buffer Components  
@@ -161,7 +161,7 @@ namespace Game
         /// Not very useful: 
         /// 1). We move all possible 3d models to the gpu on <see cref="LoadGameWorlds"/>, and then never replace any parts of those vertex buffers (unless we unload/reload). 
         /// 2). We'd need a better data streaming strategy than arbitrary recreation of the whole buffer.
-        void UnLoadModelMesh(Model* model);
+        void UnLoadModelMesh(CModel* model);
 #pragma endregion StorageData
 
 #pragma region GameComponent
@@ -240,9 +240,9 @@ namespace Game
 #pragma endregion Events
 #pragma region LoaderLogging
         void ConfiguredGameObject(GameEntityObject* newObject);
-        void ConfiguredGameModel(Model* newObject);
-        void ConfiguredGameMaterial(Material* newObject);
-        void ConfiguredGameLight(Light* newObject);
+        void ConfiguredGameModel(CModel* newObject);
+        void ConfiguredGameMaterial(CMaterial* newObject);
+        void ConfiguredGameLight(CLight* newObject);
 #pragma endregion LoaderLogging
     };
 } // namespace Game

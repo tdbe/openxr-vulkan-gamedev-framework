@@ -1,10 +1,10 @@
-#include "Model.h"
+#include "CModel.h"
 #include "../GameData.h"
 
 using namespace Game;
 
 /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
-void Model::SetName(std::string name)
+void CModel::SetName(std::string name)
 {
     auto it = GameData::Instance().namedModelComponentIDs.right.find(id);
     if(it == GameData::Instance().namedModelComponentIDs.right.end())
@@ -19,7 +19,7 @@ void Model::SetName(std::string name)
 }
 
 /// [tdbe] this is just a wrapper for scriptable <see cref="GameData"/> it shouldn't be here but people are used to it here.
-std::string Model::GetName() const
+std::string CModel::GetName() const
 {
     auto it = GameData::Instance().namedModelComponentIDs.right.find(id);
     if(it != GameData::Instance().namedModelComponentIDs.right.end())

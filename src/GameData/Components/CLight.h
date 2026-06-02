@@ -8,9 +8,9 @@ using namespace Game;
 namespace Game
 {
     /// [tdbe] Multiple types of lights (incl volumetric).
-    /// [RequireComponentOnOwnerEntities(typeof<Transform>))]
+    /// [RequireComponentOnOwnerEntities(typeof<CTransform>))]
     /// [RequireOwnerRestriction(1)]
-    struct Light : public GameComponent
+    struct CLight : public GameComponent
     {
       public:
         static const struct LightTypes
@@ -28,28 +28,28 @@ namespace Game
 
         GameEntity* GetOwner() const;
 
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         void SetRenderProperties(int lightType);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="colorAndIntensity">You are technically allowed to use values above 1.0</param>
         void SetRenderProperties(glm::vec4 colorAndIntensity, int lightType);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="colorAndIntensity">You are technically allowed to use values above 1.0</param>
         void SetRenderProperties(glm::vec4 colorAndIntensity);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         void SetRenderProperties(glm::vec3 color);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="colorAndIntensity">You are technically allowed to use values above 1.0</param>
         /// <param name="radiusMultiplier">Extra radius to adjust in addition to the radius coming from the light's transform's scale.</param>
         void SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="colorAndIntensity">You are technically allowed to use values above 1.0</param>
         /// <param name="radiusMultiplier">Extra radius to adjust in addition to the radius coming from the light's transform's scale.</param>
         void SetRenderProperties(glm::vec4 colorAndIntensity, float radiusMultiplier, int lightType);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="radiusMultiplier">Extra radius to adjust in addition to the radius coming from the light's transform's scale.</param>
         void SetRenderProperties(float radiusMultiplier, int lightType);
-        /// [tdbe] update light properties (also relies on the owner's Transform)
+        /// [tdbe] update light properties (also relies on the owner's CTransform)
         /// <param name="radiusMultiplier">Extra radius to adjust in addition to the radius coming from the light's transform's scale.</param>
         void SetRenderProperties(float radiusMultiplier);
         /// [tdbe] send this to the shaders, it represents everything about this light
@@ -74,8 +74,8 @@ namespace Game
 
         /// [tdbe] You shouldn't call this constructor directly, instead use <see cref="GameDataPool::GetFreeItem"/>.
         /// See <see cref="GameData::LoadGameWorlds"/>. And remember to add it to some <see cref="GameEntity"/> or <see cref="GameEntityObject"/>.
-        Light(GameDataId::ID id = {}, GameDataId::ID owner = {});
-        ~Light();
+        CLight(GameDataId::ID id = {}, GameDataId::ID owner = {});
+        ~CLight();
 
       private:
         bool isVisible = true;

@@ -1,15 +1,15 @@
 #include "../../Utils/Util.h"
-#include "Children.h"
-#include "Parent.h"
+#include "CChildren.h"
+#include "CParent.h"
 #include "../Entities/GameEntityObject.h"
 
 using namespace Game;
 
-Children::Children(GameDataId::ID id, GameDataId::ID owner) : GameComponent(id, owner)
+CChildren::CChildren(GameDataId::ID id, GameDataId::ID owner) : GameComponent(id, owner)
 {
 }
 
-GameEntity* Children::GetOwner() const
+GameEntity* CChildren::GetOwner() const
 {
     std::vector<GameDataId::ID> ownerIDs = GetOwnerIDs();
     GameEntity* found = nullptr;
@@ -20,24 +20,24 @@ GameEntity* Children::GetOwner() const
     return found;
 }
 
-void Children::AddOwnerToParentOfChild(const GameDataId::ID childId)
+void CChildren::AddOwnerToParentOfChild(const GameDataId::ID childId)
 {
     GameEntity* owner = GetOwner();
     auto parentComponentOfChildEntity = 
-        GameData::Instance().GetEntity(childId)->GetComponentByTypeIndex<Parent>();
+        GameData::Instance().GetEntity(childId)->GetComponentByTypeIndex<CParent>();
     // [tdbe] don't ripple: don't loop back to here.
     parentComponentOfChildEntity->SetParent(owner->id, false);
 }
 
-void Children::RemoveOwnerFromParentOfChild(const GameDataId::ID childId)
+void CChildren::RemoveOwnerFromParentOfChild(const GameDataId::ID childId)
 {
     auto parentComponentOfChildEntity = 
-        GameData::Instance().GetEntity(childId)->GetComponentByTypeIndex<Parent>();
+        GameData::Instance().GetEntity(childId)->GetComponentByTypeIndex<CParent>();
     // [tdbe] don't ripple: don't loop back to here, we're cleaning ourselves up.
     parentComponentOfChildEntity->ClearParent(false);
 }
 
-void Children::RemoveOwnerFromParentOfChildren()
+void CChildren::RemoveOwnerFromParentOfChildren()
 {
     GameEntity* owner = GetOwner();
     for(auto childId : *children)
@@ -47,6 +47,6 @@ void Children::RemoveOwnerFromParentOfChildren()
     }
 }
 
-Children::~Children()
+CChildren::~CChildren()
 {
 }
